@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Dr+Sugiyama&family=Gabarito:wght@400..900&family=Nanum+Brush+Script&family=Nanum+Pen+Script&display=swap');
+
+nav:hover{
+  box-shadow: 0 4px 6px rgb(0, 0, 0);
+  transition: 200ms;
+}
+.brand{
+  font-family: "Dr Sugiyama", cursive ;
+display: flex;
+}
+.text-box {
+  margin-left:80px ;
+}
+.li-item{
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin-left: 9px;
+}
+
+.li-item:hover{
+    background-color: rgba(53, 51, 51, 0.571);
+    border-radius: 10px;
+    color:rgb(244, 255, 41) !important;
+    
+}
+.li-item link:active{
+    color:rgb(173, 47, 47)!important;
+}
+.search-button{
+  border-radius: 50px;
+}
+.brand{
+  display: flex;
+  
+  width: 36px;
+  height: auto;
+}
+@media screen and (min-width:0px)and (max-width:700px){
+  .text-box{
+    width: 8rem;
+  }
+}
+
+

@@ -1,0 +1,330 @@
+:root{
+  --sc-clr:#dfdfdf;
+}
+.bars::-webkit-scrollbar {
+  width: 5px;
+  background-color: rgb(238, 231, 231);
+}
+.bars::-webkit-scrollbar-thumb {
+  background: #2baf2d;
+  border-radius: 6px; 
+}
+.bars::-webkit-scrollbar-thumb:hover {
+  background: #37fe2d; /* color of the scrollbar handle on hover */
+}
+.view-container {
+    display: flex;
+    width: 100vw;
+    min-height: 100vh;
+    background: linear-gradient(254deg, #ffcea2 41%, #f7efe8 100%);
+  z-index: 0;
+  margin-top: 50px;
+  }
+.sidebar {
+  width: 350px;
+  height: 100vh; 
+  padding: 5px;
+  position: fixed;
+  top: 10px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--dyellow);
+}
+.sidebar-heading{
+    position: fixed;
+    background: var(--dyellow);
+    width: 336px;
+    height: 100px;
+    border-bottom: 2px solid;
+    display:flex;
+    z-index: 0;
+}
+.marked{
+     width: 25px;
+}
+.marked:checked{
+     width: 25px;
+}
+.view-content{
+    margin-left: 360px; 
+    min-height: 90vh;
+    margin-top: 20px;
+   flex:1;
+}
+.video-container{
+    margin-top: 0;
+    width: 1100px;
+    height: 580px;
+    background: black;
+    border-radius: 10px;
+    margin: 0 auto;
+}
+video{
+    object-fit: contain;
+    border-radius: 10px;
+    top: 0;
+    left: 0;
+}
+.accordion{
+  margin-top: 5px;
+  margin-bottom: 10px;
+  margin-right: 15px;
+  border-radius:5px;
+  display: flex;
+  flex-direction: column;
+}
+.accordion-header {
+  background-color: #d4d1d1;
+  width: 100%;
+  padding: 10px;
+  cursor: pointer;
+  height: 60px;
+  border-radius:10px;
+  transition: background-color 0.5s ease;
+  text-transform: capitalize;
+  display: flex;
+ justify-content: space-between;
+}
+.accordion-header.active{
+  background-color: #d8d2d2;
+  transition: background-color 0.5s ease;
+}
+.accordion-content{
+  padding: 20px;
+  border-radius:0 0 10px 10px;
+  background-color: rgb(234, 229, 229);
+  color: rgb(103, 94, 94);
+  width: 100%;
+  min-height: 0; 
+  transition: min-height 0.5s ease;
+  overflow: hidden;
+}
+.accordion-content.active{
+min-height: 200px;
+
+}
+.icon{
+  display: flex;
+  font-size: 30px; 
+}
+
+.addIcon{
+    font-size: 25pt;
+    margin-left: 10px;
+    cursor: pointer;
+    color: rgba(252, 44, 44, 0.733);
+    border-radius: 50%;
+  }
+  .addIcon:hover{
+    filter: drop-shadow(2px 2px 2px );
+  }
+  .span-files{
+    margin-top: 100px;
+   min-width: 200px;
+  }
+  .file{
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 2px;
+    height: auto;
+    /* border-bottom:1px solid; */
+    box-shadow: #64646f33 0px 5px 10px 20px;
+    border-radius: 5px;
+    background-color: #fdfeffcb;
+  }
+  
+  .file:hover{
+    background: #a6c5e3e7;
+  }
+  .file.active{
+    background: #8effa4;
+  }
+  .span-files li{
+    list-style-type: none;
+    /* color:var(--txt-clr) */
+  }
+  .file-title{
+    background-color: rgba(225, 225, 225, 0.725);
+    margin-top:3px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    width: 73em;
+    margin-left: -100px;
+  }
+  .heading{
+    font-size: 30px
+  }
+  .AddLecture{
+   margin-left: 500px;
+   width: 100%;
+  }
+  .assignment-container{
+    margin-top: -5px;
+    min-height: 100vh;
+    margin-left: -100px;
+    background: white;
+    padding: 10px;
+  }
+  
+  .assignment-container button{
+    background-color: #00ffcc57;
+    margin-left: 20px;
+    border: 1px solid;
+    width: 150px;
+    &:hover{
+      content:'';
+      background-color:#00ffcca3;
+    }
+  }
+  .assign-heading{
+    width: 900px;
+    margin: 0 auto;
+    min-height: 170px;
+    background-color: #c0d4c0;
+    padding: 10px;
+    border-radius:4px ;
+  }
+  .assign-heading .q{
+      color: blue;
+      font-size: 18px;
+  }
+  .submit{
+    width: 900px;
+    /* background-color: #b2afaf; */
+    background: rgb(27,53,75);
+  background: linear-gradient(254deg, rgba(27,53,75,1) 0%, rgba(90,184,173,1) 56%, rgba(52,84,107,1) 100%);
+    margin:0 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 100px;
+    gap: 5px;
+    border-radius: 4px;
+    margin-top: 20px;
+  }
+  .submit textarea{
+    width: 700px;
+    height: 170px;
+    border: none;
+    background-color: rgba(250, 250, 250, 0.595);
+    border-radius: 3px;
+    &:focus{
+      content: '';
+      outline: none;
+      box-shadow: 2px 2px 4px 2px black;
+    }
+  }
+  .submit input{
+    width: 700px;
+    background-color: rgba(239, 239, 239, 0.611);
+    margin-bottom:10px ;
+  }
+   .bt{
+    margin-left: 100px;
+  }
+  .submit button{
+    width: 200px;
+    height: 40px;
+    border:none;
+    color: white;
+    background-color: #07070753;  
+    box-shadow: 0px 0px 20px rgba(19, 49, 71, 0.7);
+  } 
+  
+  .submit button:hover{
+    box-shadow: 2px 4px 20px rgba(19, 49, 71, 0.7);
+    transition: 0.3s ;
+  }
+  .assignment-container .students{
+    width: 1150px;
+    margin-left: 90px;
+    padding: 10px;
+    background-color: #bec1c7a9;
+    margin-top: 10px;
+  }
+  .students h3{
+    font-weight: bold;
+    border-bottom: 3px solid;
+    background-color: #babae0c6;
+    padding: 10px;
+  }
+  
+  .answer{
+  overflow: hidden;
+    max-height: 10%;
+    width:50%;
+  }
+  .viewer {
+    /* margin-top: 65px; */
+    width: 100vw;
+    height: 50vh;
+    /* background:linear-gradient(254deg, #ffcea2 41%, #f7efe8 100%); */
+  }
+  .viewer object{
+    /* margin-left:4%; */
+
+  }
+  .viewer button{
+    background-color: rgb(197, 193, 193);
+   width: 40px;
+   height: 40px;
+   border-radius: 10px;
+  position: fixed;
+  top: 50%;
+  }
+  .check{
+    margin-left: 10px;
+    margin-bottom: 5px;
+    color:rgb(30, 187, 30);
+    background-color: white;
+    padding: 5px;
+    border-radius: 50%;
+  }
+  
+.performance{
+    min-height: 100vh; 
+    padding: 5px;
+    margin: 10px;
+    /* background-color: red; */
+}
+.performance-container{
+    background-color: rgb(255, 253, 253);
+    padding: 5px;
+ 
+}
+
+.performance-details{
+    border: 1px solid;
+    padding: 10px;
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+}
+.student-performance{
+  margin: 5px;
+  min-height: 300px;
+
+}
+.download{
+  display: flex;
+ justify-content: flex-end;
+}
+.download-btn{
+  display: flex;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  color: red;
+  border: none;
+  margin: 0 0 10px 0;
+  
+}
+.download-btn:hover{
+  border:1px solid red
+}
+.download span{
+  margin-right: 10px;
+}

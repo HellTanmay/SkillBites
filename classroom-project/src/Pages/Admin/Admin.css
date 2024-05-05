@@ -1,0 +1,128 @@
+:root{
+    --yellow:#ece1d7;
+    --dyellow:#f7e9dd
+}
+.skeleton {
+    height: 102px;
+    border-radius: 0px 0px 20px 20px;
+    animation: skeleton-loading 1s linear infinite alternate;
+  }
+  .pie-skeleton{
+    width: 350px;
+    height: 400px;
+    margin: 0 auto;
+    animation: skeleton-loading 1s linear infinite alternate;
+  }
+  
+  @keyframes skeleton-loading {
+    0% {
+      background-color: #ebe8e8;
+    }
+    100% {
+      background-color: #a9a4a4;
+    }
+  }
+.dashboard{
+    width: 100%;
+    min-height: 100vh;
+    margin-top: 60px;
+    padding: 5px;
+    background: linear-gradient(254deg, #ffcea2 41%, #f7e9dd 100%);
+}
+.heading{
+    width: 100%;
+    background-color: rgba(126, 126, 126, 0.459);
+}
+.heading h1{
+    text-transform: uppercase;
+    padding: 5px;
+    letter-spacing: 7px;
+    font-weight: bolder;
+    background: linear-gradient(254deg, #f97c7c 70%, #5a77d8 100%); 
+    -webkit-background-clip: text;
+    color: transparent;
+    filter: drop-shadow(4px 2px 3px rgb(19, 18, 18));
+}
+.cards{
+    margin: 40px 20px 20px 10px;
+}
+.dashboard-cards{
+    display:flex;
+    flex-direction: row;
+    gap: 15px;
+    justify-content: space-around;
+}
+.dashboard-card{
+    width:350px;
+    height: 150px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 1px 3px 5px 2px rgb(255, 229, 173);
+    background: linear-gradient(254deg, #ed7e7e 43%, #f5c7c4 87%);
+}
+.dashboard-card:nth-child(odd){
+    background: linear-gradient(254deg, #859dec 43%, #bdb9b9 87%); ;
+}
+.card-head{
+    background-color:#32313173; 
+    width: 100%;
+    border-bottom: 2px solid #433e3e;
+    border-radius: 20px 20px 0 0;
+   
+}
+.card-head h2{
+    margin-left:10px;
+    color: white;
+}
+.card-content{
+    height: 102px;
+    border-radius: 0px 0px 20px 20px;
+    padding-right: 10px;
+    font-size: 40px;
+}
+.pie{
+    width: 350px;
+    border: 1px solid;
+    padding: 20px;
+    margin: 0 auto;
+}
+.Payment-Dashboard,
+.Course-Dashboard{
+    padding: 10px;
+    margin-top: 60px;
+   background:linear-gradient(254deg, #ffcea2 41%, #f7e9dd 100%);
+   min-height: 100vh;
+}
+.Payment-Dashboard input[type=text]{
+    width: 20%;
+    margin: 0 5px 5px 0;
+    padding: 5px;
+    border-radius: 5px;
+    outline: none;
+    border: 2px solid #f5c7c4;;
+    background-color: #f5c7c4;
+    transition: border-color 0.3s ease-in-out;   
+}
+.Payment-Dashboard input[type=text]:focus{
+    border-color: #ec9286;
+}
+.Payment-Dashboard button{
+    width: 80px;
+    background-color: #ed7e7e;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    height: 34px;
+    color: white;
+    transition: background-color 0.5s ease;
+}
+.Payment-Dashboard button:hover{
+    background-color: #f23636;
+}
+tbody Link{
+    text-decoration: none;
+}
+.adminIcons{
+    background-color: #32313173;
+   
+}

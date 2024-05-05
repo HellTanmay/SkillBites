@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+.Hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+margin-top: 58px;
+  /* background-image: linear-gradient(  #09203f 0%, #64839a 100%); */
+  /* background: radial-gradient(ellipse at top, #954e03, transparent); */
+  background-image: url("https://wallpapercave.com/wp/wp9697503.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 80px;
+  height: 90vh;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    background-image: linear-gradient(to bottom right, #121111da, #000000);
+    opacity: 0.7;
+    top: 56px;
+    bottom: 11px;
+    left: 0;
+    right: 0;
+  }
+}
+
+.Content {
+  width: 750px;
+  min-width: 400px;
+  max-height: 100%;
+  padding: 10px 0.5rem;
+  color: #000000;
+  filter: drop-shadow(10px 7px 20px rgb(0, 0, 0));
+  display: flex;
+  flex-direction: column;
+  cursor:default;
+}
+
+.Content h1 {
+  font-size: 3.5em;
+  margin-bottom: 20px;
+  font-family: 'prompt';
+  color: rgb(255,255,255);
+}
+.Content p{
+  color: rgb(255, 252, 252);
+  font-family: "Comfortaa";
+  font-size: 17px;
+}
+.btn-content {
+  top: 70%;
+  left: 55%;
+
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+}
+.custom-btn1:hover {
+  background-color: rgb(65, 132, 192);
+}
+
+
+/* @media screen and (min-width:0px)and (max-width:700px) {
+     .custom-btn{
+      margin-left: 4px;
+      
+     }
+     .image{
+    
+      width: 20%;
+      height: 20%;
+     
+     }
+     .btn-content{
+      left: 30px;
+      margin-top:-9rem;
+     }
+     .Hero{
+      background-position: center;
+      
+     }
+     .Content{
+        position: absolute;
+        top: 20rem;
+        left: 10rem;
+        z-index: 2;
+        transform: translate(-50%,-50%);
+        width: 40%;
+        padding: 20px;
+      }
+     } */
