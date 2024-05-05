@@ -40,10 +40,10 @@ console.log(user)
                       <img
                         src={user.photo}
                         alt="user"
-                        className="rounded-circle"
+                        // className="rounded-circle"
                         width="160px"
                         height="160px"
-                        style={{ border: "2px solid green" }}
+                        style={{ border: "2px solid green",borderRadius:'50%' }}
                       />
                     {/* </div> */}
                     <div className="mt-3">

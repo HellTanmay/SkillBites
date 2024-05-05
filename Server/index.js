@@ -46,7 +46,7 @@ app.use("/pdf", express.static(__dirname + "/pdf"));
 .catch((error) => {
 console.log(error)
 });
-
+console.log(process.env.CLOUD_NAME,process.env.CLOUD_API_KEY,process.env.CLOUD_API_SECRET)
 app.post("/Signup", async (req, res, next) => {
   const { username, email, password, role } = req.body;
   try {
@@ -146,7 +146,6 @@ app.put("/profile/edit",verifyToken,upload.single("avatar"),
         fs.renameSync(path, newPath);
         const cloudRes = await cloudinary.uploader.upload(newPath, {
           folder: "avatar",
-          gravity:'face',
         });
         fs.unlinkSync(newPath);
         imageUrl = cloudRes.secure_url;
