@@ -43,7 +43,8 @@ console.log(user)
                         // className="rounded-circle"
                         width="160px"
                         height="160px"
-                        style={{ border: "2px solid green",borderRadius:'50%' }}
+                        
+                        style={{ border: "2px solid green",borderRadius:'50%',objectFit:'cover' }}
                       />
                     {/* </div> */}
                     <div className="mt-3">

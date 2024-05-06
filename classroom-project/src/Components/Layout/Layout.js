@@ -55,7 +55,7 @@ export default function Layout({ children ,hideFooter,initial=false,index=true})
             <>
              <h4 className="text-white mt-4 "style={{textAlign:'center'}}>Student Dashboard</h4>
              <div className="pro">
-             <img src={!loading&&user?.photo}width="100px" alt='profile' height='100px'style={{borderRadius:'50%', marginLeft:'40px'}} loading='lazy'></img>
+             <img src={!loading&&user?.photo}width="100px" alt='profile' height='100px'style={{borderRadius:'50%', marginLeft:'40px',objectFit:'cover'}} loading='lazy'></img>
              <p style={{color:'white',marginTop:'10px',textAlign:'center'}}><IoMdPerson style={{marginTop:'-5px'}}/>{' '}{!loading&&user?.username}</p>
              </div>
              <hr/>
@@ -73,7 +73,7 @@ export default function Layout({ children ,hideFooter,initial=false,index=true})
             <>
              <h4 className="text-white mt-4 "style={{textAlign:'center'}}>Instructor Dashboard</h4>
              <div className="pro">
-             <img src={user?.photo}width="100px" alt='profile' height='100px'style={{borderRadius:'50%', marginLeft:'40px'}}></img>
+             <img src={user?.photo}width="100px" alt='profile' height='100px'style={{borderRadius:'50%', marginLeft:'40px',objectFit:'cover'}}></img>
              <p style={{color:'white',marginTop:'10px',textAlign:'center'}}><IoMdPerson style={{marginTop:'-5px'}}/>{' '}{user?.username}</p>
              </div>
               {TeachData.map((val, key) => (

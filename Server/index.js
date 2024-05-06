@@ -46,7 +46,7 @@ app.use("/pdf", express.static(__dirname + "/pdf"));
 .catch((error) => {
 console.log(error)
 });
-console.log(process.env.CLOUD_NAME,process.env.CLOUD_API_KEY,process.env.CLOUD_API_SECRET)
+
 app.post("/Signup", async (req, res, next) => {
   const { username, email, password, role } = req.body;
   try {
