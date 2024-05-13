@@ -79,19 +79,30 @@ export const CourseSlice =createSlice ({
         courseData:[],
         MycourseData:[],
         performanceStats:{},
+        loading:false,
     },
     extraReducers:(builder)=>{
         builder.addCase(fetchCourse.fulfilled, (state,action)=>{
             state.courseData=action.payload;
+            state.loading=false
+        })
+        builder.addCase(fetchCourse.pending, (state,action)=>{
+          state.loading=true
         })
         builder.addCase(fetchCourse.rejected, (state,action)=>{
             console.log("error",action.payload);
+            state.loading=false
         })
         builder.addCase(fetchMyCourse.fulfilled, (state,action)=>{
             state.MycourseData=action.payload;
+            state.loading=false
+        })
+        builder.addCase(fetchMyCourse.pending, (state,action)=>{
+            state.loading=true
         })
         builder.addCase(fetchMyCourse.rejected, (state,action)=>{
             console.log("error",action.payload);
+            state.loading=false
         })
         builder.addCase(approved.fulfilled, (state,action)=>{
             const updatedCourse = state.courseData.data&&state.courseData.data.map((course) =>
@@ -104,9 +115,14 @@ export const CourseSlice =createSlice ({
         })
         builder.addCase(fetchPerformance.fulfilled, (state,action)=>{
             state.performanceStats=action.payload;
+            state.loading=false
+        })
+        builder.addCase(fetchPerformance.pending, (state,action)=>{
+            state.loading=true
         })
         builder.addCase(fetchPerformance.rejected, (state,action)=>{
             console.log("error",action.payload);
+            state.loading=false
         })
     }
 

@@ -46,6 +46,7 @@ export const extraSlice =createSlice ({
     extraReducers:(builder)=>{
         builder.addCase(AddContact.fulfilled, (state,action)=>{
             state.contact=action.payload;
+          
         })
         builder.addCase(AddContact.rejected, (state,action)=>{
             console.log("error",action.payload);

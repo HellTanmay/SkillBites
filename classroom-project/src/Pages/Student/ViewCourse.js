@@ -15,28 +15,39 @@ import { FaCheck } from "react-icons/fa";
 import AddLectures from "../Instructor/AddLectures";
 import './viewCourse.css';
 import { RiDeleteBin4Line } from "react-icons/ri";
-
+import {DisplayQuizz, deleteQuizz} from "../../Components/Store/QuizzSlice";
+import DisplayQuiz from './DisplayQuiz'
+import AddQuiz from "../Instructor/AddQuiz";
 
 function ViewCourse() {
   const [videoSrc, setVideoSrc] = useState("");
   const [isActive, setIsActive] = useState(false);
   const [openModal, setOpenmodal] = useState(false);
   const [lectureModal, setLectureModal] = useState(false);
+  const [openTestModal, setTestModal] = useState(false);
   const [assignments, setAssignments] = useState(null);
   const [selectedAssign, setSelectedAssign] = useState(null);
+  const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [desc, setDesc] = useState("");
-  const fileInputRef = useRef("");
-  const [pdf, setPdf] = useState(false);
-  const dispatch = useDispatch();
+  const [quizState,setQuizState]=useState()
   const [selectedLecture, setSelectedLecture] = useState(null);
+  const fileInputRef = useRef("");
+
+  const dispatch = useDispatch();
   const lectures = useSelector((state) => state?.Lecture?.lectures?.data);
+  const quizzes=useSelector((state)=>state.Quizzes.quizzes.data)
+
   const params = new URLSearchParams(window.location.search);
   const q_id = params.get("assignment_id");
-  const { userInfo } = useContext(UserContext);
+  const qu_id=params.get("quizz_id")
+  const l_id=params.get("lecture_id")
   const { id } = useParams();
+
+  const { userInfo } = useContext(UserContext);
   const role = userInfo?.role;
   const user = userInfo?.id;
-  console.log(lectures,"40")
+
+
 function fetchAssignments(){
   try {
     fetch(`http://localhost:4000/getAssignments/${id}`, {
@@ -55,8 +66,9 @@ function fetchAssignments(){
 
   useEffect(() => {
     dispatch(getLectures(id));
+    dispatch(DisplayQuizz(id));
   }, [dispatch]);
-
+ 
   function format(formatted) {
     const date = new Date(formatted);
     const dateType = date.toLocaleDateString("en-IN", {
@@ -75,9 +87,10 @@ function fetchAssignments(){
     setVideoSrc(lecture.file.secure_url);
     setSelectedLecture(lecture);
     setSelectedAssign(null);
-
+    setSelectedQuiz(null)
     params.set("lecture_id", lecture._id);
     params.delete("assignment_id");
+    params.delete('quizz_id')
     const newUrl = `${window.location.pathname}?${params.toString()}`;
     window.history.replaceState({}, "", newUrl);
   }
@@ -92,13 +105,27 @@ function fetchAssignments(){
   function handleAssign(assignment) {
     setSelectedAssign(assignment);
     setSelectedLecture(null);
+    setSelectedQuiz(null)
     clear();
     params.delete("lecture_id");
+    params.delete('quizz_id')
     params.set("assignment_id", assignment._id);
     const newUrl = `${window.location.pathname}?${params.toString()}`;
     window.history.replaceState({}, "", newUrl);
   }
 
+  function handleQuizzes(quizz) {
+    setSelectedQuiz(quizz);
+    setSelectedAssign(null);
+    setSelectedLecture(null);
+    params.set("quizz_id", quizz._id);
+    params.delete("assignment_id");
+    params.delete("lecture_id");
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.replaceState({}, "", newUrl);
+  }
+
+//Automatic mounting while reloading
   useEffect(() => {
     if (q_id) {
       const selectedAssignment =assignments &&
@@ -107,15 +134,23 @@ function fetchAssignments(){
         setSelectedAssign(selectedAssignment);
       }
     }
-  }, [q_id, assignments]);
-
-  useEffect(() => {
-    const updatedSelectedLecture = lectures?.find(
-      (lecture) => lecture._id === selectedLecture?._id);
-    if (updatedSelectedLecture) {
-      setSelectedLecture(updatedSelectedLecture);
+    if (qu_id) {
+      const selectQuiz =quizzes &&
+          quizzes.find((quiz) => quiz._id === qu_id);
+      if (selectQuiz) {
+        setSelectedQuiz(selectQuiz)
+      }
     }
-  }, [lectures, selectedLecture]);
+    if (l_id) {
+      const selectLec =lectures &&
+          lectures.find((lecture) => lecture._id === l_id);
+      if (selectLec) {
+        setSelectedLecture(selectLec)
+        setVideoSrc(selectLec.file.secure_url)
+        console.log("145",selectLec)
+      }
+    }
+  }, [q_id, assignments,qu_id, quizzes,l_id,lectures]);
 
   async function submit(e) {
     e.preventDefault();
@@ -132,6 +167,7 @@ function fetchAssignments(){
       );
       if (res.payload.success) {
         toast.success(res.payload.data);
+        fetchAssignments()
         clear();
       } else {
         toast.error(res.payload.message);
@@ -151,7 +187,7 @@ function fetchAssignments(){
   }
   }
   async function handleAssignDelete(a_id){
-    if(window.confirm('Do u really wish to delete this lecture')){
+    if(window.confirm('Do u really wish to delete this Assignment')){
     const res=await dispatch(deleteAssign({courseId:id,assignId:a_id}))
     if(res.payload.success){
       toast.success(res.payload.data,{position:'top-center'})
@@ -167,6 +203,16 @@ function fetchAssignments(){
       dispatch(getLectures(id))
     }
   }
+async function handleQuizDelete(qui_id){
+  if(window.confirm('Do u really wish to delete this test')){
+    const res=await dispatch(deleteQuizz({c_id:id,quizz_id:qui_id}))
+    console.log(res)
+    if(res?.payload?.success){
+      toast.success(res?.payload?.data,{position:'top-center'})
+      dispatch(DisplayQuizz(id))
+    }
+  }
+}
 const marked=selectedLecture?.watched?.includes(user)
   const pdfUrl = selectedAssign && selectedAssign.file;
   const sub =selectedAssign &&selectedAssign.submit &&
@@ -175,24 +221,25 @@ const marked=selectedLecture?.watched?.includes(user)
   return (
     <Layout hideFooter={true} index={false}>
       <div className="view-container">
-        <div className="sidebar">
-          <div className="bars" style={{ overflowY: "scroll", flex: 1 }}>
-            <div className="sidebar-heading">
-              <h1 className="text-center"
-                style={{lineHeight: "3.9",width: "335px",}}>
-                Videos{" "}
+       <div className={"sidebar"}>
+          <div className=""style={{overflowY:'scroll',overflowX:'hidden'}}>
+            <div className="sidebar-heading h-auto">
+              <h1 className="text-center "
+                style={{width: "335px",}}>
+                Videos
                 {role === "Instructor" && (
                   <IoIosAddCircleOutline className="addIcon" onClick={() => setLectureModal(true)}/>
                 )}
               </h1>
             </div>
-            <div className="span-files">
-              
+            <div className="span-files bars">
+             
             {lectures?.length!==0 ?lectures?.map((lecture) => (
                   <>
                     <li className={`file ${selectedLecture === lecture ? "active" : ""}`}
                         key={lecture._id}
-                        onClick={() => handleClick(lecture)}>
+                        style={{cursor:quizState==='Quizz'?'not-allowed':'pointer'}}
+                        onClick={quizState!=='Quizz'?()=> handleClick(lecture):null}>
                         <p style={{ fontWeight: "bold" }}>{lecture.filename}</p>
                         {role==='Instructor'&&(<p onClick={(e)=>e.stopPropagation()}style={{marginTop:'-40px',float:'right',color:'red'}}><RiDeleteBin4Line onClick={()=>handleLecDelete(lecture._id)}/></p>)}
                           <p style={{fontSize: "12px",marginTop: "-15px",color: "#6B6860",}}>
@@ -201,21 +248,18 @@ const marked=selectedLecture?.watched?.includes(user)
                             {format(lecture.createdAt).time}
                            </span>
                         </p>
-                    </li>
+                    </li>           
                   </>
                 )):(<div className="d-flex align-items-center justify-content-center" style={{minHeight:'200px'}}>
                   <p>No lectures yet</p>
                  </div>
-                
                )}
-            </div>
           </div>
-
-          <div className="bars" style={{ overflowY: "scroll", flex: 1 }}>
+   
             <div className="sidebar-heading"
               style={{height:'auto',borderTop:'2px solid'}}>
               <h1 className="text-center"
-                style={{lineHeight: "",width: "335px", }}>
+                style={{width: "335px", }}>
                 Assignment
                 {role === "Instructor" && (
                   <IoIosAddCircleOutline
@@ -223,15 +267,16 @@ const marked=selectedLecture?.watched?.includes(user)
                     onClick={()=>setOpenmodal(true)}/>)}
               </h1>
             </div>
-
-            <div className="span-files" style={{ marginTop: "61px" }}>
+        
+            <div className="span-files bars" >
               {assignments?.length!==0 ?assignments?.map((assignment) => {
                   const counting = assignment.submit &&assignment.submit.filter(
                       (submission) => submission.status === "pending").length;
                   return (
-                    <>
+                    <> 
                       <li className={`file ${selectedAssign === assignment ? "active" : ""}`}
-                        onClick={() => handleAssign(assignment)}>
+                        style={{cursor:quizState==='Quizz'?'not-allowed':'pointer'}}
+                        onClick={quizState!=='Quizz'?() => handleAssign(assignment):null}>
                         <p style={{ fontWeight: "bold" }}>
                           {assignment.title}
                           {role === "Instructor" && (<>
@@ -251,16 +296,48 @@ const marked=selectedLecture?.watched?.includes(user)
                           </span>
                         </p>
                       </li>
+
                     </>
                   );
                 }):<div className="d-flex align-items-center justify-content-center" style={{minHeight:'200px'}}>
                 <p>No Assignments yet</p> 
                </div>}
             </div>
+            <div className="sidebar-heading"style={{height:'auto'}}>
+              <h1 className="text-center"
+                style={{width: "335px",borderTop:'2px solid'}}>
+                Tests
+                {role === "Instructor" && (
+                  <IoIosAddCircleOutline className="addIcon" onClick={() => setTestModal(true)}/>
+                )}
+              </h1>
+            </div>
+            <div className="span-files bars">
+            {quizzes?.length!==0 ?quizzes?.map((quizz) => (
+                  <>
+                    <li className={`file ${selectedQuiz === quizz ? "active" : ""}`}
+                        key={quizz._id}
+                        onClick={() => handleQuizzes(quizz)}>
+                        <p style={{ fontWeight: "bold" }}>{quizz.title}</p>
+                        {role==='Instructor'&&(<p onClick={(e)=>e.stopPropagation()}style={{marginTop:'-40px',float:'right',color:'red'}}><RiDeleteBin4Line onClick={()=>handleQuizDelete(quizz._id)}/></p>)}
+                          <p style={{fontSize: "12px",marginTop: "-15px",color: "#6B6860",}}>
+                            {format(quizz.createdAt).date}
+                            <span style={{ float: "right", color: "#6B6860" }}>
+                            {format(quizz.createdAt).time}
+                           </span>
+                        </p>
+                    </li>           
+                  </>
+                )):(<div className="d-flex align-items-center justify-content-center" style={{minHeight:'200px'}}>
+                  <p>No Tests yet</p>
+                 </div>
+               )}
           </div>
+   
+            </div>
         </div>
         <div className="view-content d-flex flex-column ">
-          {!selectedLecture&&!selectedAssign&&(
+          {!selectedLecture&&!selectedAssign&&!selectedQuiz&&(
           <div className="performance">
                 <Performance id={id}/>
           </div>)}
@@ -402,7 +479,12 @@ const marked=selectedLecture?.watched?.includes(user)
               )}
             </div>
           )}
+        {selectedQuiz&&<div className="quiz">
+            <DisplayQuiz quizz_id={qu_id} tests={selectedQuiz} states={setQuizState}/>
+          </div>}
+          
         </div>
+        {openTestModal && <AddQuiz closeModal={setTestModal} />}
         {openModal && <AddAssignment closeModal={setOpenmodal} />}
         {lectureModal && <AddLectures closeModal={setLectureModal} />}
       </div>

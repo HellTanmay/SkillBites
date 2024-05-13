@@ -6,6 +6,7 @@ import UserReducer from './UserSlice'
 import SubmitReducer  from './SubmitSlice'
 import extraReducer from './ExtraSlice'
 import PaymentReducer from './PaymentSlice'
+import QuizzReducer from './QuizzSlice'
 
 export const store=configureStore({
     reducer:{
@@ -16,5 +17,6 @@ export const store=configureStore({
         Submissions:SubmitReducer,
         Extras:extraReducer,
         Payments:PaymentReducer,
+        Quizzes:QuizzReducer,
     }
 })

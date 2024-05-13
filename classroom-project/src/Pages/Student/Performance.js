@@ -14,6 +14,7 @@ const Performance = () => {
   const User=useSelector((state)=>state.User.userData)
   const performance=useSelector((state)=>state.course.performanceStats)
   const allPerformance=useSelector((state)=>state.course.performanceStats.studentsPerformance)
+  const loading=useSelector((state)=>state.course.loading)
   const percentage=Math.floor(performance.studentPerformance*100)/100
   console.log(allPerformance)
   const {id}=useParams()
@@ -30,8 +31,8 @@ const Performance = () => {
     });
   }
   return (
-    <div className='performance-container'>
-   {User.role==='Student'&&( <> <h1>Html/css/Javascript</h1>
+   <div className='performance-container'>
+   {User.role==='Student'&&!loading&&( <> <h1>Html/css/Javascript</h1>
       <p>No of lectures:<span>{performance.noOfLectures}</span></p>
       <p>No of assignments:<span>{performance.noOfAssignments}</span></p>
       <div className=''>
@@ -76,7 +77,6 @@ const Performance = () => {
     
     </table>
       </div>}
-  
     </div>
   )
 }

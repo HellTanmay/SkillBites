@@ -105,7 +105,7 @@ export default function Layout({ children ,hideFooter,initial=false,index=true})
       <div style={{
           width: `calc(100%-${sidebarWidth})`,
           marginLeft:index? sidebarWidth:'0',
-          transition: "350ms",
+          transition: " 350ms ease",
         }}>
         {children}
       </div>
@@ -113,7 +113,7 @@ export default function Layout({ children ,hideFooter,initial=false,index=true})
         style={{
           width: `calc(100%-${sidebarWidth})`,
           marginLeft: sidebarWidth,
-          transition: "350ms",
+          transition: " 350ms ease",
         }}
       />)}
     </>

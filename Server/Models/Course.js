@@ -134,6 +134,43 @@ const CourseSchema = new Schema(
         ],
       },
     ],
+  quizz:[{
+    title:{
+      type:String,
+      required:true
+    },
+    file:{
+      type:String,
+      required:true,
+    },
+    mark:{
+      type:Number,
+      default:1,
+    },
+    duration:{
+      type:Number,
+    },
+    totalmarks:{
+      type:Number,
+    },
+    createdAt:{
+      type:Date,
+      default:Date.now(),
+    },
+    submitQuiz:[{
+      student:{
+        type:Schema.Types.ObjectId,
+        ref:'User',
+      },
+      marks:{
+        type:Number,
+      },
+      submittedAt:{
+        type:Date,
+        default:Date.now()
+      }
+    }]
+  }]
   },
   {
     timestamps: true,

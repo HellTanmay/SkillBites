@@ -26,7 +26,7 @@ const StudentAssigns = ({format,c_id,q_id}) => {
         </div>
      </div></>)}
      {!isLoading && !isPdfViewerPage &&(
-     <table class="table table-bordered tanle-striped">
+     <table class="table table-bordered table-striped">
   <thead className="thead-dark">
     <tr>
       <th scope="col">SL.No</th>

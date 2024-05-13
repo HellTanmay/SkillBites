@@ -31,12 +31,12 @@
   justify-content: center;
   position: fixed;
   left: -100%;
-  transition: 350ms;
+  transition: left 200ms ease
 }
 
 .nav-menu.active {
   left: 0;
-  transition: 300ms;
+  transition: left 200ms ease;
 }
 .row1 {
   display: flex;
@@ -71,7 +71,7 @@
   padding-left: 0;
 }
 
-span {
+.row1 span {
   margin-left: 14px;
 }
 
