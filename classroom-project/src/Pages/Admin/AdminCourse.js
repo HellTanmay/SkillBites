@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Layout from '../../Components/Layout/Layout'
 import {useSelector,useDispatch}from 'react-redux'
 import { approved, deleteCourse, fetchCourse } from '../../Components/Store/CourseSlice'
 import { useNavigate } from 'react-router-dom'
 import {toast} from 'react-toastify'
 import { RiDeleteBin6Line } from "react-icons/ri";
-
+import TableSkeleton from '../../Extras/TableSkeleton'
+import { IoEyeSharp } from "react-icons/io5";
 
 const AdminCourse = () => {
   
@@ -19,6 +20,7 @@ return date.toLocaleDateString('en-IN', {
 }
   const dispatch=useDispatch()
 const courses=useSelector((state)=>state.course.courseData.data)
+const loading=useSelector((state)=>state.course.loading)
 const navigate=useNavigate()
 useEffect(()=>{
   dispatch(fetchCourse())
@@ -42,12 +44,14 @@ async function handleDelete(courseId){
   }
 }
 }
+
   return (
-    <Layout hideFooter={true}initial={true}>
+    <Layout hideFooter>
       <div className='Course-Dashboard'>
         <h1 className='text-center'>Courses</h1>
+        <div className='bars'style={{overflow:'auto',maxHeight:'80vh'}}>
       <table className="table table-light table-hover table-striped">
-  <thead className='table-dark'>
+  <thead className='table-dark fixed-header'>
     <tr>
       <th scope="col">Course-Id</th>
       <th scope="col">Course Name</th>
@@ -60,10 +64,10 @@ async function handleDelete(courseId){
       <th>Action</th>
     </tr>
   </thead>
-  {courses?.length!==0?<tbody>
-    {courses?.map(course=>(
-    <tr key={course._id}
-    onClick={()=>navigate(`/course/${course._id}`)}>
+  { !loading?(
+  courses?.length!==0?(<tbody>
+   { courses?.map(course=>(
+    <tr key={course._id}>
       <th scope="row">{course._id}</th>
       <td>{course.title}</td>
       <td>{course.author.username}</td>
@@ -72,17 +76,22 @@ async function handleDelete(courseId){
       <td>{course.price*course.enrolled.length.toString()}</td>
       <td>{format(course.createdAt)}</td>
       <td style={{ textAlign:'center'}}><input style={{cursor:'pointer'}} type='checkbox'checked={course?.approved===true}
-      onChange={(e)=>click(course,e.target.checked)}onClick={(e)=>e.stopPropagation()}/></td>  
-      <td style={{ textAlign:'center',color:'red'}} onClick={(e)=>e.stopPropagation()}><RiDeleteBin6Line style={{cursor:'pointer'}} onClick={()=>handleDelete(course?._id)}/></td>
+      onChange={(e)=>click(course,e.target.checked)}/></td>  
+      <td >
+      <span style={{marginRight:'20px',padding:'5px',color:'darkblue',fontSize:'14pt',cursor:'pointer'}}><IoEyeSharp onClick={()=>navigate(`/course/${course._id}`)}/></span>
+      <span><RiDeleteBin6Line style={{cursor:'pointer',color:'red',fontSize:'14pt'}} onClick={()=>handleDelete(course?._id)}/></span></td>
     </tr>))}
-  </tbody>:
+  </tbody>):(
   <tbody>
     <tr>
       <td colspan='9'className='text-center'>No Courses Available</td>
     </tr>
-    </tbody>}
+    </tbody>)):(
+      <TableSkeleton columns={9}rows={courses?.length}/>
+    )}
 </table>
-</div>    
+</div>  
+</div>  
     </Layout>
   )
 }

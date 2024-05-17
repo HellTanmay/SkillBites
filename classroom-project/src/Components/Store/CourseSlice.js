@@ -2,9 +2,14 @@ import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
 import { toast } from "react-toastify";
 
 
-export const fetchCourse=createAsyncThunk('fetchCourse',async()=>{
+export const fetchCourse=createAsyncThunk('fetchCourse',async(category)=>{
  try{
-    const response=await fetch(`http://localhost:4000/course`,{credentials:'include'});
+    let url=`http://localhost:4000/course`
+    if(category){
+        url+=`?optio=${category}`
+    }
+     console.log(url)
+    const response=await fetch(url,{credentials:'include'});
     return response?.json();
 
  }catch(err){

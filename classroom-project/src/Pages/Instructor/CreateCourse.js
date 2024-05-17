@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import Layout from "../../Components/Layout/Layout";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCategory } from "../../Components/Store/CategorySlice";
+import Select from 'react-dropdown-select'
 
 const CreateCourse = () => {
   const [Title, setTitle] = useState("");
@@ -13,11 +16,22 @@ const CreateCourse = () => {
   const [file, setFile] = useState("");
   const [Duration, setDuration] = useState(0);
   const [Price, setPrice] = useState(0);
+  const [category, setCategory] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [redirect, setRedirect] = useState("");
-  const data = new FormData();
 
+  const dispatch=useDispatch()
+  useEffect(()=>{
+    dispatch(fetchCategory())
+  },[])
+
+  const categories=useSelector((state)=>state.Categories.category.data)
+  const categoryObject=categories?.map(options=>({value:options._id,label:options.name}))
+
+  const data = new FormData();
+  const cat=category?.map(cat=>cat.value)
+  
   async function create(e) {
     setLoading(true);
     data.set("title", Title);
@@ -25,6 +39,7 @@ const CreateCourse = () => {
     data.set("content", Content);
     data.set("duration", Duration);
     data.set("price", Price);
+    data.set("category", cat);
     data.set("file", file[0]);
     e.preventDefault();
     try {
@@ -127,9 +142,10 @@ const CreateCourse = () => {
                   required
                 />
                 </div>
+                
           <div className=" d-flex flex-column">
+            
             <label for="desc">Set Price(in rupees):</label>
-      
             <input
               type="number"
               value={Price}
@@ -142,6 +158,13 @@ const CreateCourse = () => {
             <br />
             </div>
             </div>
+            <label htmlFor="select">Select category</label>
+             <Select className="edit-text" options={categoryObject} multi 
+             color="#f97c7c"
+             dropdownHeight="100px"
+             style={{backgroundColor:'white'}}
+             onChange={value=>setCategory(value)}searchable/>
+             <br/>
             <label for="desc">Description:</label>
             <ReactQuill
               placeholder="List every information about the course"

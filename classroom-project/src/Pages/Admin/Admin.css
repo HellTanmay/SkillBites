@@ -24,7 +24,7 @@
   }
 .dashboard{
     width: 100%;
-    min-height: 100vh;
+    min-height: 90dvh;
     margin-top: 60px;
     padding: 5px;
     background: linear-gradient(254deg, #ffcea2 41%, #f7e9dd 100%);
@@ -49,7 +49,8 @@
 .dashboard-cards{
     display:flex;
     flex-direction: row;
-    gap: 15px;
+    flex: 0 1;
+    
     justify-content: space-around;
 }
 .dashboard-card{
@@ -78,7 +79,14 @@
     height: 102px;
     border-radius: 0px 0px 20px 20px;
     padding-right: 10px;
-    font-size: 40px;
+   
+}
+.card-content span{
+    white-space:nowrap;
+    display:flex;
+    justify-content:center;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 35pt;
 }
 .pie{
     width: 350px;
@@ -91,7 +99,7 @@
     padding: 10px;
     margin-top: 60px;
    background:linear-gradient(254deg, #ffcea2 41%, #f7e9dd 100%);
-   min-height: 100vh;
+   min-height: 90vh;
 }
 .Payment-Dashboard input[type=text]{
     width: 20%;
@@ -125,4 +133,59 @@ tbody Link{
 .adminIcons{
     background-color: #32313173;
    
+}
+.fixed-header th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+.addCategory{
+    width: 100%;
+    margin:10px auto;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+.addCategory h1{
+    padding: 10px;
+    margin-top: 10px;
+}
+.addCategory button{
+    width: 100px;
+    /* margin-top: 10px; */
+    outline: none;
+    background-color: #f9e595;
+    height: 40px;
+    border-radius: 10px;
+}
+.categories{
+    background-color: rgba(224, 221, 221, 0.771);
+    width: 90%;
+    margin: 10px auto;
+    padding: 10px;
+}
+.category-items{
+    display: flex;
+    gap: 1px;
+    width: 100%;
+    flex-wrap: wrap;
+    
+}
+.category-items li{
+    list-style-type: none;
+    background-color: #cbcaca;
+    padding: 5px;
+    border-radius: 10px;
+    margin: 10px;
+    cursor:default;
+ 
+}
+.delete-Cat{
+    cursor: pointer;
+}
+.delete-Cat:hover{
+    color: rgb(132, 16, 16);
 }

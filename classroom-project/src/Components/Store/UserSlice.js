@@ -33,6 +33,7 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
     initialState:{
         userData:{},
         loading:false,
+        allLoading:false,
     },
     extraReducers:(builder)=>{
         builder.addCase(fetchUser.fulfilled,(state,action)=>{
@@ -48,9 +49,15 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
         })
         builder.addCase(fetchAllUsers.fulfilled,(state,action)=>{
             state.userData=action.payload;
+            state.allLoading=false
         })
+        builder.addCase(fetchAllUsers.pending,(state,action)=>{
+            state.allLoading=true
+        })
+        
         builder.addCase(fetchAllUsers.rejected,(state,action)=>{
             console.log("error",action.payload);
+            state.allLoading=false
         })
         
     }

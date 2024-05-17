@@ -2,10 +2,12 @@ import  { useEffect } from 'react'
 import Layout from '../../Components/Layout/Layout'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchAllUsers } from '../../Components/Store/UserSlice'
+import TableSkeleton from '../../Extras/TableSkeleton'
 
 const AdminStudent = () => {
     const dispatch=useDispatch()
     const userData=useSelector((state)=>state.User.userData.data)
+    const loading=useSelector((state)=>state.User.allLoading)
     useEffect(()=>{
         dispatch(fetchAllUsers())
       },[])
@@ -25,12 +27,14 @@ const AdminStudent = () => {
         return {date:dateType,
                time:timeType}
       }
+ 
   return (
-   <Layout hideFooter={true}initial={true} >
+   <Layout hideFooter >
           <div className='Course-Dashboard'>
         <h1 className='text-center'>Students</h1>
+        <div className='bars'style={{overflow:'auto',maxHeight:'80vh'}}>
       <table className="table  table-light table-hover table-striped">
-  <thead className='table-dark'>
+  <thead className='table-dark fixed-header'>
     <tr>
       <th scope="col">Student_id</th>
       <th scope="col">Student</th>
@@ -40,7 +44,8 @@ const AdminStudent = () => {
       <th scope="col">Joined on</th>   
     </tr>
   </thead>
-  {userData?.length!==0?<tbody>
+  {!loading?(
+  userData?.length!==0?(<tbody>
     {userData?.map(user=>(
     <tr key={user.user._id}>
       <th scope="row">{user.user._id}</th>
@@ -59,13 +64,16 @@ const AdminStudent = () => {
       <td>{format(user?.user?.createdAt).date +' at '+format(user.user.createdAt).time}</td>
     
     </tr>))}
-  </tbody>: <tbody>
+  </tbody>):( <tbody>
             <tr>
               <td colSpan="7" className="text-center">No Students available</td>
             </tr>
-          </tbody>}
+          </tbody>)):(
+            <TableSkeleton columns={6}rows={userData?.data?.length}/>
+          )}
 </table>
 </div>  
+</div>
     </Layout>
   )
 }

@@ -22,6 +22,7 @@ import AdminInstructors from "./Pages/Admin/AdminInstructors";
 import AdminPayment from "./Pages/Admin/AdminPayment";
 import CheckoutSuccess from "./Pages/Student/CheckoutSuccess";
 import Orders from "./Pages/Student/Orders";
+import AddCategory from "./Pages/Admin/AddCategory";
 function App() {
   return (
     <>
@@ -47,6 +48,7 @@ function App() {
         <Route path="/Admin/students" element={<AdminStudent/>}></Route>
         <Route path="/Admin/instructors" element={<AdminInstructors/>}></Route>
         <Route path="/Admin/payments" element={<AdminPayment/>}></Route>
+        <Route path="/Admin/addCategories" element={<AddCategory/>}></Route>
         <Route path="/orders" element={<Orders/>}></Route>
         <Route path="/order-success" element={<CheckoutSuccess/>}></Route>
         <Route path="*" element={<NotFound/>} />

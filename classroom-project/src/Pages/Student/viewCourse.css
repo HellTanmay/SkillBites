@@ -3,6 +3,7 @@
 }
 .bars::-webkit-scrollbar {
   width: 5px;
+  height: 5px;
   background-color: rgb(238, 231, 231);
 }
 .bars::-webkit-scrollbar-thumb {
@@ -440,7 +441,7 @@ video {
   width: 110%;
   margin-left: -60px;
   min-height: 500px;
-  background-color: red;
+ 
 }
 .quiz-submissions table{
   width: 90%;

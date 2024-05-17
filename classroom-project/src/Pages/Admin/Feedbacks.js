@@ -2,14 +2,15 @@ import React, { useEffect } from 'react'
 import Layout from '../../Components/Layout/Layout'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchContact } from '../../Components/Store/ExtraSlice'
+import TableSkeleton from '../../Extras/TableSkeleton'
 
 const Feedbacks = () => {
     const dispatch=useDispatch()
     const contact=useSelector((state)=>state.Extras.contact.data)
+    const loading=useSelector((state)=>state.Extras.loading)
     useEffect(()=>{
         dispatch(fetchContact())
     },[])
-    let count=0
 
     function format(formatted){
       const date=new Date(formatted)
@@ -21,9 +22,10 @@ const Feedbacks = () => {
     }
 
   return (
-   <Layout hideFooter={true}initial={true}>
+   <Layout hideFooter>
         <div className='Course-Dashboard'>
         <h1 className='text-center'>Feedbacks</h1>
+        <div className='bars'style={{overflow:'auto',maxHeight:'80vh'}}>
       <table className="table table-light table-striped">
   <thead className='table-dark'>
     <tr>
@@ -34,18 +36,28 @@ const Feedbacks = () => {
       <th scope="col">Message</th>   
     </tr>
   </thead>
+  {!loading?(
+    contact?.length!==0?(
   <tbody>
-    {contact&&contact.map(contacts=>(
+    {contact?.map((contacts,index)=>(
     <tr key={contacts._id}>
-      <th scope="row">{count=count+1}</th>
+      <th scope="row">{index+1}</th>
       <td>{contacts.name}</td>
       <td>{contacts.email}</td>
       <td>{format(contacts?.createdAt)}</td>
       <td style={{width:'40%'}}>{contacts.message}</td> 
     </tr>))}
-  </tbody>
+  </tbody>):(
+    <tbody>
+      <tr>
+        <td colSpan={5}>No feedbacks yet</td>
+      </tr>
+    </tbody>)):(
+      <TableSkeleton columns={5} rows={contact?.length}/>
+  )}
 </table>
 </div> 
+</div>
    </Layout>
   )
 }

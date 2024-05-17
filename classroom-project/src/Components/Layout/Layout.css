@@ -33,7 +33,10 @@
   left: -100%;
   transition: left 200ms ease
 }
-
+.side-icons{
+  color:rgb(254, 252, 112);
+  font-size: 15pt;
+}
 .nav-menu.active {
   left: 0;
   transition: left 200ms ease;

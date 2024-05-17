@@ -9,6 +9,7 @@ const User = require("./Models/user.js");
 const Course = require("./Models/Course.js");
 const Purchase = require("./Models/Orders.js");
 const Contact=require("./Models/Contact.js");
+const Category=require("./Models/Category.js");
 
 const app = express();
 const crypto = require("crypto");
@@ -171,14 +172,57 @@ app.put("/profile/edit",verifyToken,upload.single("avatar"),
     }
   }
 );
-
+app.post('/addCategories',verifyToken,async(req,res,next)=>{
+  try {
+    const role=req.user.role
+    const {category}=req.body
+    console.log(category)
+    if(role!=='Admin'){
+      throw new AppError('You are restricted from adding categories',403)
+    }
+    await Category.create({
+      name:category
+    })
+    res.status(200).json({success:true,data:'added'})
+  } catch (error) {
+    next(error)
+  }
+})
+app.get('/getCategories',verifyToken,async(req,res,next)=>{
+  try {
+    const role=req.user.role
+    const categoryDoc=await Category.find()
+  res.status(200).json({success:true,data:categoryDoc})
+  } catch (error) {
+    next(error)
+  }
+})
+app.delete('/deleteCategory',verifyToken,async(req,res,next)=>{
+  try{
+    const role=req.user.role
+    const {categoryId}=req.query
+    
+    if(role!=='Admin'){
+      throw new AppError('You are restricted from adding categories',403)
+    }
+   
+    const category=await Category.findOneAndDelete({ _id: categoryId });
+    if(!category){
+      throw new AppError('Category not found',404)
+    }
+    res.status(200).json({success:true,data: `${category.name} Deleted Successfully`})
+  }
+  catch(err){
+    next(err)
+  }
+})
 app.post("/course", verifyToken, upload.single("file"), async (req, res, next) => {
   let coverImageUrl;
   let cloudinaryRes;
   const role=req.user.role
   try {
     if(role!=='Instructor'){
-      throw new AppError('You are restricted from creating course',400)
+      throw new AppError('You are restricted from creating course',403)
     }
     if (req.file) {
       const { originalname, path } = req.file;
@@ -199,7 +243,10 @@ app.post("/course", verifyToken, upload.single("file"), async (req, res, next) =
       throw new AppError('thumbnail is required',400)
     }
     coverImageUrl = cloudinaryRes.secure_url;
-    const { title, summary, content, duration, price } = req.body;
+    const { title, summary, content, duration, price,category } = req.body;
+    const categoryString = category.toString(); 
+    const categoryIds = categoryString.split(',');
+    console.log(categoryIds)
     const info = req.user;
     const courseDoc = await Course.create({
       title,
@@ -208,6 +255,7 @@ app.post("/course", verifyToken, upload.single("file"), async (req, res, next) =
       duration,
       price,
       cover: coverImageUrl,
+      category:categoryIds,
       author: info.id,
     });
     res.json({success:true, courseDoc });
@@ -219,17 +267,25 @@ app.post("/course", verifyToken, upload.single("file"), async (req, res, next) =
 app.get("/course", verifyToken, async (req, res, next) => {
   try {
     let courses;
+    const {optio}=req.query
     const role=req.user.role
+
     if (role === "Admin") {
       courses = await Course.find()
         .populate("author", ["username"])
         .populate("enrolled", ["id", "username"])
         .sort({ createdAt: 1 });
     } else {
-      courses = await Course.find({ approved: true })
+      courses = await Course.find({approved:true})
         .populate("author", ["username"])
+        // .populate("category",["name"])
         .populate("enrolled", ["id", "username"])
-        .sort({ createdAt: 1 });
+        .sort({ createdAt: -1 });
+    }
+    if (optio) {
+      courses = courses.filter(course =>
+        course.category.includes(optio)
+      );
     }
     res.status(200).json({success:true,data:courses})
    

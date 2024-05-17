@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Certificate from './Certificate'
+import TableSkeleton from '../../Extras/TableSkeleton'
 
 const Performance = () => {
   let count=0
@@ -60,7 +61,8 @@ const Performance = () => {
       <th scope="col">Student performance</th>
     </tr>
   </thead>
-  {allPerformance?.length!==0?<tbody>
+{!loading?(
+  allPerformance?.length!==0?(<tbody>
    {allPerformance?.map(performance=><tr>
         <th scope="row">{count=count+1}</th>
       <td><img src={performance.profile}width='40px'height='40px'className='profile-pic' alt='profile'/>{performance.name}</td>
@@ -68,12 +70,15 @@ const Performance = () => {
       <td>{format(performance?.joined)}</td>
       <td>{performance.percentage?.toFixed(2)+'%'}</td> 
     </tr>)}
-    </tbody>:
+    </tbody>):(
     <tbody>
     <tr>
       <td colSpan="7" className="text-center">No Students available</td>
     </tr>
-  </tbody>}
+  </tbody>)):
+  (
+  <TableSkeleton/>
+  )}
     
     </table>
       </div>}

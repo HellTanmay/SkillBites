@@ -31,8 +31,9 @@ export default function Layout({ children ,hideFooter,initial=false,index=true})
   return (
     <>
       <Navbar onIcon={show} />
+
       <nav className={sidebar ? "nav-menu active" : "nav-menu"}
-        style={{ top: 0,height:index?'100vh':'68vh'}}>
+        style={{ top: 0,bottom:index?'0':'200px'}}>
         <ul className="nav-menu-items" onClick={show}>
           <NavLink className="menu-bar-close">
             <AiOutlineClose />
@@ -44,7 +45,7 @@ export default function Layout({ children ,hideFooter,initial=false,index=true})
               {Data.map((val, key) => (
                 <li className= "row1" key={key}>
                   <NavLink to={val.Link}>
-                    {val.icon}
+                    <span className="side-icons">{val.icon}</span>
                     <span>{val.title}</span>
                   </NavLink>
                 </li>
@@ -62,7 +63,7 @@ export default function Layout({ children ,hideFooter,initial=false,index=true})
               {StudentData.map((val, key) => (
                 <li className= "row1" key={key}>
                   <NavLink to={val.Link}>
-                    {val.icon}
+                  <span className="side-icons">{val.icon}</span>
                     <span>{val.title}</span>
                   </NavLink>
                 </li>
@@ -80,24 +81,13 @@ export default function Layout({ children ,hideFooter,initial=false,index=true})
                 <>
                 <li className="row1" key={key}>
                   <NavLink to={val.Link}>
-                    {val.icon}
+                  <span className="side-icons">{val.icon}</span>
                     <span>{val.title}</span>
                   </NavLink>
                 </li>
                 </>
               ))}
-                <li className="row1" >
-                  <NavLink to='/create'>
-                  <IoCreateSharp/>
-                    <span>Create course</span>
-                  </NavLink>
-                </li>
-               <li className="row1">
-                  <NavLink to='/myCourse'>
-                  <AiOutlineFolderView/>
-                    <span>View Course</span>
-                  </NavLink>
-                </li>
+             
             </>
           )}
         </ul>
@@ -109,6 +99,7 @@ export default function Layout({ children ,hideFooter,initial=false,index=true})
         }}>
         {children}
       </div>
+    
      {!hideFooter&&( <Footer
         style={{
           width: `calc(100%-${sidebarWidth})`,

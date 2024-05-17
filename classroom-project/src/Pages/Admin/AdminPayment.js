@@ -3,6 +3,7 @@ import Layout from '../../Components/Layout/Layout'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllPayments } from '../../Components/Store/PaymentSlice'
 import { toast } from 'react-toastify'
+import TableSkeleton from '../../Extras/TableSkeleton'
 
 const AdminPayment = () => {
   const [payment,setPayment]=useState()
@@ -41,18 +42,17 @@ const AdminPayment = () => {
         return {date:dateType,
                time:timeType}
       }
+
   return (
-   <Layout hideFooter={true} initial={true}>
+   <Layout hideFooter>
    
           <div className='Payment-Dashboard'>
-          {isLoading&&(<> <div className="d-flex justify-content-center loader">
-             <div className='loading-animation'>Wait a moment...</div>
-              </div></>)}
         <h1 className='text-center'> Payments</h1>
-        {!isLoading&&<> <input type='text'value={payment} placeholder='Enter Payment_id'onChange={(e)=>setPayment(e.target.value)}/>
+       <input type='text'value={payment} placeholder='Enter Payment_id'onChange={(e)=>setPayment(e.target.value)}/>
         <button onClick={handleSubmit}>Filter</button>
+        <div className='bars'style={{overflow:'auto',maxHeight:'80vh'}}>
      <table className="table  table-light table-hover table-striped">
-  <thead className='table-dark'>
+  <thead className='table-dark fixed-header'>
     <tr>
       <th scope="col">Payment_id</th>
       <th scope="col">Username</th>
@@ -63,7 +63,8 @@ const AdminPayment = () => {
       <th scope="col">Purchased on</th>   
     </tr>
   </thead>
-  {payments?<tbody>
+  {!isLoading?(
+  payments?(<tbody>
     {payments?.map(payment=>(
     <tr key={payment?.orders?.id} >
       <th scope="row">{payment?.orders.id}</th>
@@ -75,13 +76,15 @@ const AdminPayment = () => {
       <td>{format(new Date(payment?.orders?.created_at*1000)).date  +' at '+format(new Date(payment?.orders?.created_at*1000)).time}</td>
     
     </tr>))}
-  </tbody>: <tbody>
+  </tbody>):( <tbody>
             <tr>
               <td colSpan="7" className="text-center">No Payments available</td>
             </tr>
-          </tbody>}
+          </tbody>)):(
+            <TableSkeleton columns={7} rows={payments?.length}/>
+          )}
 </table>
-</>}
+</div>
 </div> 
     </Layout>
   )

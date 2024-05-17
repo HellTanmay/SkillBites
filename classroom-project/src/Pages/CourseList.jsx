@@ -1,43 +1,96 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../Components/Layout/Layout";
 import Course from "./Course";
-import {useDispatch,useSelector}from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { fetchCourse } from "../Components/Store/CourseSlice";
+import Select from "react-select";
+import { fetchCategory } from "../Components/Store/CategorySlice";
+import { CircularProgressbar } from "react-circular-progressbar";
 
-export default function CourseList(){
-    const dispatch=useDispatch();
-     const state=useSelector((state)=>state)
-    const courses=state?.course?.courseData.data
-useEffect(()=>{
-    dispatch(fetchCourse())
-},[dispatch])
+export default function CourseList() {
+  const [option, setOption] = useState([]);
+  const dispatch = useDispatch();
+  const courses = useSelector((state) => state.course?.courseData.data);
+const loading=useSelector((state)=>state.course.loading)
 
-    return(
-        <>
-       <Layout>
+  useEffect(() => {
+    dispatch(fetchCategory());
+  }, [dispatch]);
+  useEffect(() => {
+    const category = option?.length > 0 ? option[0]?.value : "";
+    dispatch(fetchCourse(category));
+    console.log(category);
+  }, [option]);
+
+  const categories = useSelector((state) => state.Categories.category.data);
+  const categoryObject = categories?.map((options) => ({
+    value: options._id,
+    label: options.name,
+  }));
+
+  return (
+    <>
+      <Layout>
         <div className="course-container">
-        <div className=" course-heading d-flex"style={{justifyContent:'space-between'}}>
-        <img src="Assets/course2.png" width='580px'alt='pic'></img>
-        <img style={{marginTop:'-40px'}}src="Assets/course.png" width='500px' height='500px'alt='pic'></img>
-        </div>
-        <div style={{width:'100%',background:'white',height:'50px',paddingBottom:'10px',}}>
-        <h1 style={{textAlign:'center',color:"black",fontFamily:'angkor',padding:''}}>All Courses</h1>
-        </div>
-        <div className="course">
+          <div className=" course-heading d-flex">
+              <div className="c-image">
+            <img className="img1" src="Assets/course2.png" alt="pic" width='450px' height='350px'></img>
+            </div>
+            <div className="d-flex flex-column justify-content-between">
+              <Select
+                menuPosition="fixed"
+                styles={{
+                  control: (baseStyles) => ({
+                    ...baseStyles,
+                    marginTop: "10px",
+                    fontFamily: "TimesNewRoman",
+                  }),
+                  menuList: (baseStyles) => ({
+                    ...baseStyles,
+                    marginTop: "10px",
+                    height: "100px",
+                    fontFamily: "TimesNewRoman",
+                  }),
+                }}
+                options={categoryObject}
+                searchable
+                noOptionsMessage={() => "Invalid category"}
+                placeholder="Select Category..."
+                onChange={(e) => setOption([e])}
+                isClearable
+              ></Select>
+              <h1
+                className="course-h1 d-flex align-items-center justify-content-center "
+                style={{ height: "100%", color: "black", fontFamily: "angkor" }}
+              >
+                All Courses
+              </h1>
+            </div>
+            <div className="c-image ">
+            <img className="img3 " width='400px'height='400px' src="Assets/course.png" alt="pic"></img>
+          </div>
+          </div>
+          <div className="course">
             <div className="row gap-4 m-5">
-              
-                {courses?.length>0?courses?.map(course=>(
-                    <Course {...course}source='allCourse'/>
-                )):(
-                    <div className="d-flex justify-content-center">
-                        <h4>No courses are available yet</h4>
-                    </div>
-                )}
+              {!loading?(
+              courses?.length > 0 ? (
+                courses?.map((course) => (
+                  <Course {...course} source="allCourse" key={course.id} />
+                ))
+              ) : (
+                <div className="d-flex justify-content-center">
+                  <h4>No courses are available yet</h4>
+                </div>
+              )):(
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                  <div className="spinner-border"style={{  }}role="status"> </div>
+                  <span className="">fetching courses...</span>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-        </div>
-        </div>
-        </Layout>
-        
-        </>
-    )
+      </Layout>
+    </>
+  );
 }

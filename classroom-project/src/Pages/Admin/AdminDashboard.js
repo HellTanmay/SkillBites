@@ -69,13 +69,13 @@ const AdminDashboard = () => {
                     <h2><BsGraphUpArrow className='adminIcons'/> Total Revenue </h2>
                   </div>
                   <div className={loading?'skeleton':'card-content'}>
-                <span style={{whiteSpace:'nowrap'}}>
+                <span >
                   {!loading?'₹'+stats.totalRevenue?.toLocaleString('en-IN')+'.00':''}
                 </span>
               </div>
               </div>
               </div>
-            </div>
+          </div>
             <div className={!loading?'pie':'pie-skeleton'}>
               <h3 className='text-center'>Users</h3>
               {!loading&&<Doughnut data={userData}/>}

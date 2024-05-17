@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {  getAllSubmissions } from '../../Components/Store/QuizzSlice';
 import DisplayQuiz from '../Student/DisplayQuiz';
+import TableSkeleton from '../../Extras/TableSkeleton'
 
 const QuizSubmissions = ({quizz_id,tests}) => {
     const allLoading = useSelector((state) => state.Quizzes.allLoading);
@@ -84,17 +85,7 @@ const QuizSubmissions = ({quizz_id,tests}) => {
                 </tbody>
               )
           ):(
-            <tbody>
-               {Array.from({ length: 4 }).map((_, index) => (
-                  <tr key={index}>
-                    <td className=""><div className="table-skeleton"></div></td>
-                    <td className=""><div className="table-skeleton"></div></td>
-                    <td className=""><div className="table-skeleton"></div></td>
-                    <td className=""><div className="table-skeleton"></div></td>
-                    <td className=""><div className="table-skeleton"></div></td>
-                  </tr>
-               ))}
-                </tbody>
+           <TableSkeleton/>
 
           )
           }

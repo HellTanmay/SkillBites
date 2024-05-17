@@ -32,7 +32,7 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 @keyframes glow {
-  0% { color:  #12bcff; }
+  10% { color:  #252626; }
   100% { color:#bb5921; }
 }
 .loader{
@@ -222,7 +222,7 @@ body::-webkit-scrollbar-thumb:hover {
 .course {
   margin: 0 auto;
   padding: 10px 10px;
-  border-radius: 10px;
+  border-radius: 0 0 10px 10px;
   background: linear-gradient(to bottom, #fffcf7, #ffcea2);
 }
 .course-price {
@@ -247,10 +247,50 @@ body::-webkit-scrollbar-thumb:hover {
 .course-heading {
   background: linear-gradient(360deg, #f0e9e9 41%, #ffcea2 100%);
   height: 400px;
+  width: 100%;
   font-family: "angkor";
 }
+.course-heading >*{
+  flex-basis: 100%;
+}
+.c-image{
+  width: 1000px;
+}
+.img1{
+  margin-left: 0;
+  margin-top: 10px;
+  animation: img 300ms  ease-in;
+}
+.img3{
+  margin-right: 0;
+  animation: img2 300ms ease-out;
+}
+.course-h1{
+  margin-left: 0;
+  animation: ch1 300ms  ease-in;
+}
+@keyframes img {
+  0% {
+    transform: translateX(-100px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@keyframes img2 {
+  0% {
+    transform: translateX(100px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@keyframes ch1 {
+  0%{
+   margin-top: 300px;
+  }
+}
 /* Create course */
-
 .createContainer {
   padding: 10px;
   background:linear-gradient(254deg, #ffcea2 41%, #f7e9dd 100%);
@@ -368,10 +408,10 @@ margin-top: 50px;
   border-radius: 50%;
 }
 .orders{
-  margin: 20px auto;
-  margin-top: 100px;
-  width: 80%;
-  min-height: 70vh;
+  margin: 0 auto;
+  margin-top: 60px;
+  width: 100%;
+  min-height: 77vh;
   background-color: #e2eff1;
   padding: 5px;
 }
@@ -404,16 +444,20 @@ margin-top: 50px;
   align-items: center;
 }
 .checkout{
-  background-color: #faf9f923;
-  width: 900px;
-  margin: 40px auto;
-  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #faf9f9;
+  width: 100%;
+  margin-top: 60px;
   padding: 5px;
-  min-height: 67vh;
+  min-height: 77vh;
 }
 .checkout-details{
   padding: 5px;
   background-color: #baf4e757;
+  width: 1000px;
+  margin: 0 auto;
 }
 .checkout-heading {
   background-color: #00ffcc57;
