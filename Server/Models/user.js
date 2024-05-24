@@ -48,6 +48,10 @@ const UserSchema = new Schema({
     type: String,
     default: 'N/a',
     maxlength: [10, "Phone number should not exceed 10 characters"],
+  },
+  verified:{
+    type:Boolean,
+    default:false,
   }
 },
 {

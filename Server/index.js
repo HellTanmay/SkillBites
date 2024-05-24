@@ -10,10 +10,12 @@ const Course = require("./Models/Course.js");
 const Purchase = require("./Models/Orders.js");
 const Contact=require("./Models/Contact.js");
 const Category=require("./Models/Category.js");
+const Verification=require('./Models/verification.js')
 
 const app = express();
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
+const salt = bcrypt.genSaltSync(10);
 const cookieParser = require("cookie-parser");
 const multer = require("multer");
 const uploadFile = multer({ dest: "pdf/" });
@@ -32,6 +34,7 @@ config({ path: "./.env" });
 const razorpay = require("./Razorypay.js");
 const AppError = require("./Middleware/error.js");
 const ErrorHandler = require("./Middleware/errorHandler.js");
+const sendEmail = require("./utils/sendMail.js");
 
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(express.json());
@@ -59,24 +62,86 @@ app.post("/Signup", async (req, res, next) => {
       password,
       role,
     });
-    const token = Token(userDoc);
+    const otp=Math.floor(1000+Math.random()*9000)
+    const hashedOtp=await bcrypt.hashSync(otp.toString(),10)
+    const verification=await Verification.create({
+      userId:userDoc._id,
+      otp:hashedOtp,
+    })
+    verification.save()
+    await sendEmail(email,'Verification Email',`<p>Your verification email is <p><b> ${otp} </b></p></p>`)
+
+    res.status(200).json({ success:true, message: "Email sent successfully",data: userDoc });
+  } catch (err) {
+    next(err)
+  }
+});
+
+app.post('/verifyEmail',async(req,res,next)=>{
+  try {
+    const {email,otp}=req.body;
+    const user=await User.findOne({email})
+    if(!email||!otp){
+      throw new AppError('Try again',400)
+    }
+    const verification = await Verification.findOne({ userId: user._id });
+    if (!verification) {
+      throw new AppError( "Token expired!",404);
+    }
+    const isOtpMatch = await bcrypt.compare(otp.toString(), verification.otp);
+    if(!isOtpMatch){
+      throw new AppError('Invalid otp')
+    }
+    await User.updateOne({ _id: user._id }, { verified: true })
+    await verification.deleteOne({userId:user._id})
+
+    const token = Token(user);
     res.cookie("token", token, {
       maxAge: 60 * 60 * 24 * 1000,
       httpOnly: true,
+      sameSite:'Lax'
     });
-    res.status(200).json({ success:true, message: "Signup successful", userDoc, token });
+    res.status(200).json({ success: true, message: "OTP verified successfully",data:token });
+  } catch (error) {
+    next(error)
+  }
+})
+
+app.post("/resend-otp", async (req, res, next) => {
+  const {user_id, email} = req.body;
+  try {
+    const user=User.findById(user_id)
+  if(!user){
+    throw new AppError('User not found',404)
+  }
+    const otp = Math.floor(1000 + Math.random() * 9000);
+    const hashedOtp = await bcrypt.hash(otp.toString(), 10);
+
+    const verification = await Verification.findOneAndUpdate(
+      { userId: user_id },
+      { otp: hashedOtp },
+      { new: true, upsert: true }
+    );
+
+    await sendEmail(email, 'Resend Verification Email', `<p>Your new verification code is <b>${otp}</b></p>`);
+
+    res.status(200).json({ success: true, message: "New OTP sent successfully" });
   } catch (err) {
-    next(err)
+    next(err);
   }
 });
 
 app.post("/Login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
+
     const userDoc = await User.findOne({ email });
     if (!userDoc) {
       throw new AppError('User not found',404)
     }
+    if(userDoc.verified===false){
+     return res.status(200).json({success:'verify', data:userDoc,message: 'User not verified. Please complete the OTP verification.',})
+    }else{
     const passOk = bcrypt.compareSync(password, userDoc.password);
     if (passOk) {
       const token = Token(userDoc);
@@ -84,10 +149,11 @@ app.post("/Login", async (req, res, next) => {
         maxAge: 60 * 60 * 24 * 1000,
         httpOnly: true,
       });
-      res.json({token,role:userDoc.role});
+      res.status(200).json({success:true,token,role:userDoc.role});
     } else {
       throw new AppError('Wrong password',400)
     }
+  }
   } catch (err) {
     next(err)
   }
@@ -176,7 +242,6 @@ app.post('/addCategories',verifyToken,async(req,res,next)=>{
   try {
     const role=req.user.role
     const {category}=req.body
-    console.log(category)
     if(role!=='Admin'){
       throw new AppError('You are restricted from adding categories',403)
     }
@@ -588,6 +653,9 @@ app.patch('/updateLecture/:id',verifyToken,async(req,res,next)=>{
       course.recordings[lectureIndex].watched.push(userId)
       course.enrolled[studentIndex].totalMarks+=1
     }
+    else{
+      throw new AppError('Already marked', 404);
+    }
     await course.save()
     res.status(200).json({success:true,data:course.recordings})
   }catch(err){
@@ -856,9 +924,7 @@ app.post('/AddQuizz/:id',verifyToken,uploadFile.single("excel"),async(req,res,ne
     const worksheet = workbook.Sheets[sheetName];
     const data = xlsx.utils.sheet_to_json(worksheet);
     let totalMarks = 0;
-    // data.forEach(question => {
-    //   totalMarks +=Number( question.Marks);
-    // });
+    
     totalMarks=marks*data.length
     console.log(totalMarks)
      course.quizz.push({
@@ -870,7 +936,7 @@ app.post('/AddQuizz/:id',verifyToken,uploadFile.single("excel"),async(req,res,ne
     })
     course.total+=totalMarks
    await course.save()
-  res.status(200).json({success:true,data:course.quizz})
+  res.status(200).json({success:true,data:course.quizz,message:'Test added'})
 }catch(err){
   next(err)
 }
@@ -946,8 +1012,12 @@ app.delete('/deleteQuiz/:id',verifyToken,async(req,res,next)=>{
     }
     const quizzMarks = course.quizz[quizzIndex].totalmarks;
     course.total-=quizzMarks
+    if(course.quizz[quizzIndex].file){
+      fs.unlinkSync(course.quizz[quizzIndex].file)
+    }
     course.quizz.splice(quizzIndex, 1);
     await course.save()
+    
     res.status(200).json({success:true,data:'Deleted successfully'})
   } catch (error) {
     next(error)
@@ -1241,7 +1311,11 @@ app.get('/performanceStats/:id',verifyToken,async(req,res,next)=>{
 })
 
 app.post("/logout", (req, res) => {
-  res.cookie("token", "").json("ok");
+  res.cookie("token", '',{
+    maxAge:0,
+    httpOnly:true,
+    sameSite:'Lax'
+  })
   res.send("logged out");
 });
 

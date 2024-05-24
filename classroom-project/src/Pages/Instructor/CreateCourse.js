@@ -24,14 +24,14 @@ const CreateCourse = () => {
   const dispatch=useDispatch()
   useEffect(()=>{
     dispatch(fetchCategory())
-  },[])
+  },[category])
 
   const categories=useSelector((state)=>state.Categories.category.data)
   const categoryObject=categories?.map(options=>({value:options._id,label:options.name}))
 
   const data = new FormData();
   const cat=category?.map(cat=>cat.value)
-  
+
   async function create(e) {
     setLoading(true);
     data.set("title", Title);
@@ -123,24 +123,20 @@ const CreateCourse = () => {
               />
             </label>
             <br />
-            <div className=" d-flex flex-row justify-content-around">
+            <div className="duration">
             <div className=" d-flex flex-column">
                 <label for="desc">Set Duration(in months):</label>
-                
-                <input
-                  type="number"
-                  className="edit-text"
-                  style={{ width: "200px" }}
-                  value={Duration}
-                  max="12"
-                  onBlur={() => {
-                    Duration > 12
-                      ? setError("maximum 12 months!")
-                      : setError("");
-                  }}
-                  onChange={(ev) => setDuration(ev.target.value)}
-                  required
-                />
+                <select name="duration"
+                className="edit-text"
+                value={Duration}
+                onChange={(e)=>setDuration(e.target.value)}>
+                  <option value='2'>2</option>
+                  <option value='4'>4</option>
+                  <option value='6'>6</option>
+                  <option value='8'>8</option>
+                  <option value='10'>0</option>
+                  <option value='12'>12</option>
+                </select>
                 </div>
                 
           <div className=" d-flex flex-column">
@@ -150,7 +146,7 @@ const CreateCourse = () => {
               type="number"
               value={Price}
               className="edit-text"
-              style={{ width: "200px" }}
+             
               onChange={(ev) => setPrice(ev.target.value)}
               onBlur={()=>{Price>10000?setError('Price must be less than 10000'):setError('')}}
               required
@@ -159,9 +155,9 @@ const CreateCourse = () => {
             </div>
             </div>
             <label htmlFor="select">Select category</label>
-             <Select className="edit-text" options={categoryObject} multi 
+             <Select className="" options={categoryObject} multi 
              color="#f97c7c"
-             dropdownHeight="100px"
+            dropdownHeight="150px"
              style={{backgroundColor:'white'}}
              onChange={value=>setCategory(value)}searchable/>
              <br/>

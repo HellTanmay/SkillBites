@@ -9,12 +9,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-margin-top: 58px;
-  /* background-image: linear-gradient(  #09203f 0%, #64839a 100%); */
-  /* background: radial-gradient(ellipse at top, #954e03, transparent); */
+width: 100%;
+
   background-image: url("https://wallpapercave.com/wp/wp9697503.jpg");
   background-repeat: no-repeat;
+  position: relative;
   background-size: cover;
+  background-position: top;
   padding: 80px;
   height: 90vh;
   
@@ -23,8 +24,8 @@ margin-top: 58px;
     position: absolute;
     background-image: linear-gradient(to bottom right, #121111da, #000000);
     opacity: 0.7;
-    top: 56px;
-    bottom: 11px;
+    top: 0;
+    bottom: 0;
     left: 0;
     right: 0;
   }
@@ -32,19 +33,20 @@ margin-top: 58px;
 
 .Content {
   width: 750px;
-  min-width: 400px;
-  max-height: 100%;
-  padding: 10px 0.5rem;
-  color: #000000;
+  min-width: auto;
+  /* max-height: 100%; */
+  padding: 0 ;
+  position: relative;
   filter: drop-shadow(10px 7px 20px rgb(0, 0, 0));
   display: flex;
+  align-items: left;
   flex-direction: column;
   cursor:default;
 }
 
 .Content h1 {
-  font-size: 3.5em;
-  margin-bottom: 20px;
+  font-size: clamp(2rem,3.5vw + 1rem, 5rem);
+  margin-bottom: 10px;
   font-family: 'prompt';
   color: rgb(255,255,255);
 }
@@ -54,44 +56,23 @@ margin-top: 58px;
   font-size: 17px;
 }
 .btn-content {
-  top: 70%;
-  left: 55%;
-
   margin-top: 20px;
   display: flex;
   gap: 20px;
+
 }
 .custom-btn1:hover {
-  background-color: rgb(65, 132, 192);
+  background-color: rgb(71, 147, 213);
 }
 
 
-/* @media screen and (min-width:0px)and (max-width:700px) {
-     .custom-btn{
-      margin-left: 4px;
-      
-     }
-     .image{
-    
-      width: 20%;
-      height: 20%;
-     
-     }
-     .btn-content{
-      left: 30px;
-      margin-top:-9rem;
-     }
-     .Hero{
-      background-position: center;
-      
-     }
-     .Content{
-        position: absolute;
-        top: 20rem;
-        left: 10rem;
-        z-index: 2;
-        transform: translate(-50%,-50%);
-        width: 40%;
-        padding: 20px;
-      }
-     } */
+@media screen and (max-width:400px) {
+ 
+ 
+  .Content h1{
+   
+  }
+  .btn-content{
+    font-size: 30px;
+  }
+}

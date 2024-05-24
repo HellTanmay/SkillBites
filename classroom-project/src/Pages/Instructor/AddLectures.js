@@ -6,6 +6,7 @@ import { addLecture, getLectures } from "../../Components/Store/RecordSlice";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { RiCloseFill } from "react-icons/ri";
 
 const AddLectures = ({ closeModal }) => {
   const [video, setVideo] = useState();
@@ -43,7 +44,7 @@ const AddLectures = ({ closeModal }) => {
   
   return (<>
   
-    <div className="modal1" style={{ position: "fixed" }}>
+    <div className="modal1">
      
       <div className="modalcontainer">
       {loading && (
@@ -55,20 +56,13 @@ const AddLectures = ({ closeModal }) => {
         </div>
       </div>
     )}
-        <button
-          className="btn rounded-pill btn-danger"
-          style={{ float: "right", marginRight: "13px", marginTop: "10px" }}
-          onClick={() => closeModal(false)}
-        >
-          X
-        </button>
+   
         <div
-          className="modal-title "
-          style={{ padding: "10px", background: "white", borderRadius: "20px" }}
-        >
+          className="modal-title ">
           <h1 style={{ marginLeft: "100px", fontFamily: "angkor" }}>
             Add a new Lecture
           </h1>
+          <button onClick={()=>closeModal(false)}><RiCloseFill style={{marginBottom:'20px',marginLeft:'-3px'}}/></button>
         </div>
         <form onSubmit={add}>
         <div className="modal-body">
@@ -77,7 +71,7 @@ const AddLectures = ({ closeModal }) => {
             <div className="col-sm-2">
               <label for="formFile"> Video</label>
             </div>
-            <div className="col-sm-6">
+            <div className="col-sm-10">
               <input
                 type="file"
                 className="edit-text form-control"
@@ -93,7 +87,7 @@ const AddLectures = ({ closeModal }) => {
             <div className="col-sm-2 ">
               <label for="name">Title</label>{" "}
             </div>
-            <div className="col-sm-6">
+            <div className="col-sm-10">
               <input
                 type="text"
                 className="edit-text"
@@ -110,7 +104,7 @@ const AddLectures = ({ closeModal }) => {
             <div className="col-sm-2">
               <label >Description</label>{" "}
             </div>
-            <div className="col-sm-9">
+            <div className="col-sm-10">
            <ReactQuill
               placeholder="provide description,links"
               style={{ background: "white", }}
@@ -122,7 +116,7 @@ const AddLectures = ({ closeModal }) => {
           </div> 
         </div>
         <div className='modal-footer'>
-        <button className='btn btn-md btn-info'>Add Lecture</button>
+        <button className='btn btn-md btn-info text-white'>Add Lecture</button>
       </div>
       </form>
      </div>

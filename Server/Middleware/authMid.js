@@ -1,6 +1,6 @@
 const {sign,verify}=require('jsonwebtoken');
 const AppError = require('./error');
-const secret = "ddiihdijdknncbch5544!@#$%";
+const secret = "ddii-hdij-dknn-cbch-5544-3se7";
 
 const Token=(user)=>{
     const Token=sign({username:user.username,id:user.id,role:user.role},secret);

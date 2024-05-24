@@ -11,7 +11,8 @@ export const addLecture = createAsyncThunk("addLecture",async ({ c_id, formData 
         method: "POST",
         body: formData,
         credentials: "include",
-      });
+      })
+  
       const resdata = await response.json();
       console.log(resdata);
       return resdata;
@@ -68,7 +69,6 @@ export const RecordSlice = createSlice({
   reducers:{},
   extraReducers: (builder) => {
     builder.addCase(addLecture.fulfilled, (state, action) => {
-      state.lectures=action?.payload;
       state.loading=false 
     });
     builder.addCase(addLecture.pending, (state, action) => {

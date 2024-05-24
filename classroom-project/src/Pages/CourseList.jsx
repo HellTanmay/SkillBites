@@ -32,45 +32,52 @@ const loading=useSelector((state)=>state.course.loading)
     <>
       <Layout>
         <div className="course-container">
-          <div className=" course-heading d-flex">
+          <div className=" course-heading">
               <div className="c-image">
             <img className="img1" src="Assets/course2.png" alt="pic" width='450px' height='350px'></img>
             </div>
-            <div className="d-flex flex-column justify-content-between">
-              <Select
+              <h1
+                className="course-h1  "
+                style={{ height: "100%", color: "black", fontFamily: "angkor" }}
+              >
+                All Courses
+              </h1>
+            
+              
+       
+    
+            <div className="c-image ">
+            <img className="img3 " width='400px'height='400px' src="Assets/course.png" alt="pic"></img>
+          </div>
+          </div>
+          
+          <div className="course">
+            <div className="select">
+          <Select 
                 menuPosition="fixed"
                 styles={{
                   control: (baseStyles) => ({
                     ...baseStyles,
                     marginTop: "10px",
                     fontFamily: "TimesNewRoman",
+                    width:'clamp(20rem,30vw,30rem)'
                   }),
                   menuList: (baseStyles) => ({
                     ...baseStyles,
                     marginTop: "10px",
-                    height: "100px",
+                    height: "200px",
                     fontFamily: "TimesNewRoman",
                   }),
                 }}
+              
                 options={categoryObject}
                 searchable
                 noOptionsMessage={() => "Invalid category"}
                 placeholder="Select Category..."
                 onChange={(e) => setOption([e])}
-                isClearable
-              ></Select>
-              <h1
-                className="course-h1 d-flex align-items-center justify-content-center "
-                style={{ height: "100%", color: "black", fontFamily: "angkor" }}
-              >
-                All Courses
-              </h1>
-            </div>
-            <div className="c-image ">
-            <img className="img3 " width='400px'height='400px' src="Assets/course.png" alt="pic"></img>
-          </div>
-          </div>
-          <div className="course">
+                isClearable>
+                </Select>
+                </div>
             <div className="row gap-4 m-5">
               {!loading?(
               courses?.length > 0 ? (

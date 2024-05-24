@@ -9,7 +9,8 @@ export default function Hero(props) {
   const user=userInfo?.username;
   return (
     <Layout>
-      <section className="Hero" style={props.style}>
+      <div style={{marginTop:'58px'}}>
+      <div className="Hero" >
         {/* <div className="image">
           <img src="Assets\hero.png"alt="Hero"></img>
         </div> */}
@@ -24,17 +25,15 @@ export default function Hero(props) {
         
        
         <div className="btn-content">
-         <a
-            className="custom-btn btn btn-primary btn-lg"
+         <a className="custom-btn btn btn-primary btn-lg"
         href= {user ? "/course":'/Login'} 
-            role="button"
-          >
-            Explore Courses <i class="fa-solid fa-arrow-right"></i>
+            role="button">
+            Explore Courses <i className="fa-solid fa-arrow-right"></i>
           </a>
         </div>
         </div>
-        </section>
-      
+        </div>
+        </div>
     </Layout>
   );
 }

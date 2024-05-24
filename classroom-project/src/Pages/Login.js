@@ -1,18 +1,21 @@
-import { Link, Navigate } from "react-router-dom";
+import { Link,useNavigate,Navigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import Layout from "../Components/Layout/Layout";
 import { UserContext } from "../UserContext";
 import {toast}from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch } from "react-redux";
+import { LoginUser } from "../Components/Store/UserSlice";
 
 export default function Login() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [redirect, setRedirect] = useState();
   const{setUserInfo,userInfo}=useContext(UserContext);
+  const navigate=useNavigate()
+  const dispatch=useDispatch()
   useEffect(() => {
     if (userInfo.token && userInfo.role) {
-      // If user info is available and role is present, redirect
       redirectUser(userInfo.role);
     }
   }, [userInfo]);
@@ -22,23 +25,18 @@ export default function Login() {
      return toast.error('Fields cannot be empty'); 
     }
     try{
-    const response = await fetch("http://localhost:4000/Login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
-    if (!response.ok) {
-      const error = await response.json();
-      toast.error(error.message);
-    } 
-    else {
-      const user=await response.json()
-        await setUserInfo(user.token);
-        redirectUser(user.role);
-        toast.success( `Welcome ${user.role}`,{theme:'colored',position:'top-center'});
-  }
- 
+    const response=await dispatch(LoginUser({email,password}))
+      if(response?.payload?.success==='verify'){
+         navigate ('/Signup',{state:{user:response?.payload.data}})
+        toast.info(response?.payload?.message)
+      }else 
+      if(response?.payload?.success){
+        redirectUser(response?.payload?.role);
+        toast.success( `Welcome ${response?.payload?.role}`,{theme:'colored',position:'top-center'});
+      }  
+      else{
+        toast.error(response?.payload?.message)
+      }  
   }
     catch(err){
     console.log(err.message)
@@ -60,7 +58,7 @@ if(redirect){
     <Layout>
       <div className="login-container">
       <div className="member">
-        <form className="Login" onSubmit={login}>
+        <form className="Login-form" onSubmit={login}>
           <h1>Login</h1>
           <input
             className="text"

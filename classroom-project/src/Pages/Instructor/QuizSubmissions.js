@@ -59,7 +59,7 @@ const QuizSubmissions = ({quizz_id,tests}) => {
                       <td>
                         <span
                           className={
-                            user?.marks > tests?.totalmarks / 2
+                            user?.marks >= tests?.totalmarks / 2
                               ? "badge bg-success"
                               : "badge bg-danger"
                           }
@@ -85,7 +85,7 @@ const QuizSubmissions = ({quizz_id,tests}) => {
                 </tbody>
               )
           ):(
-           <TableSkeleton/>
+           <TableSkeleton columns={5}/>
 
           )
           }

@@ -94,7 +94,7 @@ const DisplayQuiz = ({ quizz_id, tests, states }) => {
   const minutes = Math.floor((remainingTime % 3600) / 60);
   const seconds = remainingTime % 60;
   const marks = result?.marks < tests?.totalmarks / 2;
-
+console.log(selectedAnswer)
   return (
     <div className="Quiz">
        {User.role==='Instructor'&&
@@ -118,13 +118,13 @@ const DisplayQuiz = ({ quizz_id, tests, states }) => {
           )}
           {state === "Quizz" && (
             <div className="quiz-contents d-flex flex-column align-items-center">
-              <div className={remainingTime<40?"end-timer":'timer'}>
+             {User.role!=='Instructor'&& <div className={remainingTime<40?"end-timer":'timer'}>
                 <span ><PiTimerBold style={{marginRight:'2px',marginBottom:'3px', color:'black'}}/></span> 
                 <span >
                 {hours?hours:'00'}:
                 {minutes < 10 ? "0" + minutes : minutes}:
                 {seconds < 10 ? "0" + seconds : seconds}</span>
-              </div>
+              </div>}
               <div className=""><span>{currQuestion+1}/{test?.length}</span></div>
               <div className="quiz-q d-grid gap-3">
                 <h3>{currQuestion + 1}.</h3>
@@ -132,29 +132,29 @@ const DisplayQuiz = ({ quizz_id, tests, states }) => {
               </div>
               <div className="questions ">
                 <div className='q-1' >
-                  <span onClick={() => answer("A")} className={`q d-flex ${
-                      selectedAnswer[currQuestion + 1] === "A"||test[currQuestion]?.Correct==='A' ? "active" : ""
-                    }`}
+                  <span onClick={() => answer("A")} className={`q d-flex gap-2 
+                      ${selectedAnswer[currQuestion + 1] === "A"||(User.role==='Instructor'&&test[currQuestion]?.Correct==='A') ? "active" : ""
+          }`}
                   >
-                    A.<p>{test[currQuestion]?.A}</p>
+                   <strong>A.</strong>  <p>{test[currQuestion]?.A}</p>
                   </span>
-                  <span onClick={() => answer("B")}className={`q d-flex  ${
+                  <span onClick={() => answer("B")}className={`q d-flex  gap-2 ${
                       selectedAnswer[currQuestion + 1] === "B"||test[currQuestion]?.Correct==='B'? "active" : ""
                     }`}
                   >
-                    B.<p>{test[currQuestion]?.B}</p>
+                    <strong>B.</strong> <p>{test[currQuestion]?.B}</p>
                   </span>
-                  <span onClick={() => answer("C")}className={`q d-flex  ${
+                  <span onClick={() => answer("C")}className={`q d-flex gap-2 ${
                       selectedAnswer[currQuestion + 1] === "C"||test[currQuestion]?.Correct==='C' ? "active" : ""
                     }`}
                   >
-                    C.<p>{test[currQuestion]?.C}</p>
+                   <strong>C.</strong> <p>{test[currQuestion]?.C}</p>
                   </span>
-                  <span onClick={() => answer("D")} className={`q d-flex  ${
+                  <span onClick={() => answer("D")} className={`q d-flex gap-2${
                       selectedAnswer[currQuestion + 1] === "D"||test[currQuestion]?.Correct==='D' ? "active" : ""
                     }`}
                   >
-                    D.<p>{test[currQuestion]?.D}</p>
+                    <strong>D.</strong> <p>{test[currQuestion]?.D}</p>
                   </span>
                 </div>
               </div>

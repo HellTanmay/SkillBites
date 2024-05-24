@@ -4,6 +4,7 @@ import {useDispatch} from 'react-redux'
 import { addAssignments } from '../../Components/Store/AssignSlice';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { RiCloseFill } from 'react-icons/ri';
 
 
 const AddAssignment = ({closeModal}) => {
@@ -38,22 +39,14 @@ const AddAssignment = ({closeModal}) => {
     }
 
   return (
-    <div className="modal1" style={{ position: "fixed"}}>
-    <div className="modalcontainer"style={{height:'500px'}}>
-      <button
-        className="btn rounded-pill btn-danger"
-        style={{ float: "right", marginRight: "13px", marginTop: "10px" }}
-        onClick={() => closeModal(false)}
-      >
-        X
-      </button>
-      <div
-        className="modal-title"
-        style={{ padding: "10px", background: "white", borderRadius: "20px" }}
-      >
+    <div className="modal1">
+    <div className="modalcontainer">
+   
+      <div className="modal-title">
         <h1 style={{ marginLeft: "10px", fontFamily: "angkor" }}>
           Add a new Assignment
         </h1>
+        <button onClick={()=>closeModal(false)}><RiCloseFill style={{marginBottom:'20px',marginLeft:'-3px'}}/></button>
       </div>
       <form onSubmit={add}>
       <div className="modal-body">
@@ -62,7 +55,7 @@ const AddAssignment = ({closeModal}) => {
           <div className="col-sm-2 ">
             <label for="name">Question</label>{" "}
           </div>
-          <div className="col-sm-6">
+          <div className="col-sm-10">
             <input
               type="text"
               className="edit-text"
@@ -79,7 +72,7 @@ const AddAssignment = ({closeModal}) => {
           <div className="col-sm-2">
             <label >Description</label>{" "}
           </div>
-          <div className="col-sm-9">
+          <div className="col-sm-10">
          <textarea className="edit-text"style={{height:'100px'}}
          required
          name='description'
@@ -91,7 +84,7 @@ const AddAssignment = ({closeModal}) => {
           <div className="col-sm-2">
             <label >Marks</label>{" "}
           </div>
-          <div className="col-sm-9">
+          <div className="col-sm-10">
          <input type='number' className="edit-text"style={{}}
          required
          name='description'
@@ -103,7 +96,7 @@ const AddAssignment = ({closeModal}) => {
           <div className="col-sm-2">
             <label for="formFile"> File</label>
           </div>
-          <div className="col-sm-6">
+          <div className="col-sm-10">
             <input
               type="file"
               className="edit-text form-control"
@@ -115,7 +108,7 @@ const AddAssignment = ({closeModal}) => {
         </div>
       </div>
       <div className='modal-footer'>
-      <button className='btn btn-md btn-info'>Add Assignment</button>
+      <button className='btn btn-md btn-info text-white'>Add Assignment</button>
     </div>
     </form>
    </div>

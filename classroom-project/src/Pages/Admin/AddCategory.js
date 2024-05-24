@@ -6,7 +6,7 @@ import { addCategory, deleteCategory, fetchCategory } from '../../Components/Sto
 import { toast } from 'react-toastify'
 
 const AddCategory = () => {
-    const [category,setCategory]=useState()
+    const [category,setCategory]=useState('')
     const dispatch=useDispatch()
     useEffect(()=>{
         dispatch(fetchCategory())
@@ -42,7 +42,7 @@ const AddCategory = () => {
         <hr className=''/>
         <div className=' d-flex gap-3 justify-content-center'style={{flex:'1 0',width:'100%',flexWrap:'wrap'}}>
         <input className='edit-text'placeholder='insert category...'type='text'
-        required
+        required value={category}
         onChange={(e)=>setCategory(e.target.value)}></input>
         
         <button onClick={add}>Add</button>

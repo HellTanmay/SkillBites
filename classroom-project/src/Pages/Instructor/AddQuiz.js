@@ -4,14 +4,14 @@ import { useParams } from 'react-router-dom';
 import { DisplayQuizz, addQuiz } from '../../Components/Store/QuizzSlice';
 import { toast } from 'react-toastify';
 import { MdDownload } from "react-icons/md";
+import { RiCloseFill } from 'react-icons/ri';
 
 const AddQuiz = ({closeModal}) => {
     const [excel, setExcel] = useState();
     const [title,setTitle]=useState();
-    const [marks,setMarks]=useState();
-    const [duration,setDuration]=useState();
-console.log(marks)
-console.log(duration);
+    const [marks,setMarks]=useState('1');
+    const [duration,setDuration]=useState('1');
+
     const {id}=useParams()
     const dispatch=useDispatch()
     const data = new FormData();
@@ -25,7 +25,7 @@ console.log(duration);
         if(!excel||!title||!marks||!duration){
           return toast.error('Every field is mandatory')
          }
-     try{
+      try{
         const res=await dispatch(addQuiz({c_id:id,formData:data}))
          if(res?.payload?.success){
             toast.success(res?.payload?.message)
@@ -41,24 +41,15 @@ console.log(duration);
       }
       }
   return (
-    <div className="modal1" style={{ position: "fixed" }}>
+    <div className="modal1">
      
     <div className="modalcontainer">
-
-      <button
-        className="btn rounded-pill btn-danger"
-        style={{ float: "right", marginRight: "13px", marginTop: "10px" }}
-        onClick={() => closeModal(false)}
-      >
-        X
-      </button>
       <div
-        className="modal-title "
-        style={{ padding: "10px", background: "white", borderRadius: "20px" }}
-      >
+        className="modal-title ">
         <h1 style={{ marginLeft: "100px", fontFamily: "angkor" }}>
         Add Tests
         </h1>
+        <button onClick={()=>closeModal(false)}><RiCloseFill style={{marginBottom:'20px',marginLeft:'-3px'}}/></button>
       </div>
       <form onSubmit={add}>
       <div className="modal-body">
@@ -67,7 +58,7 @@ console.log(duration);
           <div className="col-sm-2">
             <label for="formFile"> Excel file</label>
           </div>
-          <div className="col-sm-6">
+          <div className="col-sm-10">
             <input
               type="file"
               className="edit-text form-control"
@@ -83,7 +74,7 @@ console.log(duration);
           <div className="col-sm-2 ">
             <label for="name">Excel format</label>{" "}
           </div>
-          <div className="col-sm-6">
+          <div className="col-sm-5">
             <div className='excel-download'>
             <a className='' href='/Assets/ExcelFormat.xlsx'download><MdDownload className='excel-btn'/>download</a>
             </div>
@@ -94,7 +85,7 @@ console.log(duration);
           <div className="col-sm-2 ">
             <label for="name">Title</label>{" "}
           </div>
-          <div className="col-sm-6">
+          <div className="col-sm-10">
             <input
               type="text"
               className="edit-text"
@@ -111,7 +102,7 @@ console.log(duration);
           <div className="col-sm-4">
             <label>Marks for each question</label>{" "}
           </div>
-          <div className="col-sm-5">
+          <div className="col-sm-3">
           <select name='duration' 
           className='edit-text'
           style={{width:'100%'}}
@@ -130,7 +121,7 @@ console.log(duration);
           <div className="col-sm-4">
             <label>Duration(in minutes)</label>{" "}
           </div>
-          <div className="col-sm-5">
+          <div className="col-sm-3">
             <select name='duration' 
             className='edit-text'
             style={{width:'100%'}}

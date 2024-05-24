@@ -8,12 +8,11 @@ nav:hover{
   font-family: "Dr Sugiyama", cursive ;
 display: flex;
 }
-.text-box {
-  margin-left:80px ;
-}
+
 .li-item{
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  margin-left: 9px;
+  margin-bottom: 5px;
+  margin-left: 5px;
 }
 
 .li-item:hover{
@@ -34,10 +33,6 @@ display: flex;
   width: 36px;
   height: auto;
 }
-@media screen and (min-width:0px)and (max-width:700px){
-  .text-box{
-    width: 8rem;
-  }
-}
+
 
 

@@ -59,43 +59,42 @@ const role = userInfo?.role;
            
           <div className="collapse navbar-collapse " id="navbarSupportedContent"style={{zIndex:1004}}>
          
-            <ul className="navbar-nav mb-2 mb-lg-0 ms-auto ">
-            
+            <ul className="navbar-nav mb-2 mb-lg-0 ms-auto  ">
                 
-              <li className="List-item">
-                <NavLink className="nav-link li-item" to="/">
-                <FaHome/> Home
+              <li className="nav-item li-item">
+                <NavLink className="nav-link " to="/">
+                 Home
                 </NavLink>
               </li>
              
-             {role!=='Admin'&&( <li className="List-item">
-                <NavLink className="nav-link li-item" to="/contact">
+             {role!=='Admin'&&( <li className="nav-item li-item">
+                <NavLink className="nav-link " to="/contact">
                 Contact
                 </NavLink>
               </li>)}
               {username &&(
                 <>
-             {role!=='Admin'&& <li>
-                <NavLink className="nav-link li-item" to="/course"onClick={fetchCourse}>
+             {role!=='Admin'&& <li className="nav-item li-item">
+                <NavLink className="nav-link " to="/course"onClick={fetchCourse}>
                   Course List
                 </NavLink>
               </li>}
               
-                <li>
-                <span className="btn btn-md btn-danger li-item" onClick={logout}>Logout</span>
+                <li className="nav-item li-item">
+                <span className="btn btn-md btn-danger " onClick={logout}>Logout</span>
                 </li>
                 </>
               )}
               {!username &&(
                 <>
-              <li>
-                <NavLink className=" btn btn-md btn-primary li-item" to="/Login">
+              <li className="nav-item li-item">
+                <NavLink className=" btn btn-md btn-primary  " to="/Login">
                   Login
                 </NavLink>
                
               </li>
-              <li>
-                <NavLink className=" btn btn-md btn-primary li-item" to="/Signup">
+              <li className="nav-item li-item">
+                <NavLink className=" btn btn-md btn-primary " to="/Signup">
                   Signup
                 </NavLink>
                 

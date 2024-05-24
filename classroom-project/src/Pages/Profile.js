@@ -1,34 +1,23 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../Components/Layout/Layout";
 import EditProfile from "./EditProfile";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUser } from "../Components/Store/UserSlice";
 
 const Profile = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [user, setUser] = useState();
   const [state, setState] = useState(0);
-
+const dispatch=useDispatch()
+const user=useSelector((state)=>state.User.userData)
   useEffect(() => {
-    fetch("http://localhost:4000/profile", {
-      credentials: "include",
-    }).then((response) => {
-      response.json().then((data) => setUser(data));
-    });
+dispatch(fetchUser())
   }, [state]);
-console.log(user)
-  if (!user) return "";
+
   return (
     <div>
       <Layout>
         <div className="pro-container d-flex ">
-          <div
-            className="pro-divide row gutters-sm"
-            style={{
-             
-              borderRadius: "20px ",
-              padding: "10px",
-              width:'99%'
-            }}
-          >
+          <div className="pro-divide row gutters-sm">
             <h1 className="profile-head">My Profile</h1>
             <div className="col-md-4 mb-3">
               <div className="user-card card">
@@ -50,7 +39,7 @@ console.log(user)
                     <div className="mt-3">
                       <h4>{user?.username}</h4>
                       <p className="text-secondary mb-1s">{user?.role}</p>
-                      <p className="bio font-size-sm">{user.bio}</p>
+                      <p className="bio font-size-sm">{user?.bio}</p>
                     </div>
                   </div>
                 </div>
@@ -91,7 +80,6 @@ console.log(user)
                     </div>
                     <div
                       className="col-sm-9 text-secondary"
-                      style={{ overflowY: "scroll" }}
                     >
                       {user?.bio}
                     </div>
@@ -114,13 +102,13 @@ console.log(user)
                   </div>
                   <hr />
                   <div className="row">
-                    <div className="col-sm-12 text-right">
+                    <div className="col-sm-12 ">
                       <button
                         onClick={() => setOpenModal(true)}
                         type="button"
                         className="Edit-btn btn btn-md"
                         style={{
-                          marginLeft: "420px",
+                        float:'right',
                           color: "red",
                           fontFamily: "Revalia",
                         }}

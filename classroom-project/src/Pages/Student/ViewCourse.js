@@ -31,6 +31,7 @@ function ViewCourse() {
   const [desc, setDesc] = useState("");
   const [quizState,setQuizState]=useState()
   const [selectedLecture, setSelectedLecture] = useState(null);
+  const videoRef=useRef(null)
   const fileInputRef = useRef("");
 
   const dispatch = useDispatch();
@@ -213,6 +214,34 @@ async function handleQuizDelete(qui_id){
     }
   }
 }
+
+// const isFullyBuffered = () => {
+//   const video = videoRef?.current;
+//   const buffered = video?.buffered;
+//   if (buffered?.length) {
+//     const end = buffered?.end(buffered?.length - 1);
+//     return end >= video?.duration;
+//   }
+//   return false;
+// };
+// useEffect(() => {
+//   const video = videoRef.current;
+//   video?.addEventListener('progress',()=>{
+//    if( video?.ended){
+//     console.log('wow')
+//    }
+//   })
+// },[])
+ 
+
+const handleTimeUpdate = () => {
+  const video = videoRef.current;
+  if (video.currentTime === video.duration) {
+    handleMarked(l_id)
+  }
+};
+ 
+
 const marked=selectedLecture?.watched?.includes(user)
   const pdfUrl = selectedAssign && selectedAssign.file;
   const sub =selectedAssign &&selectedAssign.submit &&
@@ -345,12 +374,14 @@ const marked=selectedLecture?.watched?.includes(user)
             <>
              {role==='Student'&&( <div className=" d-flex gap-2"style={{justifyContent:'flex-end',marginBottom:'5px',marginRight:'20px'}}>
               <input className="marked" type='checkbox'checked={marked}id="mark"name='mark'
-                onChange={(e)=>handleMarked(selectedLecture._id)}/>
+                />
                 <label htmlFor="mark">Mark as watched</label>
                 </div>)}
               <div className="video-container">
                
                 <video src={videoSrc}
+                ref={videoRef}
+                  onTimeUpdate={handleTimeUpdate}
                         controls
                         disablePictureInPicture
                         autoPlay
