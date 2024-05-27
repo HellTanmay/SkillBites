@@ -43,7 +43,7 @@ const CreateCourse = () => {
     data.set("file", file[0]);
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:4000/course", {
+      const res = await fetch("http://localhost:4000/createCourse", {
         method: "POST",
         body: data,
         credentials: "include",
@@ -134,7 +134,7 @@ const CreateCourse = () => {
                   <option value='4'>4</option>
                   <option value='6'>6</option>
                   <option value='8'>8</option>
-                  <option value='10'>0</option>
+                  <option value='10'>10</option>
                   <option value='12'>12</option>
                 </select>
                 </div>

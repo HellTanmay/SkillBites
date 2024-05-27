@@ -16,6 +16,7 @@ const loading=useSelector((state)=>state.course.loading)
   useEffect(() => {
     dispatch(fetchCategory());
   }, [dispatch]);
+  
   useEffect(() => {
     const category = option?.length > 0 ? option[0]?.value : "";
     dispatch(fetchCourse(category));

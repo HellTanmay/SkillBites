@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 export const fetchCourse=createAsyncThunk('fetchCourse',async(category)=>{
  try{
-    let url=`http://localhost:4000/course`
+    let url=`http://localhost:4000/fetchCourses`
     if(category){
         url+=`?optio=${category}`
     }

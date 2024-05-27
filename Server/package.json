@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.0.3",
@@ -14,6 +15,7 @@
     "pdfkit": "^0.15.0",
     "razorpay": "^2.9.2",
     "shortid": "^2.2.16",
+    "uuid": "^9.0.1",
     "xlsx": "^0.18.5"
   },
   "scripts": {

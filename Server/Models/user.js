@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose'
 const { Schema, model } = mongoose;
-const bcrypt=require('bcryptjs');
+import bcrypt from 'bcryptjs';
 const salt = bcrypt.genSaltSync(10);
 
 
@@ -47,7 +47,7 @@ const UserSchema = new Schema({
   phone: {
     type: String,
     default: 'N/a',
-    maxlength: [10, "Phone number should not exceed 10 characters"],
+   
   },
   verified:{
     type:Boolean,
@@ -67,4 +67,4 @@ UserSchema.pre ('save',async function(next){
 
 const UserModel = model("User", UserSchema);
 
-module.exports = UserModel;
+export default UserModel;

@@ -1,6 +1,6 @@
-const AppError = require("./error");
 
-module.exports = (err, req, res, next) => {
+
+export const ErrorHandler = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
     err.message = err.message || 'Something went wrong';
     if (err.name === 'ValidationError') {

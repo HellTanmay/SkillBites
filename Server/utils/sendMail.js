@@ -1,5 +1,6 @@
-const nodemailer=require('nodemailer')
-require('dotenv').config(); 
+import nodemailer from 'nodemailer'
+import { config } from 'dotenv';  
+config()
 const sendEmail = async function (email, subject, message) {
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
@@ -28,4 +29,4 @@ const sendEmail = async function (email, subject, message) {
         }
       });
   };
-  module.exports=sendEmail
+export default sendEmail

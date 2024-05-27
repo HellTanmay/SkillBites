@@ -64,10 +64,13 @@
 }
 
 .file:hover {
-  background: #a6c5e3e7;
+  background: #8effa4;
 }
 .file.active {
   background: #8effa4;
+}
+.file:active{
+  background: #1cfa48;
 }
 .span-files li {
   list-style-type: none;
@@ -372,10 +375,13 @@ video {
 }
 
 .q-1 span:hover{
-  background-color: rgb(179, 234, 179);
+  background-color: #b3eab3;
 }
 .q.active {
-  background-color: rgb(180, 245, 180);
+  background-color: #b3eab3;
+}
+.q:active{
+  background-color: #2bd82d;
 }
 .navigation-buttons {
   display: flex;

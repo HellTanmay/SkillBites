@@ -1,7 +1,13 @@
-// const express=require('express')
-// const {createPayment}=require('../Controllers/PaymentController')
+import { Router } from 'express';
+import { verifyToken } from "../Middleware/authMid.js";
+import {createPayment, validatePayment, fetchOrders, getOrderDetails}from '../Controllers/PaymentController.js'
 
-// const router = express.Router();
-// router.post('/order',createPayment)
+const router = Router();
 
-// module.exports= router;
+router.post('/order/:id',verifyToken,createPayment)
+        .post('/order/validate/:id',verifyToken,validatePayment)
+
+router.get('/getOrders',verifyToken,fetchOrders)
+        .get('/getInvoice',verifyToken,getOrderDetails)
+
+export default router

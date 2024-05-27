@@ -146,7 +146,7 @@ const EditProfile = ({close1Modal,user}) => {
             <label>Mobile</label>{' '}
             </div>
             <div className='col-sm-10'>
-            <input type='number'className='edit-text'name='phone' value={userdata.phone} onChange={handleInput}
+            <input type='number' className='edit-text'name='phone' value={userdata.phone} onChange={handleInput}
              placeholder='Enter your  mobile number'/>
             </div>
             </div> 

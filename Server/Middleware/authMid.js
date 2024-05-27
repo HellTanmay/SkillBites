@@ -1,19 +1,19 @@
-const {sign,verify}=require('jsonwebtoken');
-const AppError = require('./error');
+import jwt from 'jsonwebtoken';
+import AppError from '../utils/error.js';
 const secret = "ddii-hdij-dknn-cbch-5544-3se7";
 
-const Token=(user)=>{
-    const Token=sign({username:user.username,id:user.id,role:user.role},secret);
+export const Token=(user)=>{
+    const Token=jwt.sign({username:user.username,id:user.id,role:user.role},secret);
     return Token;
 }
 
-const verifyToken=(req,res,next)=>{
+export const verifyToken=(req,res,next)=>{
     const token=req.cookies['token']
 
     if(!token)
     throw new AppError('Unauthorized',400)
 try {
-    const data=verify(token,secret)
+    const data=jwt.verify(token,secret)
     if(data){
         req.auth=true
         req.user=data
@@ -24,4 +24,4 @@ try {
 }
 }
 
-module.exports={Token,verifyToken}
+
