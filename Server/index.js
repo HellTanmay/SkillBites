@@ -48,7 +48,7 @@ app.use(paymentRoute)
 app.use(miscRoutes)
 
 app.listen(process.env.PORT, () => {
-  console.log(`Server is running in port ${process.env.PORT}`);
+  console.log(`Server is running in port ${process.env.PORT||4000}`);
 });
 app.use(ErrorHandler);
 

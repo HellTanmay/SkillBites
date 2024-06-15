@@ -1,11 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Dr+Sugiyama&family=Gabarito:wght@400..900&family=Nanum+Brush+Script&family=Nanum+Pen+Script&display=swap');
 
 nav:hover{
   box-shadow: 0 4px 6px rgb(0, 0, 0);
   transition: 200ms;
 }
 .brand{
-  font-family: "Dr Sugiyama", cursive ;
+  font-family:'Teko';
 display: flex;
 }
 

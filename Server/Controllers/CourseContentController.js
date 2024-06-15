@@ -1,7 +1,11 @@
 import cloudinary from "../cloudinary.js";
 import Course from "../Models/Course.js";
+import User from "../Models/user.js";
 import AppError from "../utils/error.js";
 import fs from "fs";
+import xlsx from 'xlsx'
+import {getVideoDurationInSeconds} from 'get-video-duration'
+
 
 export const createLecture = async (req, res, next) => {
   try {
@@ -123,6 +127,14 @@ export const deleteLecture = async (req, res, next) => {
             resource_type: "video",
           }
         );
+        course.recordings[lectureIndex].watched.forEach(submission => {
+          const studentIndex = course.enrolled.findIndex(
+            enrolled => enrolled.student.toString() === submission.toString()
+          );
+          if (studentIndex !== -1) {
+            course.enrolled[studentIndex].totalMarks -= 1;
+          }
+        });
         course.total -= 1;
         course.recordings.splice(lectureIndex, 1);
         await course.save();
@@ -205,6 +217,15 @@ export const deleteAssignments = async (req, res, next) => {
           throw new AppError("Course does not exist.", 404);
         }
         const assignmentMarks = course.assignments[assignIndex].marks;
+        
+        course.assignments[assignIndex].submit.forEach(submission => {
+          const studentIndex = course.enrolled.findIndex(
+            enrolled => enrolled.student.toString() === submission.student.toString()
+          );
+          if (studentIndex !== -1) {
+            course.enrolled[studentIndex].totalMarks -= assignmentMarks;
+          }
+        });
         course.total -= assignmentMarks;
         course.assignments.splice(assignIndex, 1);
         await course.save();
@@ -318,15 +339,75 @@ export const updateSubmissions = async (req, res, next) => {
           course.enrolled[studentIndex].totalMarks += assignment.marks;
           await course.save();
           const updatedSubmission = assignment.submit.id(sub_id);
-          res.status(200).json({ success: true, data: updatedSubmission });
+          res.status(200).json({ 
+            success: true, 
+            data: updatedSubmission 
+          });
         } else {
           res.status(400).json({
               success: false,
               data: assignment.submit,
-              message: "You cant change the form once the it is corrected",
+              message: "Already marked",
             });
         }
       } catch (err) {
         next(err);
       }
 };
+
+
+export const getCourseContent=async(req,res,next)=>{
+  try {
+    const user=req.user
+    const {id}=req.params;
+    const course=await Course.findById(id)
+    if(!course){
+      throw new AppError("Course not found", 404);
+    }
+    const lectures=  course.recordings
+ 
+  const lecturesWithDuration =await Promise.all(lectures.map( async(lecture) => {
+    const duration = await getVideoDurationInSeconds(lecture.file.secure_url);
+    const title= lecture.filename
+    const createdAt= lecture.createdAt
+    return {title,createdAt, duration,type:'lecture'};
+  }));
+
+  const assignments=course.assignments
+  let title
+  let createdAt
+  const assigns=assignments.map((assignment)=>{
+   title=assignment.title,
+  createdAt=assignment.createdAt
+  return {title,createdAt,type:'assignment'}
+})
+
+  const quizz=course.quizz
+  let data
+  const quizzes=quizz.map((quiz)=>{
+  const file = quiz.file;
+  const workbook = xlsx.readFile(file);
+  const sheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[sheetName];
+  data = xlsx.utils.sheet_to_json(worksheet);
+  const title=quiz.title;
+  const createdAt=quiz.createdAt;
+  const length=data.length
+  return{title,length,createdAt,type:'quiz'}
+})
+
+  
+
+  const combinedData = [
+    ...lecturesWithDuration,
+    ...assigns,
+    ...quizzes,
+  ];
+
+    res.status(200).json({success:true,data:combinedData})
+
+  } catch (error) {
+    next(error)
+  }
+
+}

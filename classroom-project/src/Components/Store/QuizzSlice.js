@@ -111,7 +111,8 @@ export const QuizzSlice = createSlice({
         result:[],
         AllResult:[],
         loading:false,
-        allLoading:false
+        allLoading:false,
+        resLoad:false
     },
     reducers:{},
     extraReducers: (builder) => {

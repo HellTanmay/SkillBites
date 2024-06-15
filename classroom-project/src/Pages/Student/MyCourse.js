@@ -11,7 +11,7 @@ export default function MyCourse() {
     const state=useSelector((state)=>state)
    const courses=state?.course?.MycourseData.data
    const loading=state?.course?.loading
-   const User=state?.User?.userData
+   const role=state?.User?.role
 useEffect(()=>{
  dispatch(fetchMyCourse())
  dispatch(fetchUser())
@@ -34,7 +34,7 @@ useEffect(()=>{
     </div>):(
        <div className='no-Orders'>
        <h4 className='mb-3'>You Dont have any courses</h4>
-       <p className='d-flex'><Link to={User.role==='Student'?'/course':'/create'} className='btn btn-primary'>{User.role==='Student'?'Browse Courses':'Create course'}</Link></p>
+       <p className='d-flex'><Link to={role==='Student'?'/course':'/create'} className='btn btn-primary'>{role==='Student'?'Browse Courses':'Create course'}</Link></p>
        </div>
     )):(
       <div className="no-Orders">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom';
 import {useDispatch} from 'react-redux'
-import { addAssignments } from '../../Components/Store/AssignSlice';
+import { addAssignments, fetchAssignments } from '../../Components/Store/AssignmentSlice';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RiCloseFill } from 'react-icons/ri';
@@ -28,6 +28,7 @@ const AddAssignment = ({closeModal}) => {
           const res=await dispatch(addAssignments({c_id:id,formData:data}))
           if(res?.payload?.success){
            toast.success("Assignment Added")
+            dispatch(fetchAssignments(id))
             closeModal(false)
           }
           else{

@@ -1,12 +1,12 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import Layout from "../../Components/Layout/Layout";
-import { UserContext } from "../../UserContext";
 import { Link, useParams } from "react-router-dom";
 import {IoIosArrowDown,IoIosArrowUp,IoIosAddCircleOutline} from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteLecture, getLectures, updateLecture } from "../../Components/Store/RecordSlice";
 import AddAssignment from "../Instructor/AddAssignment";
-import { deleteAssign, submitAssign } from "../../Components/Store/AssignSlice";
+import { deleteAssign, fetchAssignments } from "../../Components/Store/AssignmentSlice";
+import { submitAssign } from "../../Components/Store/SubmitSlice";
 import Performance from "./Performance";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -25,7 +25,6 @@ function ViewCourse() {
   const [openModal, setOpenmodal] = useState(false);
   const [lectureModal, setLectureModal] = useState(false);
   const [openTestModal, setTestModal] = useState(false);
-  const [assignments, setAssignments] = useState(null);
   const [selectedAssign, setSelectedAssign] = useState(null);
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [desc, setDesc] = useState("");
@@ -35,37 +34,39 @@ function ViewCourse() {
   const fileInputRef = useRef("");
 
   const dispatch = useDispatch();
-  const lectures = useSelector((state) => state?.Lecture?.lectures?.data);
-  const quizzes=useSelector((state)=>state.Quizzes.quizzes.data)
+  const state = useSelector((state) => state);
+  const lectures =state?.Lecture?.lectures?.data
+  const assignments=state?.fetchAssignments.Assignments.data
+  const quizzes=state.Quizzes.quizzes.data
+  const role = state.User.role;
+  const user = state.User?.userData._id;
 
   const params = new URLSearchParams(window.location.search);
   const q_id = params.get("assignment_id");
   const qu_id=params.get("quizz_id")
   const l_id=params.get("lecture_id")
   const { id } = useParams();
-
-  const { userInfo } = useContext(UserContext);
-  const role = userInfo?.role;
-  const user = userInfo?.id;
+ 
 
 
-function fetchAssignments(){
-  try {
-    fetch(`http://localhost:4000/getAssignments/${id}`, {
-      credentials: "include",
-    }).then((res) => {
-      res.json().then((data) => setAssignments(data.data));
-    });
-  } catch (err) {
-    console.log(err);
-  }
-}
+// function fetchAssignments(){
+//   try {
+//     fetch(`http://localhost:4000/getAssignments/${id}`, {
+//       credentials: "include",
+//     }).then((res) => {
+//       res.json().then((data) => setAssignments(data.data));
+//     });
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
 
-  useEffect(() => {
-    fetchAssignments()
-  }, [openModal]);
+  // useEffect(() => {
+  //   dispatch(fetchAssignments(id))
+  // }, [dispatch,openModal]);
 
   useEffect(() => {
+    dispatch(fetchAssignments(id))
     dispatch(getLectures(id));
     dispatch(DisplayQuizz(id));
   }, [dispatch]);
@@ -168,7 +169,7 @@ function fetchAssignments(){
       );
       if (res.payload.success) {
         toast.success(res.payload.data);
-        fetchAssignments()
+       dispatch(fetchAssignments(id))
         clear();
       } else {
         toast.error(res.payload.message);
@@ -192,7 +193,7 @@ function fetchAssignments(){
     const res=await dispatch(deleteAssign({courseId:id,assignId:a_id}))
     if(res.payload.success){
       toast.success(res.payload.data,{position:'top-center'})
-      fetchAssignments()
+      dispatch(fetchAssignments(id))
     }
   }
   }
@@ -306,19 +307,19 @@ const marked=selectedLecture?.watched?.includes(user)
                       <li className={`file ${selectedAssign === assignment ? "active" : ""}`}
                         style={{cursor:quizState==='Quizz'?'not-allowed':'pointer'}}
                         onClick={quizState!=='Quizz'?() => handleAssign(assignment):null}>
-                        <p style={{ fontWeight: "bold" }}>
-                          {assignment.title}
-                          {role === "Instructor" && (<>
-                            <span onClick={(e)=>e.stopPropagation()} style={{float:'right', color:'red'}}><RiDeleteBin4Line onClick={()=>handleAssignDelete(assignment._id)}/></span>
-                            <span className="badge rounded-pill bg-danger"style={{float:'right'}}>
+                        <div className="d-flex justify-content-between" style={{ fontWeight: "bold" }}>
+                          <p>{assignment.title}</p>
+                          {role === "Instructor" && (<div className="d-flex gap-1 "style={{alignItems:'flex-start'}}>
+                          <span className="badge rounded-pill bg-success mt-1"style={{}}>
                               {counting > 0 && counting}
                             </span>
-                            
-                            </>
+                            <span onClick={(e)=>e.stopPropagation()} style={{color:'red'}}>
+                              <RiDeleteBin4Line onClick={()=>handleAssignDelete(assignment._id)}/></span>
+                            </div>
                           )}
-                        </p>
+                        </div>
 
-                        <p style={{fontSize: "12px", marginTop: "-15px",color: "#6B6860",}}>
+                        <p style={{fontSize: "12px", marginTop: "-10px",color: "#6B6860",}}>
                           {format(assignment.createdAt).date}
                           <span style={{ float: "right", color: "#6B6860" }}>
                             {format(assignment.createdAt).time}
@@ -365,7 +366,7 @@ const marked=selectedLecture?.watched?.includes(user)
    
             </div>
         </div>
-        <div className="view-content d-flex flex-column ">
+        <div className="view-content ">
           {!selectedLecture&&!selectedAssign&&!selectedQuiz&&(
           <div className="performance">
                 <Performance id={id}/>
@@ -437,12 +438,16 @@ const marked=selectedLecture?.watched?.includes(user)
                 <p style={{ textIndent: "60px", color: "var(--txt-clr)" }}>
                   {selectedAssign && selectedAssign.description}
                 </p>
-                {pdfUrl && (
-                     <Link className='btn btn-success'to={`/file-viewer?source=${pdfUrl}`}>View Question</Link>
-                )}
-                <span style={{ float: "right", color: "red" }}>
-                  marks: {selectedAssign && selectedAssign.marks}
+                <hr/>
+                <div className="assigns-mark">
+               
+                  <span style={{visibility:pdfUrl?'visible':'hidden'}}>   
+                  <Link className='btn btn-success'to={`/file-viewer?source=${pdfUrl}`}>View Question</Link>
                 </span>
+                <span>
+                  Marks: {selectedAssign && selectedAssign.marks}
+                </span>
+                </div>
               </div>
               {role === "Student" && (
                 <div className="submit">
@@ -510,7 +515,7 @@ const marked=selectedLecture?.watched?.includes(user)
               )}
             </div>
           )}
-        {selectedQuiz&&<div className="quiz">
+          {selectedQuiz&&<div className="quiz">
             <DisplayQuiz quizz_id={qu_id} tests={selectedQuiz} states={setQuizState}/>
           </div>}
           

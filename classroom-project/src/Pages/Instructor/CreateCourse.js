@@ -64,7 +64,7 @@ const CreateCourse = () => {
     }
   }
   if (redirect) {
-    return <Navigate to={"/"}></Navigate>;
+    return <Navigate to={"/myCourse"}></Navigate>;
   }
 
   return (

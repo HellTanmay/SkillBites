@@ -77,6 +77,17 @@ export const fetchPerformance=createAsyncThunk('fetchPerformance',async(id)=>{
     }
    });
 
+   export const fetchContents=createAsyncThunk('fetchContents',async(id)=>{
+    try{
+       const response=await fetch(`http://localhost:4000/courseContents/${id}`,{credentials:'include'});
+    const res=await response.json();
+
+        return res
+       
+    }catch(err){
+       console.log(err)
+    }
+   });
 
 export const CourseSlice =createSlice ({
     name:'Course',
@@ -84,6 +95,7 @@ export const CourseSlice =createSlice ({
         courseData:[],
         MycourseData:[],
         performanceStats:{},
+        courseContents:{},
         loading:false,
     },
     extraReducers:(builder)=>{
@@ -106,6 +118,17 @@ export const CourseSlice =createSlice ({
             state.loading=true
         })
         builder.addCase(fetchMyCourse.rejected, (state,action)=>{
+            console.log("error",action.payload);
+            state.loading=false
+        })
+        builder.addCase(fetchContents.fulfilled, (state,action)=>{
+            state.courseContents=action.payload;
+            state.loading=false
+        })
+        builder.addCase(fetchContents.pending, (state,action)=>{
+            state.loading=true
+        })
+        builder.addCase(fetchContents.rejected, (state,action)=>{
             console.log("error",action.payload);
             state.loading=false
         })

@@ -4,7 +4,7 @@ import User from "../Models/user.js";
 import Category from "../Models/Category.js";
 import Contact from "../Models/Contact.js";
 import AppError from "../utils/error.js";
-import fs from "fs";
+import razorpay from '../Razorypay.js'
 import pdfDocument from "pdfkit";
 
 export const CreateCategory=async(req,res,next)=>{

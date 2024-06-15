@@ -45,7 +45,7 @@ width: 100%;
 }
 
 .Content h1 {
-  font-size: clamp(2rem,3.5vw + 1rem, 5rem);
+  font-size: var(--fs-xl);
   margin-bottom: 10px;
   font-family: 'prompt';
   color: rgb(255,255,255);
@@ -55,6 +55,12 @@ width: 100%;
   font-family: "Comfortaa";
   font-size: 17px;
 }
+
+/* .profile{
+  position: relative;
+  top: 0;
+  left: 100%;
+} */
 .btn-content {
   margin-top: 20px;
   display: flex;

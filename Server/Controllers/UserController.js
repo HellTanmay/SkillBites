@@ -140,7 +140,7 @@ export const login=async(req,res,next)=>{
 
 export const verify=async(req,res,next)=>{
     const info = req.user;
-    res.json(info);
+    res.status(200).json(info);
 }
 
 export const profile=async(req,res,next)=>{
@@ -156,6 +156,21 @@ export const profile=async(req,res,next)=>{
         next(error);
       }
     
+}
+
+export const userProfile=async(req,res,next)=>{
+  try {
+      let {userId} = req.query;
+      const userDoc = await User.findById(userId).select("-password");
+      if (!userDoc) {
+        throw new AppError("User not found", 404);
+      } else {
+        res.json(userDoc);
+      }
+    } catch (error) {
+      next(error);
+    }
+  
 }
 
 export const editProfile=async(req,res,next)=>{
@@ -227,5 +242,5 @@ export const Logout=async(req,res,next)=>{
     httpOnly: true,
     sameSite: "Lax",
   });
-  res.send("logged out");
+  res.status(200).json({success:true,message:'Logged out'})
 }

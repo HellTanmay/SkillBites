@@ -1,9 +1,29 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
+import { toast } from "react-toastify";
 
 const initialState={
     submissions:[],
     isLoading:false,
  };
+
+ export const submitAssign = createAsyncThunk("submitAssign",async ({ c_id, q_id, formData }) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/submitAssign/${c_id}?assignment_id=${q_id}`,
+        {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        }
+      );
+      const resdata = await response.json();
+   console.log(resdata)
+      return resdata;
+    } catch (err) {
+     toast.error(err.message);
+    }
+  });
+
 export const getSubmission=createAsyncThunk('getSubmission',async({c_id,q_id})=>{
     try{
        const response=await fetch(`http://localhost:4000/assignments/${c_id}?assignment_id=${q_id} `,

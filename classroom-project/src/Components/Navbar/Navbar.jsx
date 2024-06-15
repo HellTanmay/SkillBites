@@ -1,47 +1,42 @@
 import "./Navbar.css";
 import React, { useContext, useEffect } from "react";
 import { NavLink} from "react-router-dom";
-import {FaHome} from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
-import { UserContext } from "../../UserContext";
 import { fetchCourse } from "../Store/CourseSlice";
+import {useDispatch,useSelector} from 'react-redux'
+import { LoggedIn, LoggedOut } from "../Store/UserSlice";
 
 function Navbar({onIcon}){ 
 
-const{setUserInfo,userInfo}=useContext(UserContext);
+const dispatch=useDispatch()
+const state=useSelector((state)=>state)
+const isLoggedIn=state.User.isLoggedIn;
+const role=state.User.role
+
   useEffect(()=>{
-    fetch('http://localhost:4000/verify',{
-      credentials:'include',
-    }).then((response)=>{
-      response.json().then((userInfo)=>{
-            setUserInfo(userInfo);
-      });
-    });
+   dispatch(LoggedIn())
   },[]);
   
-  function logout(){
-    fetch('http://localhost:4000/logout',{
-      credentials:'include',
-      method:'POST',
-    });
-    setUserInfo(null);
-    window.location.href="/";
+ async function logout(){
+    const res=await dispatch(LoggedOut())
+    if(res?.payload?.success){
+      window.location.href="/";
+    }
   }
-const username=userInfo?.username;
-const role = userInfo?.role;
+
+  
   return (
     <>
-    
       <nav className="Nav navbar navbar-expand-lg navbar-dark bg-dark fixed-top"style={{zIndex:"5"}} >
         <div className="container-fluid">
-          {username&&(
+          {isLoggedIn&&(
         <div className={"menu-bar"}>
         <FiMenu onClick={onIcon}/>
         </div> )}   
           <NavLink className="brand navbar-brand" to="/">
             <span style={{border:'1px solid', borderRadius:'50%',padding:'3px'}}>
               <img src='/Assets/Logo2.png'width='30px'height='20px'alt='skillBites'/></span>
-            <span style={{marginTop:'3px', marginLeft:'7px',fontWeight:'bold',fontSize:'24px'}}>SKILL BITES</span>
+            <span style={{marginTop:'3px', marginLeft:'7px',fontWeight:'bold',fontSize:'24px'}}>SkillBites</span>
           </NavLink>
       
         
@@ -72,7 +67,7 @@ const role = userInfo?.role;
                 Contact
                 </NavLink>
               </li>)}
-              {username &&(
+              {isLoggedIn &&(
                 <>
              {role!=='Admin'&& <li className="nav-item li-item">
                 <NavLink className="nav-link " to="/course"onClick={fetchCourse}>
@@ -85,7 +80,7 @@ const role = userInfo?.role;
                 </li>
                 </>
               )}
-              {!username &&(
+              {!isLoggedIn &&(
                 <>
               <li className="nav-item li-item">
                 <NavLink className=" btn btn-md btn-primary  " to="/Login">

@@ -122,8 +122,18 @@ export const DeleteQuiz=async(req,res,next)=>{
         if (quizzIndex === -1) {
           throw new AppError("Test does not exist.", 404);
         }
+        
         const quizzMarks = course.quizz[quizzIndex].totalmarks;
         course.total -= quizzMarks;
+
+        course.quizz[quizzIndex].submitQuiz.forEach(submission => {
+          const studentIndex = course.enrolled.findIndex(
+            enrolled => enrolled.student.toString() === submission.student.toString()
+          );
+          if (studentIndex !== -1) {
+            course.enrolled[studentIndex].totalMarks -= submission.marks;
+          }
+        });
         if (course.quizz[quizzIndex].file) {
           fs.unlinkSync(course.quizz[quizzIndex].file);
         }

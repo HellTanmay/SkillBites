@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createAssignments, createLecture, deleteAssignments, deleteLecture, fetchAssignments, fetchLectures, fetchSubmissions, submitAssignments, updateLecture, updateSubmissions } from '../Controllers/CourseContentController.js'
+import { createAssignments, createLecture, deleteAssignments, deleteLecture, fetchAssignments, fetchLectures, fetchSubmissions, getCourseContent, submitAssignments, updateLecture, updateSubmissions } from '../Controllers/CourseContentController.js'
 import { verifyToken } from "../Middleware/authMid.js";
 import { uploadImageVideo,uploadDocument } from "../Middleware/multer.js";
 
@@ -12,6 +12,7 @@ router.post('/addLecture/:id',verifyToken,uploadImageVideo.single('video'),creat
 router.get('/getLectures/:id',verifyToken,fetchLectures)
         .get('/getAssignments/:id',verifyToken,fetchAssignments)
         .get('/assignments/:id',verifyToken,fetchSubmissions)
+        .get('/courseContents/:id',verifyToken,getCourseContent)
 
 router.patch('/updateLecture/:id',verifyToken,updateLecture)
 

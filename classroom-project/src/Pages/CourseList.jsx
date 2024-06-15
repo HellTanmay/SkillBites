@@ -5,13 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCourse } from "../Components/Store/CourseSlice";
 import Select from "react-select";
 import { fetchCategory } from "../Components/Store/CategorySlice";
-import { CircularProgressbar } from "react-circular-progressbar";
 
 export default function CourseList() {
   const [option, setOption] = useState([]);
   const dispatch = useDispatch();
-  const courses = useSelector((state) => state.course?.courseData.data);
-const loading=useSelector((state)=>state.course.loading)
+  const state=useSelector((state)=>state)
+  const courses =  state.course?.courseData.data;
+const loading=state.course.loading
 
   useEffect(() => {
     dispatch(fetchCategory());

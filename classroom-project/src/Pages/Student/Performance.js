@@ -12,10 +12,11 @@ import TableSkeleton from '../../Extras/TableSkeleton'
 const Performance = () => {
   let count=0
   const dispatch=useDispatch()
-  const User=useSelector((state)=>state.User.userData)
-  const performance=useSelector((state)=>state.course.performanceStats)
-  const allPerformance=useSelector((state)=>state.course.performanceStats.studentsPerformance)
-  const loading=useSelector((state)=>state.course.loading)
+  const state=useSelector((state)=>state)
+  const role=state.User.role
+  const performance=state.course.performanceStats
+  const allPerformance=state.course.performanceStats.studentsPerformance
+  const loading=state.course.loading
   const percentage=Math.floor(performance.studentPerformance*100)/100
   console.log(allPerformance)
   const {id}=useParams()
@@ -33,7 +34,7 @@ const Performance = () => {
   }
   return (
    <div className='performance-container'>
-   {User.role==='Student'&&!loading&&( <> <h1>Html/css/Javascript</h1>
+   {role==='Student'&&!loading&&( <> <h1>Html/css/Javascript</h1>
       <p>No of lectures:<span>{performance.noOfLectures}</span></p>
       <p>No of assignments:<span>{performance.noOfAssignments}</span></p>
       <div className=''>
@@ -49,7 +50,7 @@ const Performance = () => {
            
       </div></>)} 
       
-     {User.role==='Instructor'&&
+     {role==='Instructor'&&
      <div className='student-performance'>
       <table class="table  table-striped">
   <thead className=" table-dark">

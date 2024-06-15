@@ -57,10 +57,12 @@ export const fetchAllCourses=async(req,res,next)=>{
             .sort({ createdAt: 1 });
         } else {
           courses = await Course.find({ approved: true })
+          .select("-assignments -recordings -quizz -total")
             .populate("author", ["username"])
             // .populate("category",["name"])
             .populate("enrolled", ["id", "username"])
             .sort({ createdAt: -1 });
+            
         }
         if (optio) {
           courses = courses.filter((course) => course.category.includes(optio));
@@ -73,7 +75,8 @@ export const fetchAllCourses=async(req,res,next)=>{
 
 export const fetchCourseById=async(req,res,next)=>{
     const { id } = req.params;
-  const courseDoc = await Course.findById(id).populate("author", ["username"]);
+  const courseDoc = await Course.findById(id).populate("author", ["username", "photo" ])
+  .select("-assignments -recordings -quizz -total");
   res.json(courseDoc);
 }
 
@@ -98,7 +101,8 @@ export const fetchMyCourse=async(req,res,next)=>{
           courses = await Course.find({ _id: { $in: courseId } }).populate(
             "author",
             ["username"]
-          );
+          )
+          .select("-assignments -recordings -quizz -total")
           const paymentIdMap = purchase.reduce((acc, purchase) => {
             acc[purchase.courseId.toString()] = purchase.paymentId;
             return acc;

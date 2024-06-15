@@ -1,20 +1,20 @@
 import { Link,useNavigate,Navigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import Layout from "../Components/Layout/Layout";
-import { UserContext } from "../UserContext";
 import {toast}from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useDispatch } from "react-redux";
-import { LoginUser } from "../Components/Store/UserSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { LoginUser, fetchUser } from "../Components/Store/UserSlice";
 
 export default function Login() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [redirect, setRedirect] = useState();
-  const{setUserInfo,userInfo}=useContext(UserContext);
+  const userInfo=useSelector((state)=>state.User.userData)
   const navigate=useNavigate()
   const dispatch=useDispatch()
   useEffect(() => {
+    dispatch(fetchUser())
     if (userInfo.token && userInfo.role) {
       redirectUser(userInfo.role);
     }

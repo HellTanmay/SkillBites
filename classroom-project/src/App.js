@@ -1,36 +1,40 @@
 // import all the components in this app 
+
 import { Routes, Route } from "react-router-dom";
-import CourseList from "./Pages/CourseList";
-import Hero from "./Components/Hero/Hero";
-import Login from "./Pages/Login";
-import Register from "./Pages/Register";
-import { UserContextProvider } from "./UserContext";
-import Contact from "./Pages/Admin/Contact";
-import CreateCourse from "./Pages/Instructor/CreateCourse";
-import CourseDescription from "./Pages/Instructor/CourseDescription";
-import Profile from "./Pages/Profile";
-import ViewCourse from "./Pages/Student/ViewCourse";
-import EditProfile from "./Pages/EditProfile";
-import MyCourse from "./Pages/Student/MyCourse";
-import PdfViewer from "./Components/PdfViewer";
-import AdminDashboard from "./Pages/Admin/AdminDashboard";
-import AdminCourse from "./Pages/Admin/AdminCourse";
-import NotFound from './Pages/NotFound';
-import Feedbacks from "./Pages/Admin/Feedbacks";
-import AdminStudent from "./Pages/Admin/AdminStudent";
-import AdminInstructors from "./Pages/Admin/AdminInstructors";
-import AdminPayment from "./Pages/Admin/AdminPayment";
-import CheckoutSuccess from "./Pages/Student/CheckoutSuccess";
-import Orders from "./Pages/Student/Orders";
-import AddCategory from "./Pages/Admin/AddCategory";
+import { Suspense, lazy } from "react";
+
+
+const CourseList = lazy(()=>import("./Pages/CourseList"));
+const Hero = lazy(()=>import("./Components/Hero/Hero"));
+const Login = lazy(()=>import("./Pages/Login"));
+const Register = lazy(()=>import("./Pages/Register"));
+const Contact = lazy(()=>import("./Pages/Admin/Contact"));
+const CreateCourse = lazy(()=>import("./Pages/Instructor/CreateCourse"));
+const CourseDescription = lazy(()=>import("./Pages/Instructor/CourseDescription"));
+const Profile = lazy(()=>import("./Pages/Profile"));
+const ViewCourse = lazy(()=>import("./Pages/Student/ViewCourse"));
+const EditProfile = lazy(()=>import("./Pages/EditProfile"));
+const MyCourse = lazy(()=>import("./Pages/Student/MyCourse"));
+const PdfViewer = lazy(()=>import("./Components/PdfViewer"));
+const AdminDashboard = lazy(()=>import("./Pages/Admin/AdminDashboard"));
+const AdminCourse = lazy(()=>import("./Pages/Admin/AdminCourse"));
+const NotFound = lazy(()=>import("./Pages/NotFound"));
+const Feedbacks = lazy(()=>import("./Pages/Admin/Feedbacks"));
+const AdminStudent = lazy(()=>import("./Pages/Admin/AdminStudent"));
+const AdminInstructors = lazy(()=>import("./Pages/Admin/AdminInstructors"));
+const AdminPayment = lazy(()=>import("./Pages/Admin/AdminPayment"));
+const CheckoutSuccess = lazy(()=>import("./Pages/Student/CheckoutSuccess"));
+const Orders = lazy(()=>import("./Pages/Student/Orders"));
+const AddCategory = lazy(()=>import("./Pages/Admin/AddCategory"));
+
 function App() {
   return (
     <>
-    <UserContextProvider>
+    <Suspense fallback={<div className="d-flex align-items-center justify-content-center"style={{height:'100vh'}}>
+      <p>SkillBites</p>
+      </div>} >
     <Routes>
-        <Route path="/" element={<Hero />}>
-         
-        </Route>
+        <Route path="/" element={<Hero />}></Route>
         <Route path="/contact" element={<Contact/>}/>
         <Route path="/course" element={<CourseList />} />
         <Route path="/Login" element={<Login />}></Route>
@@ -53,9 +57,7 @@ function App() {
         <Route path="/order-success" element={<CheckoutSuccess/>}></Route>
         <Route path="*" element={<NotFound/>} />
       </Routes>
-    </UserContextProvider>
-      
-      
+      </Suspense>
     </>
   );
 }

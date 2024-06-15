@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import {Logout, editProfile, getAllUser, login, profile, register, resend_otp, verify, verifyEmail} from '../Controllers/UserController.js'
+import {Logout, editProfile, getAllUser, login, profile, register, resend_otp, userProfile, verify, verifyEmail} from '../Controllers/UserController.js'
 import { verifyToken } from '../Middleware/authMid.js'
 import { uploadImageVideo } from '../Middleware/multer.js'
 
@@ -14,6 +14,7 @@ router.post('/Signup',register)
 
 router.get('/verify',verifyToken,verify)
         .get('/profile',verifyToken,profile)
+        .get('/userProfile',verifyToken,userProfile)
         .get('/fetchAllUsers',verifyToken,getAllUser)
  router.put('/profile/edit',verifyToken,uploadImageVideo.single('avatar'),editProfile)
 

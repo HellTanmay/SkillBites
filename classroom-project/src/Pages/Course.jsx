@@ -18,7 +18,7 @@ export default function Course({
   source,
 }) {
   const dispatch = useDispatch();
-  const role = useSelector((state) => state.User.userData.role);
+  const role = useSelector((state) => state.User.role);
 
   async function handleDelete(courseId) {
     if (window.confirm("Do u really want to delete this course")) {

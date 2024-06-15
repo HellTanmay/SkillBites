@@ -7,7 +7,7 @@ const router=Router()
 router.post('/createCourse',verifyToken,uploadImageVideo.single("file"), createCourse)
 
 router.get('/fetchCourses',verifyToken,fetchAllCourses)
-        .get('/course/:id',fetchCourseById)
+        .get('/course/:id',verifyToken,fetchCourseById)
         .get('/myCourse',verifyToken,fetchMyCourse)
 
 router.put('/admin/course',verifyToken,approveCourse)

@@ -10,7 +10,7 @@ const Orders = () => {
     useEffect(()=>{
         dispatch(fetchMyCourse())
     },[])
-    console.log(orders)
+    
   return (
    <Layout>
         <div className='orders'>

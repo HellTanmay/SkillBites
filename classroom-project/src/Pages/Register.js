@@ -2,7 +2,6 @@ import { useState,useContext, useEffect } from "react";
 import { Link, Navigate,useLocation } from "react-router-dom";
 import Layout from "../Components/Layout/Layout";
 import { toast } from "react-toastify";
-import { UserContext } from "../UserContext";
 import { useDispatch } from "react-redux";
 import { registerUser, resendOtp, verifyEmail } from "../Components/Store/UserSlice";
 
@@ -11,7 +10,7 @@ export default function Register() {
   const [Regstate,setRegState]=useState('role')
   const [otp,setOtp]=useState()
   const [tokenData, setTokenData] = useState();
-  const{setUserInfo}=useContext(UserContext);
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",

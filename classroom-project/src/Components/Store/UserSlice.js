@@ -1,6 +1,16 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
+const isNetworkError = (error) => {
+  return (
+    error.message === 'Failed to fetch' ||
+    error.message.includes('NetworkError') ||
+    error.message.includes('ECONNREFUSED') ||
+    error.message.includes('ECONNRESET') ||
+    error.message.includes('ENOTFOUND') ||
+    error.message.includes('ETIMEDOUT')
+  );
+};
 export const registerUser = createAsyncThunk("registerUser",async (formData) => {
     
     try {
@@ -73,16 +83,47 @@ export const LoginUser = createAsyncThunk("Login",async ({email,password}) => {
     console.log(resdata);
     return resdata;
   } catch (err) {
-    console.log(err);
+    toast.error('Network error')
   }
 }
 );
+
+export const LoggedIn=createAsyncThunk('LoggedIn',async()=>{
+  try {
+    const response=await fetch('http://localhost:4000/verify',{
+      credentials:'include',
+    });
+    const data=await response.json();
+    if(!response.ok){
+      throw new Error(data.message)
+    }
+    return data
+  } catch (error) {
+    if(isNetworkError(error)){
+      toast.error('Network error')
+    }
+    throw error
+  }
+})
 
 export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
     try{
        const response=await fetch('http://localhost:4000/profile',
        {credentials:'include',
-    body:userId});
+       
+    body:userId,});
+      const data=await response.json();
+      console.log(response)
+      return data
+    }catch(err){
+       toast.error(err.message)  
+    }
+   });
+
+   export const fetchUserProfile=createAsyncThunk('fetchUserProfile',async(userId)=>{
+    try{
+       const response=await fetch(`http://localhost:4000/userProfile?userId=${userId}`,
+       {credentials:'include'});
       const data=await response.json();
       return data
     }catch(err){
@@ -103,11 +144,28 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
        throw err
     }
    });
+   export const LoggedOut=createAsyncThunk('LoggedOut',async()=>{
+    try{
+       const response=await fetch('http://localhost:4000/logout',
+       {method:'POST',
+        credentials:'include',
+       });
+      const data=await response.json();
+      return data
+      
+    }catch(err){
+       console.log(err)
+       throw err
+    }
+   });
+
 
    export const UserSlice=createSlice({
     name:'user',
     initialState:{
         userData:{},
+        isLoggedIn:false,
+        role:'',
         loading:false,
         allLoading:false,
     },
@@ -123,6 +181,20 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
             console.log("error",action.payload);
             state.loading=false
         })
+        builder.addCase(LoggedIn.fulfilled,(state,action)=>{
+          state.isLoggedIn=action.payload?.id?true:false;
+          state.role=action.payload?.role
+          state.userData=action.payload
+      })
+    builder.addCase(LoggedIn.rejected,(state,action)=>{
+      console.log(action.payload)
+  })
+  builder.addCase(LoggedOut.fulfilled,(state,action)=>{
+    state.isLoggedIn=false;
+    state.role='';
+    state.userData={}
+  
+})
         builder.addCase(fetchAllUsers.fulfilled,(state,action)=>{
             state.userData=action.payload;
             state.allLoading=false

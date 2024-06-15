@@ -22,18 +22,18 @@ const DisplayQuiz = ({ quizz_id, tests, states }) => {
   const dispatch = useDispatch();
   const test = useSelector((state) => state.Quizzes.question.data);
   const User = useSelector((state) => state.User.userData);
+  const resloading = useSelector((state) => state.Quizzes.resLoad);
   const loading = useSelector((state) => state.Quizzes.loading);
   const result = useSelector((state) => state?.Quizzes?.result?.data);
   const { id } = useParams();
-
+console.log(result)
   useEffect(() => {
     dispatch(getQuiz({ id, quizz_id }));
     dispatch(getQuizSubmission({ id, quizz_id }));
-    // setCurrentQuestion(0)
   }, [dispatch, id, quizz_id, state]);
 
   useEffect(() => {
-    setState(result ? "submitted" : "Menu");
+    setState(result?.marks ? "submitted" : "Menu");
   }, [result]);
 
   function answer(mark) {
@@ -62,10 +62,6 @@ const DisplayQuiz = ({ quizz_id, tests, states }) => {
     return () => clearInterval(timer);
   }, [state, quizz_id]);
 
-  // useEffect(() => {
-  //   console.log(selectedAnswer);
-  // }, [selectedAnswer]);
-
   async function submit() {
     const res = await dispatch(
       submitQuiz({ c_id: id, quizz_id, answers: selectedAnswer })
@@ -78,7 +74,7 @@ const DisplayQuiz = ({ quizz_id, tests, states }) => {
   }
 
   useEffect(() => {
-    if (state === "Quizz") {
+    if (state === "Quizz"||(state==='submitted'&&result)) {
       setState("Menu");
       setCurrentQuestion(0)
     }
@@ -90,12 +86,14 @@ const DisplayQuiz = ({ quizz_id, tests, states }) => {
       submit();
     }
   }, [remainingTime]);
+
   const hours = Math.floor(remainingTime / 3600);
   const minutes = Math.floor((remainingTime % 3600) / 60);
   const seconds = remainingTime % 60;
   const marks = result?.marks < tests?.totalmarks / 2;
-console.log(selectedAnswer)
+
   return (
+    <>
     <div className="Quiz">
        {User.role==='Instructor'&&
        <button style={{margin:'10px'}} className= {`btn ${!showQuiz?'btn-success':'btn-warning'}`} 
@@ -214,14 +212,14 @@ console.log(selectedAnswer)
           
         </div>
      )}
-      <div>
-         {User.role==='Instructor'&&!showQuiz&&(
-          <>
-          <QuizSubmissions quizz_id={quizz_id} tests={tests}/>
-          </>
-          )}
-        </div>
+     
     </div>
+     <div>
+     {User.role==='Instructor'&&!showQuiz&&(
+      <QuizSubmissions quizz_id={quizz_id} tests={tests}/>
+      )}
+    </div>
+    </>
   );
 };
 

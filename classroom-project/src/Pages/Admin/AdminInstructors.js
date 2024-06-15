@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import Layout from '../../Components/Layout/Layout'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllUsers } from '../../Components/Store/UserSlice'
+import { fetchAllUsers, fetchUserProfile } from '../../Components/Store/UserSlice'
 import TableSkeleton from '../../Extras/TableSkeleton'
+import { useNavigate } from 'react-router-dom'
 
 const AdminInstructors = () => {
     const dispatch=useDispatch()
@@ -11,7 +12,7 @@ const AdminInstructors = () => {
     useEffect(()=>{
         dispatch(fetchAllUsers())
     },[])
-    
+    const navigate=useNavigate()
     function format(formatted){
         const date=new Date(formatted)
       const dateType= date.toLocaleDateString('en-IN', {
