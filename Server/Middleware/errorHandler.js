@@ -15,6 +15,6 @@ export const ErrorHandler = (err, req, res, next) => {
        
     res.status(err.statusCode).json({ success: false, 
                                       message:err.message,
-                                      stackTrace:err.stack,
+                                    //   stackTrace:err.stack,
                                       error:err});
   }
