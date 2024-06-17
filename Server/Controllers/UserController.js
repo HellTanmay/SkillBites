@@ -149,9 +149,9 @@ export const profile=async(req,res,next)=>{
         const userDoc = await User.findById(userId).select("-password");
         if (!userDoc) {
           throw new AppError("User not found", 404);
-        } else {
+        } 
           res.json(userDoc);
-        }
+        
       } catch (error) {
         next(error);
       }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { IoMdDownload } from "react-icons/io";
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 
 const Certificate = () => {
     const [downloading, setDownloading] = useState(false);
@@ -16,7 +16,7 @@ const Certificate = () => {
           if(response.status>=400){
     const res=await response.json()
    
-       toast.info(res.message,{position:'bottom-right',theme:'colored'})
+       toast.error(res.message,{position:'bottom-right',theme:'colored'})
       }
           const blob = await response.blob();
         const filename = `certificate_${id}.pdf`;

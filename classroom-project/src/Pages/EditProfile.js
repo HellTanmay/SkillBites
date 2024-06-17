@@ -1,7 +1,7 @@
 import React, {useEffect, useState } from 'react'
 import { RiCloseFill } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { fetchUser } from '../Components/Store/UserSlice';
 
 const EditProfile = ({close1Modal,user}) => {
@@ -26,23 +26,7 @@ const EditProfile = ({close1Modal,user}) => {
   }
 
   useEffect(()=>{
-    // fetch('http://localhost:4000/profile',{
-    //   credentials:'include',
-    // })
-    // .then((response)=>{
-    //   response.json()
-    //   .then ((data)=>
-    //   setuserData({
-    //     ...userdata,
-    //     'username':data.username,
-    //     'email':data.email,
-    //     'gender':data.gender,
-    //     'bio':data.bio,
-    //     'phone':data.phone,
-    //     'address':data.address,
-    //   }
-    // ))
-    // }) 
+
     dispatch(fetchUser())
        setuserData({
           ...userdata,

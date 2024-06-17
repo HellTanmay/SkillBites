@@ -14,12 +14,19 @@ import courseContentRoutes from './Routes/CourseContentRoute.js'
 import quizRoutes from './Routes/QuizRoute.js'
 import paymentRoute from './Routes/PaymentRoute.js'
 import miscRoutes from './Routes/MiscRoutes.js'
+import AppError from "./utils/error.js";
 
 const app = express();
 
 config({ path: "./.env" });
 
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+
+var corsOptions = {
+  origin: ['http://localhost:3000', 'https://skillbites-frontend.onrender.com'],
+  credentials:true
+}
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

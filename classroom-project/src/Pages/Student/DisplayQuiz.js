@@ -8,7 +8,7 @@ import {
 import { useParams } from "react-router-dom";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { PiTimerBold } from "react-icons/pi";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import QuizSubmissions from "../Instructor/QuizSubmissions";
 
 const DisplayQuiz = ({ quizz_id, tests, states }) => {

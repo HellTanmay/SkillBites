@@ -8,8 +8,7 @@ import AddAssignment from "../Instructor/AddAssignment";
 import { deleteAssign, fetchAssignments } from "../../Components/Store/AssignmentSlice";
 import { submitAssign } from "../../Components/Store/SubmitSlice";
 import Performance from "./Performance";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-hot-toast";
 import StudentAssigns from "../Instructor/StudentAssigns";
 import { FaCheck } from "react-icons/fa";
 import AddLectures from "../Instructor/AddLectures";
@@ -47,24 +46,6 @@ function ViewCourse() {
   const l_id=params.get("lecture_id")
   const { id } = useParams();
  
-
-
-// function fetchAssignments(){
-//   try {
-//     fetch(`http://localhost:4000/getAssignments/${id}`, {
-//       credentials: "include",
-//     }).then((res) => {
-//       res.json().then((data) => setAssignments(data.data));
-//     });
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
-
-  // useEffect(() => {
-  //   dispatch(fetchAssignments(id))
-  // }, [dispatch,openModal]);
-
   useEffect(() => {
     dispatch(fetchAssignments(id))
     dispatch(getLectures(id));
@@ -182,7 +163,7 @@ function ViewCourse() {
   async function handleLecDelete(l_id){
   if(window.confirm('Do u really wish to delete this lecture')){
     const res=await dispatch(deleteLecture({courseId:id,lectureId:l_id}))
-    if(res.payload.success){
+    if(res?.payload?.success){
       toast.success(res.payload.data,{position:'top-center'})
       dispatch(getLectures(id))
     }
@@ -201,7 +182,7 @@ function ViewCourse() {
   async function handleMarked(l_id){
     const res=await dispatch(updateLecture({courseId:id,lectureId:l_id}))
     if(res.payload.success){
-      toast.info('Progress updated')
+      toast.success('Progress updated')
       dispatch(getLectures(id))
     }
   }

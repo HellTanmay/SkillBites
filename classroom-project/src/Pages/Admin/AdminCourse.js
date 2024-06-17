@@ -3,7 +3,7 @@ import Layout from '../../Components/Layout/Layout'
 import {useSelector,useDispatch}from 'react-redux'
 import { approved, deleteCourse, fetchCourse } from '../../Components/Store/CourseSlice'
 import { useNavigate } from 'react-router-dom'
-import {toast} from 'react-toastify'
+import {toast} from 'react-hot-toast'
 import { RiDeleteBin6Line } from "react-icons/ri";
 import TableSkeleton from '../../Extras/TableSkeleton'
 import { IoEyeSharp } from "react-icons/io5";
@@ -31,8 +31,10 @@ async function click(course,status){
  if(res.payload.success){
   toast.success(`${course.title} Approved`,{position:'top-center'})
   dispatch(fetchCourse())
+ }else{
+  toast.error(res.payload.message,{theme:'colored',position:'bottom-right'})
  }
- toast.info(res.payload.message,{theme:'colored',position:'bottom-right'})
+
 }
 
 async function handleDelete(courseId){

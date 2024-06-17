@@ -4,8 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import {useDispatch,useSelector} from 'react-redux';
 import { addLecture, getLectures } from "../../Components/Store/RecordSlice";
 import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-hot-toast";
 import { RiCloseFill } from "react-icons/ri";
 
 const AddLectures = ({ closeModal }) => {

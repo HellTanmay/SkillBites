@@ -1,14 +1,16 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
+
+let BASE_URL='http://localhost:4000'||"https://skillbites-backend.onrender.com"
 
 export const addCategory=createAsyncThunk('addCategory',async(category)=>{
  try{
     console.log(category)
-    const response=await fetch(`http://localhost:4000/addCategories`,{
+    const response=await fetch(`${BASE_URL}/addCategories`,{
         method:'POST',
         body:JSON.stringify({ category }),
         headers: {
-            'Content-Type': 'application/json', // Set content type to JSON
+            'Content-Type': 'application/json',
           },
         credentials:'include',
     });
@@ -21,7 +23,7 @@ export const addCategory=createAsyncThunk('addCategory',async(category)=>{
 
 export const fetchCategory=createAsyncThunk('fetchCategory',async()=>{
     try{
-       const response=await fetch(`http://localhost:4000/getCategories`,{credentials:'include'});
+       const response=await fetch(`${BASE_URL}/getCategories`,{credentials:'include'});
        const data=response.json();
        return data
     }catch(err){
@@ -32,14 +34,13 @@ export const fetchCategory=createAsyncThunk('fetchCategory',async()=>{
    export const deleteCategory=createAsyncThunk('deleteCategory',async(categoryId)=>{
     try{
         console.log(categoryId)
-       const response=await fetch(`http://localhost:4000/deleteCategory?categoryId=${categoryId}`,
+       const response=await fetch(`${BASE_URL}/deleteCategory?categoryId=${categoryId}`,
        {credentials:'include',
          method:'DELETE'});
     const res=await response?.json();
-        console.log(res)
         return res  
     }catch(err){
-       toast.error(err.message)
+       throw err
     }
    });
 

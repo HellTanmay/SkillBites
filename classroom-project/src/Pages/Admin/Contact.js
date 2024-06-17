@@ -3,7 +3,7 @@ import { useState } from "react";
 import Layout from "../../Components/Layout/Layout";
 import { useDispatch } from "react-redux";
 import { AddContact } from "../../Components/Store/ExtraSlice";
-import {toast} from 'react-toastify'
+import {toast} from 'react-hot-toast'
 
 const Contact = () => {
   const dispatch=useDispatch()

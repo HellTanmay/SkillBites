@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
 import { toast } from "react-hot-toast";
 
+let BASE_URL='http://localhost:4000'||"https://skillbites-backend.onrender.com"
+
 const isNetworkError = (error) => {
   return (
     error.message === 'Failed to fetch' ||
@@ -14,7 +16,7 @@ const isNetworkError = (error) => {
 export const registerUser = createAsyncThunk("registerUser",async (formData) => {
     
     try {
-      const response = await fetch(`http://localhost:4000/Signup`, {
+      const response = await fetch(`${BASE_URL}/Signup`, {
         method: "POST",
         body: JSON.stringify(formData),
         headers: {
@@ -23,7 +25,6 @@ export const registerUser = createAsyncThunk("registerUser",async (formData) => 
         credentials: "include",
       });
       const resdata = await response.json();
-      console.log(resdata);
       return resdata;
     } catch (err) {
       console.log(err);
@@ -33,7 +34,7 @@ export const registerUser = createAsyncThunk("registerUser",async (formData) => 
 
 export const verifyEmail = createAsyncThunk("verifyEmail",async ({email,otp}) => {  
   try {
-    const response = await fetch(`http://localhost:4000/verifyEmail`, {
+    const response = await fetch(`${BASE_URL}/verifyEmail`, {
       method: "POST",
       body: JSON.stringify({email,otp}),
       headers: {
@@ -42,7 +43,6 @@ export const verifyEmail = createAsyncThunk("verifyEmail",async ({email,otp}) =>
       credentials: "include",
     });
     const resdata = await response.json();
-    console.log(resdata);
     return resdata;
   } catch (err) {
     console.log(err);
@@ -52,7 +52,7 @@ export const verifyEmail = createAsyncThunk("verifyEmail",async ({email,otp}) =>
 
 export const resendOtp = createAsyncThunk("resendOtp",async ({user_id,email}) => {  
   try {
-    const response = await fetch(`http://localhost:4000/resend-otp`, {
+    const response = await fetch(`${BASE_URL}/resend-otp`, {
       method: "POST",
       body: JSON.stringify({user_id,email}),
       headers: {
@@ -61,7 +61,6 @@ export const resendOtp = createAsyncThunk("resendOtp",async ({user_id,email}) =>
       credentials: "include",
     });
     const resdata = await response.json();
-    console.log(resdata);
     return resdata;
   } catch (err) {
     console.log(err);
@@ -71,7 +70,7 @@ export const resendOtp = createAsyncThunk("resendOtp",async ({user_id,email}) =>
 
 export const LoginUser = createAsyncThunk("Login",async ({email,password}) => {  
   try {
-    const response = await fetch(`http://localhost:4000/Login`, {
+    const response = await fetch(`${BASE_URL}/Login`, {
       method: "POST",
       body: JSON.stringify({email,password}),
       headers: {
@@ -90,7 +89,7 @@ export const LoginUser = createAsyncThunk("Login",async ({email,password}) => {
 
 export const LoggedIn=createAsyncThunk('LoggedIn',async()=>{
   try {
-    const response=await fetch('http://localhost:4000/verify',{
+    const response=await fetch(`${BASE_URL}/verify`,{
       credentials:'include',
     });
     const data=await response.json();
@@ -108,21 +107,18 @@ export const LoggedIn=createAsyncThunk('LoggedIn',async()=>{
 
 export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
     try{
-       const response=await fetch('http://localhost:4000/profile',
-       {credentials:'include',
-       
-    body:userId,});
+       const response=await fetch(`${BASE_URL}/profile`,
+       {credentials:'include'});
       const data=await response.json();
-      console.log(response)
       return data
     }catch(err){
-       toast.error(err.message)  
+       console.log(err) 
     }
    });
 
    export const fetchUserProfile=createAsyncThunk('fetchUserProfile',async(userId)=>{
     try{
-       const response=await fetch(`http://localhost:4000/userProfile?userId=${userId}`,
+       const response=await fetch(`${BASE_URL}/userProfile?userId=${userId}`,
        {credentials:'include'});
       const data=await response.json();
       return data
@@ -134,7 +130,7 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
 
    export const fetchAllUsers=createAsyncThunk('fetchAllUsers',async()=>{
     try{
-       const response=await fetch('http://localhost:4000/fetchAllUsers',
+       const response=await fetch(`${BASE_URL}/fetchAllUsers`,
        {credentials:'include'});
       const data=await response.json();
       return data
@@ -144,9 +140,10 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
        throw err
     }
    });
+   
    export const LoggedOut=createAsyncThunk('LoggedOut',async()=>{
     try{
-       const response=await fetch('http://localhost:4000/logout',
+       const response=await fetch(`${BASE_URL}/logout`,
        {method:'POST',
         credentials:'include',
        });
@@ -184,15 +181,15 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
         builder.addCase(LoggedIn.fulfilled,(state,action)=>{
           state.isLoggedIn=action.payload?.id?true:false;
           state.role=action.payload?.role
-          state.userData=action.payload
+          // state.userData=action.payload
       })
     builder.addCase(LoggedIn.rejected,(state,action)=>{
-      console.log(action.payload)
+      console.log("ERROR",action.payload)
   })
   builder.addCase(LoggedOut.fulfilled,(state,action)=>{
     state.isLoggedIn=false;
     state.role='';
-    state.userData={}
+    // state.userData={}
   
 })
         builder.addCase(fetchAllUsers.fulfilled,(state,action)=>{

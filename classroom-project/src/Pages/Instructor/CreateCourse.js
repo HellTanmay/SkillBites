@@ -3,11 +3,12 @@ import { Navigate } from "react-router-dom";
 import Layout from "../../Components/Layout/Layout";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategory } from "../../Components/Store/CategorySlice";
 import Select from 'react-dropdown-select'
+import { createCourse } from "../../Components/Store/CourseSlice";
+import { IoInformationCircle } from "react-icons/io5";
 
 const CreateCourse = () => {
   const [Title, setTitle] = useState("");
@@ -18,22 +19,23 @@ const CreateCourse = () => {
   const [Price, setPrice] = useState(0);
   const [category, setCategory] = useState([]);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [redirect, setRedirect] = useState("");
 
   const dispatch=useDispatch()
   useEffect(()=>{
     dispatch(fetchCategory())
   },[category])
-
-  const categories=useSelector((state)=>state.Categories.category.data)
+  const state=useSelector((state)=>state)
+  const categories=state.Categories.category.data
+  const loading=state.course.loading
   const categoryObject=categories?.map(options=>({value:options._id,label:options.name}))
 
   const data = new FormData();
   const cat=category?.map(cat=>cat.value)
 
   async function create(e) {
-    setLoading(true);
+    
     data.set("title", Title);
     data.set("summary", Summary);
     data.set("content", Content);
@@ -43,26 +45,34 @@ const CreateCourse = () => {
     data.set("file", file[0]);
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:4000/createCourse", {
-        method: "POST",
-        body: data,
-        credentials: "include",
-      });
-        const response=await res.json()
-      if (response.success) {
-        toast.success(
-          "The course will be available publicly after admin approval",
-          { position: "top-center", autoClose: false }
-        );
+      // const res = await fetch("http://localhost:4000/createCourse", {
+      //   method: "POST",
+      //   body: data,
+      //   credentials: "include",
+      // });
+        // const response=await res.json()
+        const response=await dispatch(createCourse(data))
+        console.log(response)
+      if (response?.payload?.success) {
+      toast(
+          (t) => (
+            <div className="d-flex justify-content-center align-items-center gap-2">
+            
+            <p className="border-end">The course <b>{response.payload?.courseDoc?.title}</b> will be accessible to users after admin approval.</p> 
+             
+              <button className='btn btn-primary'onClick={() => toast.dismiss(t.id)}>Dismiss</button>
+            </div>
+          )
+        ,{style:{maxWidth:'30em'},icon:<IoInformationCircle style={{fontSize:'2em'}}/>,duration:10000,position:'bottom-right'});
         setRedirect(true);
+      }else{
+        setError(response.payload.message)
       }
-      setError(response.message)
+     
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
-    }
   }
+}
   if (redirect) {
     return <Navigate to={"/myCourse"}></Navigate>;
   }

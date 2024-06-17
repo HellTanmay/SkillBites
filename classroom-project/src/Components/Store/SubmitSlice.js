@@ -1,15 +1,16 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 const initialState={
     submissions:[],
     isLoading:false,
  };
+let BASE_URL='http://localhost:4000'||"https://skillbites-backend.onrender.com"
 
  export const submitAssign = createAsyncThunk("submitAssign",async ({ c_id, q_id, formData }) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/submitAssign/${c_id}?assignment_id=${q_id}`,
+        `${BASE_URL}/submitAssign/${c_id}?assignment_id=${q_id}`,
         {
           method: "POST",
           body: formData,
@@ -17,16 +18,15 @@ const initialState={
         }
       );
       const resdata = await response.json();
-   console.log(resdata)
       return resdata;
     } catch (err) {
-     toast.error(err.message);
+     console.log(err)
     }
   });
 
 export const getSubmission=createAsyncThunk('getSubmission',async({c_id,q_id})=>{
     try{
-       const response=await fetch(`http://localhost:4000/assignments/${c_id}?assignment_id=${q_id} `,
+       const response=await fetch(`${BASE_URL}/assignments/${c_id}?assignment_id=${q_id} `,
        {credentials:'include'});
       const data=await response.json();
       return data
@@ -39,7 +39,7 @@ export const getSubmission=createAsyncThunk('getSubmission',async({c_id,q_id})=>
 
    export const UpdateSubmission=createAsyncThunk('UpdateSubmission',async({c_id,q_id,sub_id,status})=>{
     try{
-       const response=await fetch(`http://localhost:4000/UpdateSubmission/${c_id}?assignment_id=${q_id} `,
+       const response=await fetch(`${BASE_URL}/UpdateSubmission/${c_id}?assignment_id=${q_id} `,
        {method:'PUT',
         credentials:'include',
         headers:{

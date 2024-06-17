@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import { useParams } from 'react-router-dom';
 import {useDispatch} from 'react-redux'
 import { addAssignments, fetchAssignments } from '../../Components/Store/AssignmentSlice';
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-hot-toast";
 import { RiCloseFill } from 'react-icons/ri';
 
 

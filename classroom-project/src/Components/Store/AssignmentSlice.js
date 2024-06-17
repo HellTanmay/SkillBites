@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
+let BASE_URL='http://localhost:4000'||"https://skillbites-backend.onrender.com"
 
 export const addAssignments = createAsyncThunk("addAssignments",async ({ c_id, formData }) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/addAssignments/${c_id}`,
+        `${BASE_URL}/addAssignments/${c_id}`,
         {
           method: "POST",
           body: formData,
@@ -22,27 +23,27 @@ export const addAssignments = createAsyncThunk("addAssignments",async ({ c_id, f
 
 export const fetchAssignments = createAsyncThunk("fetchAssignments", async (id) => {
     try {
-      const response = await fetch(`http://localhost:4000/getAssignments/${id}`, {
+      const response = await fetch(`${BASE_URL}/getAssignments/${id}`, {
         credentials: "include",
       });
       const res = await response.json();
       return res;
     } catch (err) {
       console.log(err);
+      throw err
     }
   });
 
   export const deleteAssign=createAsyncThunk('deleteAssign',async({courseId,assignId})=>{
     try{
         console.log(courseId)
-       const response=await fetch(`http://localhost:4000/deleteAssignment/${courseId}?assignment_id=${assignId}`,
+       const response=await fetch(`${BASE_URL}/deleteAssignment/${courseId}?assignment_id=${assignId}`,
        {credentials:'include',
          method:'DELETE'});
     const res=await response?.json();
-        console.log(res)
         return res  
     }catch(err){
-       toast.error(err.message)
+      throw err
     }
    });
 

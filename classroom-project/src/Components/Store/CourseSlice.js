@@ -1,14 +1,36 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
+let BASE_URL='http://localhost:4000'||"https://skillbites-backend.onrender.com"
+
+export const createCourse = createAsyncThunk("createCourse",async (data) => {
+              try {
+                const response = await fetch(`${BASE_URL}/createCourse`, {
+                  method: "POST",
+                  body: data,
+                  credentials: "include",
+                 
+                });
+                
+                if (!response.ok) {
+                  const errorData = await response.json();
+                  throw new Error(errorData.message || 'Failed to create course');
+                }
+          
+                const resData = await response.json();
+                return resData
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 
 export const fetchCourse=createAsyncThunk('fetchCourse',async(category)=>{
  try{
-    let url=`http://localhost:4000/fetchCourses`
+    let url=`${BASE_URL}/fetchCourses`
     if(category){
         url+=`?optio=${category}`
     }
-     console.log(url)
     const response=await fetch(url,{credentials:'include'});
     return response?.json();
 
@@ -16,12 +38,25 @@ export const fetchCourse=createAsyncThunk('fetchCourse',async(category)=>{
     console.log(err)
  }
 });
+
+export const fetchCourseById=createAsyncThunk('fetchCourseById',async(id)=>{
+    try{
+       const response=await fetch(`${BASE_URL}/course/${id}`,
+        {credentials:'include'});
+    const res=await response.json();
+        return res     
+    }catch(err){
+       console.log(err)
+       throw err
+    }
+   });
+
 export const approved=createAsyncThunk('approved',async({c_id,status})=>{
     try{
 
         console.log(c_id)
         console.log(status)
-       const response=await fetch(`http://localhost:4000/admin/course`,{
+       const response=await fetch(`${BASE_URL}/admin/course`,{
         credentials:'include',
         method:'PUT',
         headers:{
@@ -30,7 +65,6 @@ export const approved=createAsyncThunk('approved',async({c_id,status})=>{
         body:JSON.stringify({c_id,status})
     });
        const data=await response.json();
-       console.log(data)
        return data
    
     }catch(err){
@@ -40,7 +74,7 @@ export const approved=createAsyncThunk('approved',async({c_id,status})=>{
 
 export const fetchMyCourse=createAsyncThunk('fetchMyCourse',async()=>{
     try{
-       const response=await fetch(`http://localhost:4000/myCourse`,{credentials:'include'});
+       const response=await fetch(`${BASE_URL}/myCourse`,{credentials:'include'});
     const res=await response.json();
 
         return res
@@ -53,11 +87,10 @@ export const fetchMyCourse=createAsyncThunk('fetchMyCourse',async()=>{
    export const deleteCourse=createAsyncThunk('deleteCourse',async(courseId)=>{
     try{
         console.log(courseId)
-       const response=await fetch(`http://localhost:4000/deleteCourse?courseId=${courseId}`,
+       const response=await fetch(`${BASE_URL}/deleteCourse?courseId=${courseId}`,
        {credentials:'include',
          method:'DELETE'});
     const res=await response?.json();
-        console.log(res)
         return res  
     }catch(err){
        toast.error(err.message)
@@ -67,7 +100,7 @@ export const fetchMyCourse=createAsyncThunk('fetchMyCourse',async()=>{
    
 export const fetchPerformance=createAsyncThunk('fetchPerformance',async(id)=>{
     try{
-       const response=await fetch(`http://localhost:4000/performanceStats/${id}`,{credentials:'include'});
+       const response=await fetch(`${BASE_URL}/performanceStats/${id}`,{credentials:'include'});
     const res=await response.json();
 
         return res
@@ -79,7 +112,7 @@ export const fetchPerformance=createAsyncThunk('fetchPerformance',async(id)=>{
 
    export const fetchContents=createAsyncThunk('fetchContents',async(id)=>{
     try{
-       const response=await fetch(`http://localhost:4000/courseContents/${id}`,{credentials:'include'});
+       const response=await fetch(`${BASE_URL}/courseContents/${id}`,{credentials:'include'});
     const res=await response.json();
 
         return res
@@ -93,12 +126,24 @@ export const CourseSlice =createSlice ({
     name:'Course',
     initialState:{
         courseData:[],
+        courseDesc:{},
         MycourseData:[],
         performanceStats:{},
         courseContents:{},
         loading:false,
     },
     extraReducers:(builder)=>{
+          builder.addCase(createCourse.fulfilled, (state,action)=>{
+            state.courseData=action.payload;
+            state.loading=false
+        })
+        builder.addCase(createCourse.pending, (state,action)=>{
+          state.loading=true
+        })
+        builder.addCase(createCourse.rejected, (state,action)=>{
+            console.log("error",action.payload);
+            state.loading=false
+        })
         builder.addCase(fetchCourse.fulfilled, (state,action)=>{
             state.courseData=action.payload;
             state.loading=false
@@ -107,6 +152,17 @@ export const CourseSlice =createSlice ({
           state.loading=true
         })
         builder.addCase(fetchCourse.rejected, (state,action)=>{
+            console.log("error",action.payload);
+            state.loading=false
+        })
+          builder.addCase(fetchCourseById.fulfilled, (state,action)=>{
+            state.courseDesc=action.payload;
+            state.loading=false
+        })
+        builder.addCase(fetchCourseById.pending, (state,action)=>{
+          state.loading=true
+        })
+        builder.addCase(fetchCourseById.rejected, (state,action)=>{
             console.log("error",action.payload);
             state.loading=false
         })

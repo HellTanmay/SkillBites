@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
+
+let BASE_URL='http://localhost:4000'||"https://skillbites-backend.onrender.com"
 
 const initialState={
   lectures:[],
@@ -7,14 +9,13 @@ const initialState={
 }
 export const addLecture = createAsyncThunk("addLecture",async ({ c_id, formData }) => {
     try {
-      const response = await fetch(`http://localhost:4000/addLecture/${c_id}`, {
+      const response = await fetch(`${BASE_URL}/addLecture/${c_id}`, {
         method: "POST",
         body: formData,
         credentials: "include",
       })
   
       const resdata = await response.json();
-      console.log(resdata);
       return resdata;
     } catch (err) {
       console.log(err);
@@ -24,11 +25,10 @@ export const addLecture = createAsyncThunk("addLecture",async ({ c_id, formData 
 
 export const getLectures = createAsyncThunk("getLectures", async (id) => {
   try {
-    const response = await fetch(`http://localhost:4000/getLectures/${id}`, {
+    const response = await fetch(`${BASE_URL}/getLectures/${id}`, {
       credentials: "include",
     });
     const res = await response.json();
-    console.log(res);
     return res;
   } catch (err) {
     console.log(err);
@@ -37,12 +37,11 @@ export const getLectures = createAsyncThunk("getLectures", async (id) => {
 
 export const updateLecture = createAsyncThunk("updateLecture", async ({courseId,lectureId}) => {
   try {
-    const response = await fetch(`http://localhost:4000/updateLecture/${courseId}?lecture_id=${lectureId}`, {
+    const response = await fetch(`${BASE_URL}/updateLecture/${courseId}?lecture_id=${lectureId}`, {
       credentials: "include",
       method:'PATCH',
     });
     const res = await response?.json();
-    console.log("43",res);
     return res;
   } catch (err) {
     console.log(err);
@@ -51,15 +50,15 @@ export const updateLecture = createAsyncThunk("updateLecture", async ({courseId,
 
 export const deleteLecture=createAsyncThunk('deleteLecture',async({courseId,lectureId})=>{
   try{
-      console.log(courseId,lectureId)
-     const response=await fetch(`http://localhost:4000/deleteLecture/${courseId}?lecture_id=${lectureId}`,
+toast.loading('deleting...')
+     const response=await fetch(`${BASE_URL}/deleteLecture/${courseId}?lecture_id=${lectureId}`,
      {credentials:'include',
        method:'DELETE'});
   const res=await response?.json();
-      console.log(res)
+  toast.dismiss()
       return res  
   }catch(err){
-     toast.error(err.message)
+    console.log(err)
   }
  });
 
@@ -94,13 +93,3 @@ export const RecordSlice = createSlice({
 });
 
 export default RecordSlice.reducer;
- //   builder.addCase(updateLecture.fulfilled, (state,action)=>{
-    
-    //     const updatedLecture = state.lectures.data&&state?.lectures?.data.map((lecture) =>
-    //     lecture._id === action.payload.data?._id ?  { ...lecture, watched:action.payload.data.watched}:lecture
-    //     );
-    //     state.lectures = { ...state.lectures, data: updatedLecture };
-    // })
-    // builder.addCase(updateLecture.rejected, (state,action)=>{
-    //     console.log("error",action.payload);
-    // })

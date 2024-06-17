@@ -1,8 +1,8 @@
 import { Link,useNavigate,Navigate } from "react-router-dom";
 import {  useEffect, useState } from "react";
 import Layout from "../Components/Layout/Layout";
-import {toast}from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {toast}from 'react-hot-toast';
+
 import { useDispatch, useSelector } from "react-redux";
 import { LoginUser, fetchUser } from "../Components/Store/UserSlice";
 
@@ -14,7 +14,6 @@ export default function Login() {
   const navigate=useNavigate()
   const dispatch=useDispatch()
   useEffect(() => {
-    dispatch(fetchUser())
     if (userInfo.token && userInfo.role) {
       redirectUser(userInfo.role);
     }
@@ -28,7 +27,7 @@ export default function Login() {
     const response=await dispatch(LoginUser({email,password}))
       if(response?.payload?.success==='verify'){
          navigate ('/Signup',{state:{user:response?.payload.data}})
-        toast.info(response?.payload?.message)
+        toast.success(response?.payload?.message)
       }else 
       if(response?.payload?.success){
         redirectUser(response?.payload?.role);

@@ -3,7 +3,7 @@ import Layout from '../../Components/Layout/Layout'
 import { RiCloseFill } from 'react-icons/ri'
 import { useDispatch, useSelector } from 'react-redux'
 import { addCategory, deleteCategory, fetchCategory } from '../../Components/Store/CategorySlice'
-import { toast } from 'react-toastify'
+import { toast } from 'react-hot-toast'
 
 const AddCategory = () => {
     const [category,setCategory]=useState('')

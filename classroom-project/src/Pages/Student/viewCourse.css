@@ -309,8 +309,8 @@ video {
   text-decoration: none;
   background-color: rgb(249, 249, 249);
   padding: 5px;
-  width: 100px;
-  height: 30px;
+  width: 9em;
+
  border-radius: 10px;
 }
 .excel-download a{

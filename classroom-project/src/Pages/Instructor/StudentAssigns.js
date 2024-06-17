@@ -4,6 +4,7 @@ import { UpdateSubmission, getSubmission } from '../../Components/Store/SubmitSl
 import {Link,useLocation} from 'react-router-dom'
 import { fetchAssignments } from '../../Components/Store/AssignmentSlice';
 import TableSkeleton from '../../Extras/TableSkeleton';
+import toast from 'react-hot-toast';
 
 const StudentAssigns = ({format,c_id,q_id}) => {
   let count=0;
@@ -16,6 +17,7 @@ const StudentAssigns = ({format,c_id,q_id}) => {
         const res=await dispatch(UpdateSubmission({sub_id:submit._id,status:checked,c_id,q_id}))
         if(res?.payload?.success){
           dispatch(fetchAssignments(c_id))
+          toast.success('Marked',{position:'bottom-right'})
         }
     }
     useEffect(()=>{

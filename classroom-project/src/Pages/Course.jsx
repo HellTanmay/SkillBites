@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { FaUserGraduate } from "react-icons/fa6";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCourse, fetchMyCourse } from "../Components/Store/CourseSlice";
 import { RiDeleteBin2Line } from "react-icons/ri";
@@ -37,21 +37,10 @@ export default function Course({
     source === "myCourse" ? `/myCourse/view/${_id}` : `/course/${_id}`;
   return (
     <>
-      <div className="course-card card">
-        {/* <div className="image"
-          style={{
-            width: "320px",
-            height: "210px",
-            borderBottom: "2px solid",
-            marginLeft: "-13px",
-            marginTop: "-5px",
-            borderRadius: "5px 5px 0 0",
-          }}> */}
+      <div className="course-card card">     
           <img src={cover}
-            // className="card-img-top"
             alt="img"width='100%'
             />
-        {/* </div> */}
         <div className="car-body">
           <h4 className="card-title fw-bold "
             style={{

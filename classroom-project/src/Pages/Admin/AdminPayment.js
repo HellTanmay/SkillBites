@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../../Components/Layout/Layout'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllPayments } from '../../Components/Store/PaymentSlice'
-import { toast } from 'react-toastify'
+import { toast } from 'react-hot-toast'
 import TableSkeleton from '../../Extras/TableSkeleton'
 
 const AdminPayment = () => {

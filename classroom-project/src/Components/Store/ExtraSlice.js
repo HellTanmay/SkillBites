@@ -1,8 +1,10 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
 
+let BASE_URL='http://localhost:4000'||"https://skillbites-backend.onrender.com"
+
 export const AddContact=createAsyncThunk('AddContact',async(formData)=>{
  try{
-    const response=await fetch(`http://localhost:4000/contact`,{
+    const response=await fetch(`${BASE_URL}/contact`,{
         method:'POST',
         body:JSON.stringify(formData),
         headers:{
@@ -18,7 +20,7 @@ export const AddContact=createAsyncThunk('AddContact',async(formData)=>{
 
 export const fetchContact=createAsyncThunk('fetchContact',async()=>{
     try{
-       const response=await fetch(`http://localhost:4000/getContacts`,{credentials:'include'});
+       const response=await fetch(`${BASE_URL}/getContacts`,{credentials:'include'});
        const data=response.json();
        return data
     }catch(err){
@@ -28,7 +30,7 @@ export const fetchContact=createAsyncThunk('fetchContact',async()=>{
 
 export const fetchStats=createAsyncThunk('fetchStats',async()=>{
     try{
-       const response=await fetch(`http://localhost:4000/stats`,{credentials:'include'});
+       const response=await fetch(`${BASE_URL}/stats`,{credentials:'include'});
        const data=response.json();
        return data
     }catch(err){

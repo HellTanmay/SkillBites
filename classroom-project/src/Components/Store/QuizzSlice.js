@@ -1,16 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
+let BASE_URL='http://localhost:4000'||"https://skillbites-backend.onrender.com"
 
 export const addQuiz = createAsyncThunk("addQuiz",async ({ c_id, formData }) => {
     try {
-      const response = await fetch(`http://localhost:4000/AddQuizz/${c_id}`, {
+      const response = await fetch(`${BASE_URL}/AddQuizz/${c_id}`, {
         method: "POST",
         body: formData,
         credentials: "include",
       });
       const resdata = await response.json();
-      console.log(resdata);
       return resdata;
     } catch (err) {
       console.log(err);
@@ -20,11 +20,10 @@ export const addQuiz = createAsyncThunk("addQuiz",async ({ c_id, formData }) => 
 
 export const DisplayQuizz = createAsyncThunk("DisplayQuiz", async (id) => {
   try {
-    const response = await fetch(`http://localhost:4000/DisplayQuizz/${id}`, {
+    const response = await fetch(`${BASE_URL}/DisplayQuizz/${id}`, {
       credentials: "include",
     });
     const res = await response.json();
-    console.log(res);
     return res;
   } catch (err) {
     console.log(err);
@@ -33,11 +32,10 @@ export const DisplayQuizz = createAsyncThunk("DisplayQuiz", async (id) => {
 
 export const getQuiz = createAsyncThunk("getQuiz", async ({id,quizz_id}) => {
   try {
-    const response = await fetch(`http://localhost:4000/getQuiz/${id}?quizz_id=${quizz_id}`, {
+    const response = await fetch(`${BASE_URL}/getQuiz/${id}?quizz_id=${quizz_id}`, {
       credentials: "include",
     });
     const res = await response.json();
-    console.log(res);
     return res;
   } catch (err) {
     console.log(err);
@@ -47,21 +45,20 @@ export const getQuiz = createAsyncThunk("getQuiz", async ({id,quizz_id}) => {
 export const deleteQuizz=createAsyncThunk('deleteQuizz',async({c_id,quizz_id})=>{
   try{
     console.log(c_id, quizz_id)
-     const response=await fetch(`http://localhost:4000/deleteQuiz/${c_id}?quizz_id=${quizz_id}`,
+     const response=await fetch(`${BASE_URL}/deleteQuiz/${c_id}?quizz_id=${quizz_id}`,
      {credentials:'include',
        method:'DELETE'});
   const res=await response?.json();
-      console.log(res)
       return res  
   }catch(err){
-     toast.error(err.message)
+     console.log(err)
   }
  });
 
  export const submitQuiz = createAsyncThunk("submitQuiz",async ({ c_id,quizz_id,answers }) => {
   try {
     console.log(answers)
-    const response = await fetch(`http://localhost:4000/AnswerSubmit/${c_id}?quizz_id=${quizz_id}`, {
+    const response = await fetch(`${BASE_URL}/AnswerSubmit/${c_id}?quizz_id=${quizz_id}`, {
       method: "POST",
       body:JSON.stringify(answers),
       headers:{
@@ -70,7 +67,7 @@ export const deleteQuizz=createAsyncThunk('deleteQuizz',async({c_id,quizz_id})=>
       credentials: "include",
     });
     const resdata = await response.json();
-    console.log(resdata);
+    
     return resdata;
   } catch (err) {
     console.log(err);
@@ -79,11 +76,11 @@ export const deleteQuizz=createAsyncThunk('deleteQuizz',async({c_id,quizz_id})=>
 );
 export const getQuizSubmission = createAsyncThunk("getQuizSubmission", async ({id,quizz_id}) => {
   try {
-    const response = await fetch(`http://localhost:4000/getQuizSubmission/${id}?quizz_id=${quizz_id}`, {
+    const response = await fetch(`${BASE_URL}/getQuizSubmission/${id}?quizz_id=${quizz_id}`, {
       credentials: "include",
     });
     const res = await response.json();
-    console.log(res);
+
     return res;
   } catch (err) {
     console.log(err);
@@ -92,11 +89,10 @@ export const getQuizSubmission = createAsyncThunk("getQuizSubmission", async ({i
 
 export const getAllSubmissions = createAsyncThunk("getAllSubmissions", async ({id,quizz_id}) => {
   try {
-    const response = await fetch(`http://localhost:4000/getAllSubmissions/${id}?quizz_id=${quizz_id}`, {
+    const response = await fetch(`${BASE_URL}/getAllSubmissions/${id}?quizz_id=${quizz_id}`, {
       credentials: "include",
     });
     const res = await response.json();
-    console.log(res);
     return res;
   } catch (err) {
     console.log(err);

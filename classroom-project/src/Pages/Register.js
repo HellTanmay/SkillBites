@@ -1,7 +1,7 @@
 import { useState,useContext, useEffect } from "react";
 import { Link, Navigate,useLocation } from "react-router-dom";
 import Layout from "../Components/Layout/Layout";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { registerUser, resendOtp, verifyEmail } from "../Components/Store/UserSlice";
 

@@ -1,7 +1,6 @@
 import razorpay from "../Razorypay.js";
 import Course from "../Models/Course.js";
 import Purchase from "../Models/Orders.js";
-import User from "../Models/user.js";
 import AppError from "../utils/error.js";
 import shortid from "shortid";
 import crypto from "crypto";
@@ -32,7 +31,7 @@ export const createPayment=async(req,res,next)=>{
           if (!order) {
             throw new AppError("Something went wrong, Try again later", 400);
           }
-          res.status(200).json(order);
+          res.status(200).json({success:true,data:order});
         }
       } catch (err) {
         next(err);

@@ -1,11 +1,53 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+let BASE_URL='http://localhost:4000'||"https://skillbites-backend.onrender.com"
+
 const initialState={
   payments:[],
   isLoading:false
 }
+
+export const createPayment = createAsyncThunk("createPayment",async ({id, amount,currency} ) => {
+  try {
+    const response = await fetch(`${BASE_URL}/order/${id}`, {
+      method: "POST",
+      body: JSON.stringify({
+        amount:amount*100,
+        currency,
+      }),
+      headers:{
+        "Content-Type":"application/json",
+      },
+      credentials: "include",
+    });
+    const resdata = await response.json();
+    return resdata;
+  } catch (err) {
+    console.log(err);
+  }
+}
+);
+
+export const validatePayment = createAsyncThunk("validatePayment",async ({id, body} ) => {
+  try {
+    const response = await fetch(`${BASE_URL}/order/validate/${id}`, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers:{
+        "Content-Type":"application/json",
+      },
+      credentials: "include",
+    });
+    const resdata = await response.json();
+    return resdata;
+  } catch (err) {
+    console.log(err);
+  }
+}
+);
+
 export const getAllPayments = createAsyncThunk("getAllPayments",async (payment) => {
-  let url = "http://localhost:4000/getOrders/";
+  let url = `${BASE_URL}/getOrders/`;
       if (payment) {
         url += `?payment_id=${payment}`;
       }
@@ -14,7 +56,6 @@ export const getAllPayments = createAsyncThunk("getAllPayments",async (payment) 
         credentials: "include",
       });
       const resdata = await response?.json();
-      console.log(resdata);
       return resdata;
     } catch (err) {
       console.log(err);
@@ -24,11 +65,10 @@ export const getAllPayments = createAsyncThunk("getAllPayments",async (payment) 
 export const getPayment = createAsyncThunk("getPayment",async (payment) => {
  
     try {
-      const response = await fetch(`http://localhost:4000/getInvoice?payment_id=${payment}`, {
+      const response = await fetch(`${BASE_URL}/getInvoice?payment_id=${payment}`, {
         credentials: "include",
       });
       const resdata = await response?.json();
-      console.log(resdata);
       return resdata;
     } catch (err) {
       console.log(err);
@@ -43,7 +83,6 @@ export const PaymentSlice = createSlice({
     reducers:{},
     extraReducers: (builder) => {
       builder.addCase(getAllPayments.fulfilled, (state, action) => {
-        console.log(action.payload)
         state.payments=action?.payload;  
         state.isLoading=false
       });
@@ -55,7 +94,6 @@ export const PaymentSlice = createSlice({
         state.isLoading=false
       });
       builder.addCase(getPayment.fulfilled, (state, action) => {
-        console.log(action.payload)
         state.payments=action?.payload;  
         state.isLoading=false
       });

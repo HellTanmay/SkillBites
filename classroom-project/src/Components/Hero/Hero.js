@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import Layout from "../Layout/Layout";
 import "./Hero.css";
-import { useContext } from "react";
 
 
 export default function Hero() {

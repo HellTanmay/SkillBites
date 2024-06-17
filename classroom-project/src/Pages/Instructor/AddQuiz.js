@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { DisplayQuizz, addQuiz } from '../../Components/Store/QuizzSlice';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { MdDownload } from "react-icons/md";
 import { RiCloseFill } from 'react-icons/ri';
 
@@ -70,17 +70,7 @@ const AddQuiz = ({closeModal}) => {
             />
           </div>
         </div>
-        <div className="row mb-4">
-          <div className="col-sm-2 ">
-            <label for="name">Excel format</label>{" "}
-          </div>
-          <div className="col-sm-5">
-            <div className='excel-download'>
-            <a className='' href='/Assets/ExcelFormat.xlsx'download><MdDownload className='excel-btn'/>download</a>
-            </div>
-            <br />
-          </div>
-        </div>
+       
         <div className="row mb-4">
           <div className="col-sm-2 ">
             <label for="name">Title</label>{" "}
@@ -138,7 +128,11 @@ const AddQuiz = ({closeModal}) => {
         </div> 
         
       </div>
-      <div className='modal-footer'>
+      <div className='modal-footer d-flex justify-content-between'>
+          <div className='excel-download'>
+            <a  href='/Assets/ExcelFormat.xlsx'download><MdDownload className='excel-btn'/> excel format</a>
+          </div>
+            
       <button className='btn btn-md btn-info'>Add Test</button>
     </div>
     </form>

@@ -3,70 +3,46 @@ import Layout from "../../Components/Layout/Layout";
 import { useParams,useNavigate } from "react-router-dom";
 import {useDispatch,useSelector}from 'react-redux';
 import { fetchUser} from '../../Components/Store/UserSlice'
-import {toast} from 'react-toastify'
-import "react-toastify/dist/ReactToastify.css";
+import {toast} from 'react-hot-toast'
 import { PiStudent } from "react-icons/pi";
 import { IoTimerOutline } from "react-icons/io5";
-import { fetchContents } from "../../Components/Store/CourseSlice";
+import { fetchContents, fetchCourseById } from "../../Components/Store/CourseSlice";
 import { RiFileVideoLine, RiListCheck3 } from "react-icons/ri";
 import { FaRegFileAlt } from "react-icons/fa";
+import { createPayment, validatePayment } from "../../Components/Store/PaymentSlice";
 
 
 const CourseDescription = () => {
-  const [courseInfo, setCourseInfo] = useState(null);
   const { id } = useParams();
   const dispatch=useDispatch()
   const state=useSelector((state)=>state)
   const User=state.User.userData
   const courseContent=state.course.courseContents.data
+  const courseInfo=state.course.courseDesc
   const loading=state.course.loading
 const navigate=useNavigate()
 
 useEffect(()=>{
   dispatch(fetchUser())
   dispatch(fetchContents(id))
+  dispatch(fetchCourseById(id))
 },[dispatch])
-
-  useEffect(() => {
-   fetch(`http://localhost:4000/course/${id}`,
-    {credentials:'include'}
-   ).then((response) => {
-      response.json().then((course) => {
-        setCourseInfo(course);
-      }); 
-    });
-
-  }, []);
-
 
      if (!courseInfo) return "";
       if (!User)return ""
   const currency='INR';
-  const amount=courseInfo.price
+  const amount=courseInfo?.price
 
   async function payHandler(e){
     try{
-    const response=await fetch(`http://localhost:4000/order/${courseInfo._id}`,{
-      method:'POST',
-      credentials:'include',
-      body:JSON.stringify({
-        amount:amount*100,
-        currency,
-      }),
-      headers:{
-        "Content-Type":"application/json",
-      },
-    })
-    const order=await response.json();
-    console.log(order)
-    if (response.status>=400 &&response.status<500) {
-      toast.info(order.message,{theme:'colored',position:'bottom-right'}); 
-      return;
+   const response= await dispatch(createPayment({id:courseInfo._id,amount,currency}))
+    let order
+    if(response.payload.success){
+     order=await response.payload.data;
+    }else{
+      toast.error(response.payload.message,{style:{background:'skyblue'},iconTheme:'blue',position:'bottom-right'})
     }
-    if (response.status>=500) {
-      toast.error(order.message,{theme:'colored',position:'top-center'}); 
-      return;
-    }
+
 const options = {
   key: 'rzp_test_0bzBSxkt9xLCn4', 
   amount:order.amount,
@@ -80,18 +56,10 @@ const options = {
      const body={
       ...response,
      };
-     const validate=await fetch(`http://localhost:4000/order/validate/${courseInfo._id}`,{
-      method:'POST',
-      body:JSON.stringify(body),
-      credentials:'include',
-      headers:{
-        'Content-Type':'application/json'
-      }
-     });
-     const res=await validate.json();
+    const res=await dispatch(validatePayment({id:courseInfo._id,body}))
      console.log(res);
-     if(res.success){
-      navigate(`/order-success?payment_id=${res.payment_id}`)
+     if(res.payload.success){
+      navigate(`/order-success?payment_id=${res.payload.payment_id}`)
      }
   },
   prefill: { 
@@ -121,21 +89,23 @@ const userExist=courseInfo?.enrolled?.find((user)=>user.student===User._id)
   return (
     <Layout>
       <div className="course-description">
+        {!loading?(
+          <>
       <div className="desc-heading">
         <h1>{courseInfo.title}</h1>
         <hr/>
           <h6 style={{fontSize:''}}>{courseInfo.summary}</h6>
           <div className="instructor-img">
-          <img src={courseInfo.author.photo} className="profile-pic" width='40px'height='40px'/>
-          <span>{courseInfo.author.username}</span>
+          <img src={courseInfo.author?.photo} className="profile-pic" width='40px'height='40px'/>
+          <span>{courseInfo.author?.username}</span>
           </div>
           <div className="desc-footer">
-          <p><IoTimerOutline/> Duration: {courseInfo.duration} months</p>
-          <p> <PiStudent/> Students enrolled: {courseInfo.enrolled.length} </p>
+          <p><IoTimerOutline/> Duration: {courseInfo?.duration} months</p>
+          <p> <PiStudent/> Students enrolled: {courseInfo?.enrolled?.length} </p>
           </div>
       </div>
       <article className="content-description">
-          <p dangerouslySetInnerHTML={{ __html: courseInfo.content }} ></p>
+          <p dangerouslySetInnerHTML={{ __html: courseInfo?.content }} ></p>
           </article>
           <div className="course-contents">
           <div className="text-center bg-secondary"style={{borderRadius:'10px 10px 0 0'}}>
@@ -143,8 +113,8 @@ const userExist=courseInfo?.enrolled?.find((user)=>user.student===User._id)
           </div> 
         <div className="lectures">
            
-           {!loading?(
-            courseContent.length>0?(
+           {
+            courseContent?.length>0?(
             courseContent?.map((contents) => {
         const duration =Math.floor( contents?.duration);
         const minutes = Math.floor(duration / 60);
@@ -171,10 +141,7 @@ const userExist=courseInfo?.enrolled?.find((user)=>user.student===User._id)
       
             })):(<div className="d-flex justify-content-center align-items-center "style={{height:'20em'}}>
             No Contents yet
-          </div>)):(
-              <div className="d-flex justify-content-center align-items-center "style={{height:'20em'}}>
-                please wait...
-              </div>)}
+          </div>)}
                   
                     
             </div>
@@ -186,10 +153,14 @@ const userExist=courseInfo?.enrolled?.find((user)=>user.student===User._id)
               <div className="d-flex justify-content-between">
               <p className="fs-4"><strong>₹ {courseInfo.price?.toLocaleString('en-IN')}</strong></p>
               <button className="btn btn-primary"
-              onClick={()=>User.role==='Admin'||User.username===courseInfo.author.username||userExist?navigate(`/myCourse/view/${courseInfo._id}`):payHandler()}>
-              <strong>{User.role==='Admin'||User.username===courseInfo.author.username||userExist?'Watch':'Buy now'}</strong></button>
+              onClick={()=>User.role==='Admin'||User?.username===courseInfo.author?.username||userExist?navigate(`/myCourse/view/${courseInfo._id}`):payHandler()}>
+              <strong>{User.role==='Admin'||User?.username===courseInfo.author?.username||userExist?'Watch':'Buy now'}</strong></button>
               </div>
           </div>
+          </>):(
+              <div style={{position:'absolute',top:'50%',right:'50%'}}>
+                please wait...
+              </div>)}
 </div>
     </Layout>
   );
