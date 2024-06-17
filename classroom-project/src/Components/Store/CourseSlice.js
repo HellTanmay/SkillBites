@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
 import { toast } from "react-hot-toast";
 
-let BASE_URL='http://localhost:4000'||"https://skillbites-backend.onrender.com"
+let BASE_URL="https://skillbites-backend.onrender.com"
 
 export const createCourse = createAsyncThunk("createCourse",async (data) => {
               try {

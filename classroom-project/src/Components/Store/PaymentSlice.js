@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-let BASE_URL='http://localhost:4000'||"https://skillbites-backend.onrender.com"
+let BASE_URL="https://skillbites-backend.onrender.com"
 
 const initialState={
   payments:[],
