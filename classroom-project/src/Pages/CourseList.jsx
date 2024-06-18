@@ -43,10 +43,7 @@ const loading=state.course.loading
               >
                 All Courses
               </h1>
-            
-              
-       
-    
+          
             <div className="c-image ">
             <img className="img3 " width='400px'height='400px' src="Assets/course.png" alt="pic"></img>
           </div>

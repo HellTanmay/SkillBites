@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
 import { toast } from "react-hot-toast";
 
 let BASE_URL="https://skillbites-backend.onrender.com"
+// let BASE_URL="http://localhost:4000"
 
 const isNetworkError = (error) => {
   return (
@@ -16,6 +17,7 @@ const isNetworkError = (error) => {
 export const registerUser = createAsyncThunk("registerUser",async (formData) => {
     
     try {
+      toast.loading('Signing up...')
       const response = await fetch(`${BASE_URL}/Signup`, {
         method: "POST",
         body: JSON.stringify(formData),
@@ -25,6 +27,7 @@ export const registerUser = createAsyncThunk("registerUser",async (formData) => 
         credentials: "include",
       });
       const resdata = await response.json();
+      toast.dismiss()
       return resdata;
     } catch (err) {
       console.log(err);
@@ -34,6 +37,7 @@ export const registerUser = createAsyncThunk("registerUser",async (formData) => 
 
 export const verifyEmail = createAsyncThunk("verifyEmail",async ({email,otp}) => {  
   try {
+    toast.loading('verifying email...')
     const response = await fetch(`${BASE_URL}/verifyEmail`, {
       method: "POST",
       body: JSON.stringify({email,otp}),
@@ -43,6 +47,7 @@ export const verifyEmail = createAsyncThunk("verifyEmail",async ({email,otp}) =>
       credentials: "include",
     });
     const resdata = await response.json();
+    toast.dismiss()
     return resdata;
   } catch (err) {
     console.log(err);
@@ -139,6 +144,23 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
        throw err
     }
    });
+
+   export const updateUser = createAsyncThunk("updateUser", async (formData) => {
+    try {
+      console.log(formData)
+      const response = await fetch(`${BASE_URL}/profile/edit`, {
+        credentials: "include",
+        method:'PUT',
+        body:formData
+      });
+      const res = await response?.json();
+      console.log(res)
+
+      return res;
+    } catch (err) {
+      console.log(err);
+    }
+  });
    
    export const LoggedOut=createAsyncThunk('LoggedOut',async()=>{
     try{
@@ -180,14 +202,36 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
         builder.addCase(LoggedIn.fulfilled,(state,action)=>{
           state.isLoggedIn=action.payload?.id?true:false;
           state.role=action.payload?.role
+          state.loading=false
         })
+        builder.addCase(LoggedIn.pending,(state,action)=>{
+          state.loading=true
+          })
         builder.addCase(LoggedIn.rejected,(state,action)=>{
         console.log("ERROR",action.payload)
+        state.loading=false
+        })
+        builder.addCase(LoginUser.fulfilled,(state,action)=>{
+          state.loading=false
+        })
+        builder.addCase(LoginUser.pending,(state,action)=>{
+          state.loading=true
+          })
+        builder.addCase(LoginUser.rejected,(state,action)=>{
+        console.log("ERROR",action.payload)
+        state.loading=false
         })
         builder.addCase(LoggedOut.fulfilled,(state,action)=>{
         state.isLoggedIn=false;
         state.role='';
+        state.loading=false
         })
+        builder.addCase(LoggedOut.pending,(state,action)=>{
+          state.loading=true
+          })
+          builder.addCase(LoggedOut.rejected,(state,action)=>{
+            state.loading=false
+            })
         builder.addCase(fetchAllUsers.fulfilled,(state,action)=>{
             state.userData=action.payload;
             state.allLoading=false

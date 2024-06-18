@@ -168,9 +168,9 @@ async function resend(ev){
               placeholder='Enter otp'
               onChange={(e)=>setOtp(e.target.value)}></input>
               <button type="submit" className="Login-button">Verify Otp</button>
-              <div className="resend-otp d-flex ">
+              <div className="resend-otp d-flex justify-content-around">
               <span>Didn't recieve any otp?</span>
-             <button onClick={resend} className="btn ">Resend otp</button>
+             <button onClick={resend} className="btn btn-sm btn-primary">Resend otp</button>
               </div>
               </form>
               </div>

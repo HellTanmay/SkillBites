@@ -2,9 +2,9 @@ import React, {useEffect, useState } from 'react'
 import { RiCloseFill } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
-import { fetchUser } from '../Components/Store/UserSlice';
+import { fetchUser, updateUser } from '../Components/Store/UserSlice';
 
-const EditProfile = ({close1Modal,user}) => {
+const EditProfile = ({close1Modal}) => {
   const [avatar,setAvatar]=useState('');
   const [error,setError]=useState()
   const [loading,isLoading]=useState(false)
@@ -50,19 +50,14 @@ const EditProfile = ({close1Modal,user}) => {
         formData.append(key, value);
       });
       try{
-      const res=await fetch("http://localhost:4000/profile/edit",{
-        credentials:'include',
-        method:'PUT',
-        body:formData,
-      })
-      const data=await res.json()
-      console.log(data)
-      user(data)
-          if(data.success){
+      const data=await dispatch(updateUser(formData))
+          if(data.payload.success){
+            dispatch(fetchUser())
             close1Modal(false);
             toast.success('Updated successfully',{position:'top-center'})
+          }else{
+            setError(data.payload.message)
           }
-          setError(data.message)
       }catch(err)
       {
           console.log(err.message)

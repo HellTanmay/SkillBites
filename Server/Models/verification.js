@@ -12,9 +12,10 @@ const verificationSchema = new Schema(
     },
     createdAt: {
       type: Date,
-      default: Date.now(),
-      // expires: "10m",
+      default: Date.now,
+      expires:'10m',
     },
+    
   },
   {
     timestamps: true,

@@ -6,12 +6,12 @@ import { fetchUser } from "../Components/Store/UserSlice";
 
 const Profile = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [state, setState] = useState(0);
+
 const dispatch=useDispatch()
 const user=useSelector((state)=>state.User.userData)
   useEffect(() => {
 dispatch(fetchUser())
-  }, [state]);
+  }, [dispatch]);
 
   return (
     <div>
@@ -121,7 +121,7 @@ dispatch(fetchUser())
               </div>
             </div>
             {openModal && (
-              <EditProfile close1Modal={setOpenModal} user={setState} />
+              <EditProfile close1Modal={setOpenModal} />
             )}
           </div>
         </div>

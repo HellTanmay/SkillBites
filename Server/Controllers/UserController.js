@@ -50,7 +50,7 @@ export const verifyEmail = async (req, res, next) => {
     if (!email || !otp) {
       throw new AppError("Try again", 400);
     }
-    const verification = await Verification.findOne({ userId: user._id });
+    const verification = await Verification.findOne({ userId: user._id});
     if (!verification) {
       throw new AppError("Token expired!", 404);
     }

@@ -11,6 +11,7 @@ export default function Login() {
   const [password, setPassword] = useState();
   const [redirect, setRedirect] = useState();
   const userInfo=useSelector((state)=>state.User.userData)
+  const loading=useSelector((state)=>state.User.loading)
   const navigate=useNavigate()
   const dispatch=useDispatch()
   useEffect(() => {
@@ -75,7 +76,7 @@ if(redirect){
             onChange={(ev) => setPassword(ev.target.value)}
           />
           <br />
-          <button className="Login-button">Login</button>
+          <button className="Login-button">{loading?'Logging in...':'Login'}</button>
           <br />
           <br />
           <p>
