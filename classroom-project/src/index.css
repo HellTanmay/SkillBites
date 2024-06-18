@@ -280,7 +280,7 @@ body {
 /* CourseList */
 .course-container {
   margin-top: 63px;
-  min-width: 80vh;
+  min-height: 80vh;
 }
 
 .course-heading {
