@@ -64,8 +64,9 @@ export const verifyEmail = async (req, res, next) => {
     const token = Token(user);
     res.cookie("token", token, {
       maxAge: 60 * 60 * 24 * 1000,
+      secure:process.env.NODE_ENV='production',
       httpOnly: true,
-      sameSite: "Lax",
+      sameSite:process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
     });
     res.status(200).json({
       success: true,
@@ -126,7 +127,9 @@ export const login=async(req,res,next)=>{
             const token = Token(userDoc);
             res.cookie("token", token, {
               maxAge: 60 * 60 * 24 * 1000,
+              secure:process.env.NODE_ENV='production',
               httpOnly: true,
+              sameSite:process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
             });
             res.status(200).json({ success: true, token, role: userDoc.role });
           } else {
@@ -239,8 +242,9 @@ export const getAllUser=async(req,res,next)=>{
 export const Logout=async(req,res,next)=>{
   res.cookie("token", "", {
     maxAge: 0,
+    secure:process.env.NODE_ENV='production',
     httpOnly: true,
-    sameSite: "Lax",
+    sameSite:process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
   });
   res.status(200).json({success:true,message:'Logged out'})
 }
