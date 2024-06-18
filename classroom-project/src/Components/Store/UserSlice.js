@@ -79,7 +79,6 @@ export const LoginUser = createAsyncThunk("Login",async ({email,password}) => {
       credentials: "include",
     });
     const resdata = await response.json();
-    console.log(resdata);
     return resdata;
   } catch (err) {
     toast.error('Network error')
@@ -181,17 +180,14 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
         builder.addCase(LoggedIn.fulfilled,(state,action)=>{
           state.isLoggedIn=action.payload?.id?true:false;
           state.role=action.payload?.role
-          // state.userData=action.payload
-      })
-    builder.addCase(LoggedIn.rejected,(state,action)=>{
-      console.log("ERROR",action.payload)
-  })
-  builder.addCase(LoggedOut.fulfilled,(state,action)=>{
-    state.isLoggedIn=false;
-    state.role='';
-    // state.userData={}
-  
-})
+        })
+        builder.addCase(LoggedIn.rejected,(state,action)=>{
+        console.log("ERROR",action.payload)
+        })
+        builder.addCase(LoggedOut.fulfilled,(state,action)=>{
+        state.isLoggedIn=false;
+        state.role='';
+        })
         builder.addCase(fetchAllUsers.fulfilled,(state,action)=>{
             state.userData=action.payload;
             state.allLoading=false

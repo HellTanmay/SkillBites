@@ -25,8 +25,10 @@ async function contactData(e){
     setContact({'username':'',
                 'email':'',
                 'message':''})
+  }else{
+    toast.error(res.payload.message)
   }
-  toast.error(res.payload.message)
+  
 }
   return (
     <Layout>
