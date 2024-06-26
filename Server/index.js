@@ -49,15 +49,17 @@ mongoose.connect(process.env.MONGO_URL )
     console.log(error);
   });
 
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../classroom-project/build', 'index.html'));
-  });
+ 
 app.use(UserRoutes)
 app.use(courseRoutes)
 app.use(courseContentRoutes)
 app.use(quizRoutes)
 app.use(paymentRoute)
 app.use(miscRoutes)
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../classroom-project/build', 'index.html'));
+}); 
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running in port ${process.env.PORT||4000}`);
