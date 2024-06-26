@@ -39,9 +39,7 @@ app.use("/pdf", express.static(__dirname + "/pdf"));
 
 app.use(express.static(path.join(__dirname, '../classroom-project/build')));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../classroom-project/build', 'index.html'));
-});
+
 
 mongoose.connect(process.env.MONGO_URL )
   .then(() => {
@@ -51,7 +49,9 @@ mongoose.connect(process.env.MONGO_URL )
     console.log(error);
   });
 
-  
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../classroom-project/build', 'index.html'));
+  });
 app.use(UserRoutes)
 app.use(courseRoutes)
 app.use(courseContentRoutes)
