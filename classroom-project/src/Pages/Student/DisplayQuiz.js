@@ -26,7 +26,7 @@ const DisplayQuiz = ({ quizz_id, tests, states }) => {
   const loading = useSelector((state) => state.Quizzes.loading);
   const result = useSelector((state) => state?.Quizzes?.result?.data);
   const { id } = useParams();
-console.log(result)
+
   useEffect(() => {
     dispatch(getQuiz({ id, quizz_id }));
     dispatch(getQuizSubmission({ id, quizz_id }));
@@ -110,7 +110,7 @@ console.log(result)
                 questions
               </p>
               <p>Duration: {tests?.duration} minutes</p>
-              <p>Total Marks: {tests.totalmarks}</p>
+              <p>Total Marks: {tests?.totalmarks}</p>
               <button onClick={() => setState("Quizz")}>Start Test</button>
             </div>
           )}
