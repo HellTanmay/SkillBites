@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import {Logout, editProfile, getAllUser, login, profile, register, resend_otp, userProfile, verify, verifyEmail} from '../Controllers/UserController.js'
-import { verifyToken } from '../Middleware/authMid.js'
+import {Logout, editProfile, getAllUser, login, profile, refresh, register, resend_otp, userProfile, verify, verifyEmail} from '../Controllers/UserController.js'
+import { verfiyRefreshToken, verifyToken } from '../Middleware/authMid.js'
 import { uploadImageVideo } from '../Middleware/multer.js'
 
 const router=Router()
@@ -11,12 +11,14 @@ router.post('/Signup',register)
         .post('/resend-otp',resend_otp)
         .post('/Login',login)
         .post('/logout',Logout)
+        .post('/refresh',verfiyRefreshToken,refresh)
 
 router.get('/verify',verifyToken,verify)
         .get('/profile',verifyToken,profile)
         .get('/userProfile',verifyToken,userProfile)
         .get('/fetchAllUsers',verifyToken,getAllUser)
  router.put('/profile/edit',verifyToken,uploadImageVideo.single('avatar'),editProfile)
+
 
 export default router
 

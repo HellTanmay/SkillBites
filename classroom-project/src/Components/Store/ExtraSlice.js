@@ -1,11 +1,13 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
+import { fetchWithAuth
 
-let BASE_URL="https://skillbites-backend.onrender.com"
-// let BASE_URL="http://localhost:4000"
+ } from "./fetchRequest";
+// let BASE_URL="https://skillbites-backend.onrender.com"
+
 
 export const AddContact=createAsyncThunk('AddContact',async(formData)=>{
  try{
-    const response=await fetch(`${BASE_URL}/contact`,{
+    const response=await fetchWithAuth(`/contact`,{
         method:'POST',
         body:JSON.stringify(formData),
         headers:{
@@ -21,7 +23,7 @@ export const AddContact=createAsyncThunk('AddContact',async(formData)=>{
 
 export const fetchContact=createAsyncThunk('fetchContact',async()=>{
     try{
-       const response=await fetch(`${BASE_URL}/getContacts`,{credentials:'include'});
+       const response=await fetchWithAuth(`/getContacts`,{credentials:'include'});
        const data=response.json();
        return data
     }catch(err){
@@ -31,7 +33,7 @@ export const fetchContact=createAsyncThunk('fetchContact',async()=>{
 
 export const fetchStats=createAsyncThunk('fetchStats',async()=>{
     try{
-       const response=await fetch(`${BASE_URL}/stats`,{credentials:'include'});
+       const response=await fetchWithAuth(`/stats`,{credentials:'include'});
        const data=response.json();
        return data
     }catch(err){

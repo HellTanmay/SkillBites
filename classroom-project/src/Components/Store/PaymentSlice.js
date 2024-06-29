@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-let BASE_URL="https://skillbites-backend.onrender.com"
-// let BASE_URL="http://localhost:4000"
+import { fetchWithAuth } from "./fetchRequest";
+// let BASE_URL="https://skillbites-backend.onrender.com"
 
 const initialState={
   payments:[],
@@ -10,7 +9,7 @@ const initialState={
 
 export const createPayment = createAsyncThunk("createPayment",async ({id, amount,currency} ) => {
   try {
-    const response = await fetch(`${BASE_URL}/order/${id}`, {
+    const response = await fetchWithAuth(`/order/${id}`, {
       method: "POST",
       body: JSON.stringify({
         amount:amount*100,
@@ -31,7 +30,7 @@ export const createPayment = createAsyncThunk("createPayment",async ({id, amount
 
 export const validatePayment = createAsyncThunk("validatePayment",async ({id, body} ) => {
   try {
-    const response = await fetch(`${BASE_URL}/order/validate/${id}`, {
+    const response = await fetchWithAuth(`/order/validate/${id}`, {
       method: "POST",
       body: JSON.stringify(body),
       headers:{
@@ -48,12 +47,12 @@ export const validatePayment = createAsyncThunk("validatePayment",async ({id, bo
 );
 
 export const getAllPayments = createAsyncThunk("getAllPayments",async (payment) => {
-  let url = `${BASE_URL}/getOrders/`;
+  let url = `/getOrders/`;
       if (payment) {
         url += `?payment_id=${payment}`;
       }
     try {
-      const response = await fetch(url, {
+      const response = await fetchWithAuth(url, {
         credentials: "include",
       });
       const resdata = await response?.json();
@@ -66,7 +65,7 @@ export const getAllPayments = createAsyncThunk("getAllPayments",async (payment) 
 export const getPayment = createAsyncThunk("getPayment",async (payment) => {
  
     try {
-      const response = await fetch(`${BASE_URL}/getInvoice?payment_id=${payment}`, {
+      const response = await fetchWithAuth(`/getInvoice?payment_id=${payment}`, {
         credentials: "include",
       });
       const resdata = await response?.json();

@@ -15,15 +15,18 @@ const Performance = () => {
   const state=useSelector((state)=>state)
   const role=state.User.role
   const performance=state.course.performanceStats
+  const course=state.course.courseDesc
   const allPerformance=state.course.performanceStats.studentsPerformance
   const loading=state.course.loading
   const percentage=Math.floor(performance.studentPerformance*100)/100
-  console.log(allPerformance)
+  
   const {id}=useParams()
+
   useEffect(()=>{
     dispatch(fetchUser())
     dispatch(fetchPerformance(id))
   },[])
+
   function format(formatted){
     const date=new Date(formatted)
   return date.toLocaleDateString('en-IN', {
@@ -32,9 +35,10 @@ const Performance = () => {
       year: 'numeric',
     });
   }
+  
   return (
    <div className='performance-container'>
-   {role==='Student'&&!loading&&( <> <h1>Html/css/Javascript</h1>
+   {role==='Student'&&!loading&&( <> <h1>{course?.title}</h1>
       <p>No of lectures:<span>{performance.noOfLectures}</span></p>
       <p>No of assignments:<span>{performance.noOfAssignments}</span></p>
       <div className=''>

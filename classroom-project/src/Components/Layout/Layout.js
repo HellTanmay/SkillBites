@@ -14,7 +14,7 @@ import { fetchUser } from "../Store/UserSlice";
 export default function Layout({ children ,hideFooter,initial=false,index=true}) {
   const [sidebar, setSidebar] = useState(initial);
   const show = () => setSidebar(!sidebar);
-  const sidebarWidth= sidebar ? "16.4%" : "0"
+  
   const state=useSelector((state)=>state)
   const user=state.User.userData
   const role=state.User.role
@@ -92,8 +92,6 @@ export default function Layout({ children ,hideFooter,initial=false,index=true})
         </ul>
       </nav>
       <div style={{
-          width: `calc(100%-${sidebarWidth})`,
-          marginLeft:index? sidebarWidth:'0',
           transition: " 350ms ease",
         }}>
         {children}
@@ -101,8 +99,6 @@ export default function Layout({ children ,hideFooter,initial=false,index=true})
     
      {!hideFooter&&( <Footer
         style={{
-          width: `calc(100%-${sidebarWidth})`,
-          marginLeft: sidebarWidth,
           transition: " 350ms ease",
         }}
       />)}

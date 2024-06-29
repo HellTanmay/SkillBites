@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-hot-toast";
+import { fetchWithAuth } from "./fetchRequest";
 
-let BASE_URL="https://skillbites-backend.onrender.com"
-// let BASE_URL="http://localhost:4000"
+// let BASE_URL="https://skillbites-backend.onrender.com"
 
 const initialState={
   lectures:[],
@@ -10,7 +10,7 @@ const initialState={
 }
 export const addLecture = createAsyncThunk("addLecture",async ({ c_id, formData }) => {
     try {
-      const response = await fetch(`${BASE_URL}/addLecture/${c_id}`, {
+      const response = await fetchWithAuth(`/addLecture/${c_id}`, {
         method: "POST",
         body: formData,
         credentials: "include",
@@ -26,7 +26,7 @@ export const addLecture = createAsyncThunk("addLecture",async ({ c_id, formData 
 
 export const getLectures = createAsyncThunk("getLectures", async (id) => {
   try {
-    const response = await fetch(`${BASE_URL}/getLectures/${id}`, {
+    const response = await fetchWithAuth(`/getLectures/${id}`, {
       credentials: "include",
     });
     const res = await response.json();
@@ -38,7 +38,7 @@ export const getLectures = createAsyncThunk("getLectures", async (id) => {
 
 export const updateLecture = createAsyncThunk("updateLecture", async ({courseId,lectureId}) => {
   try {
-    const response = await fetch(`${BASE_URL}/updateLecture/${courseId}?lecture_id=${lectureId}`, {
+    const response = await fetchWithAuth(`/updateLecture/${courseId}?lecture_id=${lectureId}`, {
       credentials: "include",
       method:'PATCH',
     });
@@ -52,7 +52,7 @@ export const updateLecture = createAsyncThunk("updateLecture", async ({courseId,
 export const deleteLecture=createAsyncThunk('deleteLecture',async({courseId,lectureId})=>{
   try{
 toast.loading('deleting...')
-     const response=await fetch(`${BASE_URL}/deleteLecture/${courseId}?lecture_id=${lectureId}`,
+     const response=await fetchWithAuth(`/deleteLecture/${courseId}?lecture_id=${lectureId}`,
      {credentials:'include',
        method:'DELETE'});
   const res=await response?.json();

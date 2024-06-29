@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
+import { fetchWithAuth } from "./fetchRequest";
 import { toast } from "react-hot-toast";
 
-let BASE_URL="https://skillbites-backend.onrender.com"
-// let BASE_URL="http://localhost:4000"
+// let BASE_URL="https://skillbites-backend.onrender.com"
 
 export const addCategory=createAsyncThunk('addCategory',async(category)=>{
  try{
     console.log(category)
-    const response=await fetch(`${BASE_URL}/addCategories`,{
+    const response=await fetchWithAuth(`/addCategories`,{
         method:'POST',
         body:JSON.stringify({ category }),
         headers: {
@@ -24,7 +24,7 @@ export const addCategory=createAsyncThunk('addCategory',async(category)=>{
 
 export const fetchCategory=createAsyncThunk('fetchCategory',async()=>{
     try{
-       const response=await fetch(`${BASE_URL}/getCategories`,{credentials:'include'});
+       const response=await fetchWithAuth(`/getCategories`,{credentials:'include'});
        const data=response.json();
        return data
     }catch(err){
@@ -35,7 +35,7 @@ export const fetchCategory=createAsyncThunk('fetchCategory',async()=>{
    export const deleteCategory=createAsyncThunk('deleteCategory',async(categoryId)=>{
     try{
         console.log(categoryId)
-       const response=await fetch(`${BASE_URL}/deleteCategory?categoryId=${categoryId}`,
+       const response=await fetchWithAuth(`/deleteCategory?categoryId=${categoryId}`,
        {credentials:'include',
          method:'DELETE'});
     const res=await response?.json();

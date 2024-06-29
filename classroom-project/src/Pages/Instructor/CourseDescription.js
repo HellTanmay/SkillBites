@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../Components/Layout/Layout";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams,useNavigate, Navigate, useLocation,  } from "react-router-dom";
 import {useDispatch,useSelector}from 'react-redux';
 import { fetchUser} from '../../Components/Store/UserSlice'
 import {toast} from 'react-hot-toast'
@@ -16,17 +16,27 @@ const CourseDescription = () => {
   const { id } = useParams();
   const dispatch=useDispatch()
   const state=useSelector((state)=>state)
-  const User=state.User.userData
-  const courseContent=state.course.courseContents.data
-  const courseInfo=state.course.courseDesc
-  const loading=state.course.loading
+  const User=state.User?.userData
+  const courseContent=state.course?.courseContents?.data
+  const courseInfo=state.course?.courseDesc?.data
+  const error=state.course?.error
+  const loading=state.course?.loading
 const navigate=useNavigate()
+const location=useLocation()
 
 useEffect(()=>{
   dispatch(fetchUser())
   dispatch(fetchContents(id))
-  dispatch(fetchCourseById(id))
+ dispatch(fetchCourseById(id))
 },[dispatch])
+
+
+
+// useEffect(()=>{
+//   if(error==='server error'){
+//     navigate('/denied')
+//   }
+// },[navigate,error])
 
      if (!courseInfo) return "";
       if (!User)return ""
@@ -38,28 +48,27 @@ useEffect(()=>{
    const response= await dispatch(createPayment({id:courseInfo._id,amount,currency}))
     let order
     if(response.payload.success){
-     order=await response.payload.data;
+     order=await response?.payload?.data;
     }else{
-      toast.error(response.payload.message,{style:{background:'skyblue'},iconTheme:'blue',position:'bottom-right'})
+      toast.error(response.payload?.message,{style:{background:'skyblue'},iconTheme:'blue',position:'bottom-right'})
     }
 
 const options = {
   key: 'rzp_test_0bzBSxkt9xLCn4', 
-  amount:order.amount,
-  currency:order.currency,
-  name: courseInfo.title, 
-  description: courseInfo.summary,
-  image:courseInfo.cover,
-  order_id: order.id,
-  receipt:order.receipt,
+  amount:order?.amount,
+  currency:order?.currency,
+  name: courseInfo?.title, 
+  description: courseInfo?.summary,
+  image:courseInfo?.cover,
+  order_id: order?.id,
+  receipt:order?.receipt,
   handler: async function (response){
      const body={
       ...response,
      };
     const res=await dispatch(validatePayment({id:courseInfo._id,body}))
-     console.log(res);
-     if(res.payload.success){
-      navigate(`/order-success?payment_id=${res.payload.payment_id}`)
+     if(res.payload?.success){
+      navigate(`/order-success?payment_id=${res.payload?.payment_id}`)
      }
   },
   prefill: { 
@@ -74,7 +83,6 @@ const options = {
 const rzp1 = new window.Razorpay(options);
 rzp1.on('payment.failed', function (response){
    toast.error('Try again later')
-   console.log(response)
 });
 rzp1.open();
     
@@ -83,7 +91,7 @@ rzp1.open();
  }
 }
 
-const userExist=courseInfo?.enrolled?.find((user)=>user.student===User._id)
+const userExist=courseInfo?.enrolled?.find((user)=>user?.student===User?._id)
 
 
   return (
@@ -92,9 +100,9 @@ const userExist=courseInfo?.enrolled?.find((user)=>user.student===User._id)
         {!loading?(
           <>
       <div className="desc-heading">
-        <h1>{courseInfo.title}</h1>
+        <h1>{courseInfo?.title}</h1>
         <hr/>
-          <h6 style={{fontSize:''}}>{courseInfo.summary}</h6>
+          <h6 style={{fontSize:''}}>{courseInfo?.summary}</h6>
           <div className="instructor-img">
           <img src={courseInfo.author?.photo} className="profile-pic" width='40px'height='40px'/>
           <span>{courseInfo.author?.username}</span>
@@ -148,12 +156,12 @@ const userExist=courseInfo?.enrolled?.find((user)=>user.student===User._id)
             
             </div>
           <div className="buy-card">
-              <img src={courseInfo.cover}width='100%'></img>
-              <h1>{courseInfo.title}</h1>
+              <img src={courseInfo?.cover}width='100%'></img>
+              <h1>{courseInfo?.title}</h1>
               <div className="d-flex justify-content-between">
               <p className="fs-4"><strong>₹ {courseInfo.price?.toLocaleString('en-IN')}</strong></p>
               <button className="btn btn-primary"
-              onClick={()=>User.role==='Admin'||User?.username===courseInfo.author?.username||userExist?navigate(`/myCourse/view/${courseInfo._id}`):payHandler()}>
+              onClick={()=>User.role==='Admin'||User?.username===courseInfo.author?.username||userExist?navigate(`/myCourse/view/${courseInfo?._id}`):payHandler()}>
               <strong>{User.role==='Admin'||User?.username===courseInfo.author?.username||userExist?'Watch':'Buy now'}</strong></button>
               </div>
           </div>

@@ -1,13 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { fetchWithAuth } from "./fetchRequest";
 
-let BASE_URL="https://skillbites-backend.onrender.com"
-// let BASE_URL="http://localhost:4000"
+// let BASE_URL="https://skillbites-backend.onrender.com"
+let BASE_URL="http://localhost:4000"
 
 
 export const addAssignments = createAsyncThunk("addAssignments",async ({ c_id, formData }) => {
     try {
-      const response = await fetch(
-        `${BASE_URL}/addAssignments/${c_id}`,
+      const response = await fetchWithAuth(
+        `/addAssignments/${c_id}`,
         {
           method: "POST",
           body: formData,
@@ -24,7 +25,7 @@ export const addAssignments = createAsyncThunk("addAssignments",async ({ c_id, f
 
 export const fetchAssignments = createAsyncThunk("fetchAssignments", async (id) => {
     try {
-      const response = await fetch(`${BASE_URL}/getAssignments/${id}`, {
+      const response = await fetchWithAuth(`/getAssignments/${id}`, {
         credentials: "include",
       });
       const res = await response.json();
@@ -38,7 +39,7 @@ export const fetchAssignments = createAsyncThunk("fetchAssignments", async (id) 
   export const deleteAssign=createAsyncThunk('deleteAssign',async({courseId,assignId})=>{
     try{
         console.log(courseId)
-       const response=await fetch(`${BASE_URL}/deleteAssignment/${courseId}?assignment_id=${assignId}`,
+       const response=await fetchWithAuth(`/deleteAssignment/${courseId}?assignment_id=${assignId}`,
        {credentials:'include',
          method:'DELETE'});
     const res=await response?.json();

@@ -6,7 +6,7 @@ import Course from "../Models/Course.js";
 import fs from "fs";
 import bcrypt from "bcryptjs";
 import cloudinary from "../cloudinary.js";
-import { Token } from "../Middleware/authMid.js";
+import { Token, refreshToken } from "../Middleware/authMid.js";
 import AppError from "../utils/error.js";
 import sendEmail from "../utils/sendMail.js";
 
@@ -125,13 +125,23 @@ export const login=async(req,res,next)=>{
           const passOk = bcrypt.compareSync(password, userDoc.password);
           if (passOk) {
             const token = Token(userDoc);
-            res.cookie("token", token, {
-              maxAge: 60 * 60 * 24 * 1000,
+            const refresh = refreshToken(userDoc);
+
+           res.cookie("token", token, {       
+              maxAge: 1*60*1000,
               secure:process.env.NODE_ENV='production',
               httpOnly: true,
               sameSite:process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
             });
-            res.status(200).json({ success: true, token, role: userDoc.role });
+           
+            res.cookie("refresh", refresh, {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              maxAge: 7 * 24 * 60 * 60 * 1000, 
+              sameSite:process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
+
+            });
+            res.status(200).json({ success: true, token,refresh, role: userDoc.role });
           } else {
             throw new AppError("Wrong password", 400);
           }
@@ -141,9 +151,28 @@ export const login=async(req,res,next)=>{
       }
 }
 
+
+
 export const verify=async(req,res,next)=>{
     const info = req.user;
     res.status(200).json(info);
+}
+
+export const refresh=async(req,res,next)=>{
+  try {
+    const info=req.user
+    const token=Token(info)
+    
+    res.cookie("token",token,{
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite:process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+      maxAge:   1 * 60 * 1000, 
+    })
+    res.json({success:true})
+  } catch (error) {
+    next(error)
+  }
 }
 
 export const profile=async(req,res,next)=>{
@@ -244,7 +273,11 @@ export const Logout=async(req,res,next)=>{
     maxAge: 0,
     secure:process.env.NODE_ENV='production',
     httpOnly: true,
-    sameSite:process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
+  });
+  res.cookie("refresh", "", {
+    maxAge: 0,
+    secure:process.env.NODE_ENV='production',
+    httpOnly: true,
   });
   res.status(200).json({success:true,message:'Logged out'})
 }

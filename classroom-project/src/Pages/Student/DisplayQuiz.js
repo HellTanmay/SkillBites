@@ -22,7 +22,6 @@ const DisplayQuiz = ({ quizz_id, tests, states }) => {
   const dispatch = useDispatch();
   const test = useSelector((state) => state.Quizzes.question.data);
   const User = useSelector((state) => state.User.userData);
-  const resloading = useSelector((state) => state.Quizzes.resLoad);
   const loading = useSelector((state) => state.Quizzes.loading);
   const result = useSelector((state) => state?.Quizzes?.result?.data);
   const { id } = useParams();

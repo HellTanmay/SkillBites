@@ -74,10 +74,18 @@ export const fetchAllCourses=async(req,res,next)=>{
 }
 
 export const fetchCourseById=async(req,res,next)=>{
+  try{
     const { id } = req.params;
-  const courseDoc = await Course.findById(id).populate("author", ["username", "photo" ])
-  .select("-assignments -recordings -quizz -total");
-  res.json(courseDoc);
+    const courseDoc = await Course.findById(id).populate("author", ["username", "photo" ])
+    .select("-assignments -recordings -quizz -total");
+    if(!courseDoc){
+      throw new AppError('Course not found',404) 
+    }
+    res.status(200).json({success:true,data:courseDoc});
+  }catch(err){
+    next(err)
+  }
+  
 }
 
 export const fetchMyCourse=async(req,res,next)=>{

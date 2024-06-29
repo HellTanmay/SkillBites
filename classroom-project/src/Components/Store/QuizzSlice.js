@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-hot-toast";
+import { fetchWithAuth } from "./fetchRequest";
 
-let BASE_URL="https://skillbites-backend.onrender.com"
-// let BASE_URL="http://localhost:4000"
+// let BASE_URL="https://skillbites-backend.onrender.com"
 
 export const addQuiz = createAsyncThunk("addQuiz",async ({ c_id, formData }) => {
     try {
-      const response = await fetch(`${BASE_URL}/AddQuizz/${c_id}`, {
+      const response = await fetchWithAuth(`/AddQuizz/${c_id}`, {
         method: "POST",
         body: formData,
         credentials: "include",
@@ -21,7 +21,7 @@ export const addQuiz = createAsyncThunk("addQuiz",async ({ c_id, formData }) => 
 
 export const DisplayQuizz = createAsyncThunk("DisplayQuiz", async (id) => {
   try {
-    const response = await fetch(`${BASE_URL}/DisplayQuizz/${id}`, {
+    const response = await fetchWithAuth(`/DisplayQuizz/${id}`, {
       credentials: "include",
     });
     const res = await response.json();
@@ -33,7 +33,7 @@ export const DisplayQuizz = createAsyncThunk("DisplayQuiz", async (id) => {
 
 export const getQuiz = createAsyncThunk("getQuiz", async ({id,quizz_id}) => {
   try {
-    const response = await fetch(`${BASE_URL}/getQuiz/${id}?quizz_id=${quizz_id}`, {
+    const response = await fetchWithAuth(`/getQuiz/${id}?quizz_id=${quizz_id}`, {
       credentials: "include",
     });
     const res = await response.json();
@@ -46,7 +46,7 @@ export const getQuiz = createAsyncThunk("getQuiz", async ({id,quizz_id}) => {
 export const deleteQuizz=createAsyncThunk('deleteQuizz',async({c_id,quizz_id})=>{
   try{
     console.log(c_id, quizz_id)
-     const response=await fetch(`${BASE_URL}/deleteQuiz/${c_id}?quizz_id=${quizz_id}`,
+     const response=await fetchWithAuth(`/deleteQuiz/${c_id}?quizz_id=${quizz_id}`,
      {credentials:'include',
        method:'DELETE'});
   const res=await response?.json();
@@ -59,7 +59,7 @@ export const deleteQuizz=createAsyncThunk('deleteQuizz',async({c_id,quizz_id})=>
  export const submitQuiz = createAsyncThunk("submitQuiz",async ({ c_id,quizz_id,answers }) => {
   try {
     console.log(answers)
-    const response = await fetch(`${BASE_URL}/AnswerSubmit/${c_id}?quizz_id=${quizz_id}`, {
+    const response = await fetchWithAuth(`/AnswerSubmit/${c_id}?quizz_id=${quizz_id}`, {
       method: "POST",
       body:JSON.stringify(answers),
       headers:{
@@ -77,7 +77,7 @@ export const deleteQuizz=createAsyncThunk('deleteQuizz',async({c_id,quizz_id})=>
 );
 export const getQuizSubmission = createAsyncThunk("getQuizSubmission", async ({id,quizz_id}) => {
   try {
-    const response = await fetch(`${BASE_URL}/getQuizSubmission/${id}?quizz_id=${quizz_id}`, {
+    const response = await fetchWithAuth(`/getQuizSubmission/${id}?quizz_id=${quizz_id}`, {
       credentials: "include",
     });
     const res = await response.json();
@@ -90,7 +90,7 @@ export const getQuizSubmission = createAsyncThunk("getQuizSubmission", async ({i
 
 export const getAllSubmissions = createAsyncThunk("getAllSubmissions", async ({id,quizz_id}) => {
   try {
-    const response = await fetch(`${BASE_URL}/getAllSubmissions/${id}?quizz_id=${quizz_id}`, {
+    const response = await fetchWithAuth(`/getAllSubmissions/${id}?quizz_id=${quizz_id}`, {
       credentials: "include",
     });
     const res = await response.json();

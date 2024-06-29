@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
 import { toast } from "react-hot-toast";
+import { fetchWithAuth } from "./fetchRequest";
 
-let BASE_URL="https://skillbites-backend.onrender.com"
-// let BASE_URL="http://localhost:4000"
+// let BASE_URL="https://skillbites-backend.onrender.com"
 
 const isNetworkError = (error) => {
   return (
@@ -18,7 +18,7 @@ export const registerUser = createAsyncThunk("registerUser",async (formData) => 
     
     try {
       toast.loading('Signing up...')
-      const response = await fetch(`${BASE_URL}/Signup`, {
+      const response = await fetchWithAuth(`/Signup`, {
         method: "POST",
         body: JSON.stringify(formData),
         headers: {
@@ -38,7 +38,7 @@ export const registerUser = createAsyncThunk("registerUser",async (formData) => 
 export const verifyEmail = createAsyncThunk("verifyEmail",async ({email,otp}) => {  
   try {
     toast.loading('verifying email...')
-    const response = await fetch(`${BASE_URL}/verifyEmail`, {
+    const response = await fetchWithAuth(`/verifyEmail`, {
       method: "POST",
       body: JSON.stringify({email,otp}),
       headers: {
@@ -57,7 +57,7 @@ export const verifyEmail = createAsyncThunk("verifyEmail",async ({email,otp}) =>
 
 export const resendOtp = createAsyncThunk("resendOtp",async ({user_id,email}) => {  
   try {
-    const response = await fetch(`${BASE_URL}/resend-otp`, {
+    const response = await fetchWithAuth(`/resend-otp`, {
       method: "POST",
       body: JSON.stringify({user_id,email}),
       headers: {
@@ -75,7 +75,7 @@ export const resendOtp = createAsyncThunk("resendOtp",async ({user_id,email}) =>
 
 export const LoginUser = createAsyncThunk("Login",async ({email,password}) => {  
   try {
-    const response = await fetch(`${BASE_URL}/Login`, {
+    const response = await fetchWithAuth(`/Login`, {
       method: "POST",
       body: JSON.stringify({email,password}),
       headers: {
@@ -84,6 +84,7 @@ export const LoginUser = createAsyncThunk("Login",async ({email,password}) => {
       credentials: "include",
     });
     const resdata = await response.json();
+  console.log(resdata)
     return resdata;
   } catch (err) {
     toast.error('Network error')
@@ -93,7 +94,7 @@ export const LoginUser = createAsyncThunk("Login",async ({email,password}) => {
 
 export const LoggedIn=createAsyncThunk('LoggedIn',async()=>{
   try {
-    const response=await fetch(`${BASE_URL}/verify`,{
+    const response=await fetchWithAuth(`/verify`,{
       credentials:'include',
     });
     const data=await response.json();
@@ -111,7 +112,7 @@ export const LoggedIn=createAsyncThunk('LoggedIn',async()=>{
 
 export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
     try{
-       const response=await fetch(`${BASE_URL}/profile`,
+       const response=await fetchWithAuth(`/profile`,
        {credentials:'include'});
       const data=await response.json();
       return data
@@ -122,7 +123,7 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
 
    export const fetchUserProfile=createAsyncThunk('fetchUserProfile',async(userId)=>{
     try{
-       const response=await fetch(`${BASE_URL}/userProfile?userId=${userId}`,
+       const response=await fetchWithAuth(`/userProfile?userId=${userId}`,
        {credentials:'include'});
       const data=await response.json();
       return data
@@ -134,7 +135,7 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
 
    export const fetchAllUsers=createAsyncThunk('fetchAllUsers',async()=>{
     try{
-       const response=await fetch(`${BASE_URL}/fetchAllUsers`,
+       const response=await fetchWithAuth(`/fetchAllUsers`,
        {credentials:'include'});
       const data=await response.json();
       return data
@@ -148,7 +149,7 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
    export const updateUser = createAsyncThunk("updateUser", async (formData) => {
     try {
       console.log(formData)
-      const response = await fetch(`${BASE_URL}/profile/edit`, {
+      const response = await fetchWithAuth(`/profile/edit`, {
         credentials: "include",
         method:'PUT',
         body:formData
@@ -164,7 +165,7 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
    
    export const LoggedOut=createAsyncThunk('LoggedOut',async()=>{
     try{
-       const response=await fetch(`${BASE_URL}/logout`,
+       const response=await fetchWithAuth(`/logout`,
        {method:'POST',
         credentials:'include',
        });
@@ -182,8 +183,8 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
     name:'user',
     initialState:{
         userData:{},
-        isLoggedIn:false,
-        role:'',
+        isLoggedIn:localStorage.getItem('isLoggedIn')||false,
+        role:localStorage.getItem('role')||null,
         loading:false,
         allLoading:false,
     },
@@ -200,8 +201,11 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
             state.loading=false
         })
         builder.addCase(LoggedIn.fulfilled,(state,action)=>{
-          state.isLoggedIn=action.payload?.id?true:false;
+          console.log(action.payload)
+          state.isLoggedIn=action.payload?true:false;
           state.role=action.payload?.role
+          
+          localStorage.setItem('role',state.role)
           state.loading=false
         })
         builder.addCase(LoggedIn.pending,(state,action)=>{
@@ -212,6 +216,11 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
         state.loading=false
         })
         builder.addCase(LoginUser.fulfilled,(state,action)=>{
+          console.log(action.payload)
+          state.isLoggedIn=action.payload?true:false;
+          state.role=action.payload?.role
+          localStorage.setItem('isLoggedIn',action.payload.success?true:false)
+          localStorage.setItem('role',state.role)
           state.loading=false
         })
         builder.addCase(LoginUser.pending,(state,action)=>{
@@ -222,6 +231,7 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
         state.loading=false
         })
         builder.addCase(LoggedOut.fulfilled,(state,action)=>{
+          localStorage.clear()
         state.isLoggedIn=false;
         state.role='';
         state.loading=false

@@ -25,11 +25,11 @@ var corsOptions = {
   origin: ['http://localhost:3000', 'https://skillbites-frontend.onrender.com'],
   credentials:true
 }
-
+app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+
 
 
 const __filename = fileURLToPath(import.meta.url);

@@ -9,6 +9,7 @@
   background: none;
   color: rgb(253, 253, 255);
   cursor: pointer;
+
 }
 
 .menu-bar-close {
@@ -31,7 +32,7 @@
   justify-content: center;
   position: fixed;
   left: -100%;
-  transition: left 200ms ease
+  transition: left 1s ease linear
 }
 .side-icons{
   color:rgb(254, 252, 112);
@@ -39,7 +40,7 @@
 }
 .nav-menu.active {
   left: 0;
-  transition: left 200ms ease;
+  transition: left 1s ease-in-out;
 }
 .row1 {
   display: flex;

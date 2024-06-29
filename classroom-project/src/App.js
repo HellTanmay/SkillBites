@@ -1,7 +1,9 @@
 // import all the components in this app 
 
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet,useLocation } from "react-router-dom";
 import { Suspense, lazy } from "react";
+import { useSelector } from "react-redux";
+import Denied from "./Pages/Denied";
 
 
 const CourseList = lazy(()=>import("./Pages/CourseList"));
@@ -27,6 +29,21 @@ const CheckoutSuccess = lazy(()=>import("./Pages/Student/CheckoutSuccess"));
 const Orders = lazy(()=>import("./Pages/Student/Orders"));
 const AddCategory = lazy(()=>import("./Pages/Admin/AddCategory"));
 
+
+  const AllowRoles = ({ allowedRoles }) => {
+    const { isLoggedIn, role } = useSelector((state) => state.User);
+    const location = useLocation();
+  
+    return isLoggedIn && allowedRoles.find((myRole) => myRole === role) ? (
+      <Outlet />
+    ) : isLoggedIn ? (
+      <Navigate to={"/denied"} state={{ from: location }} replace />
+    ) : (
+      <Navigate to={"/login"} state={{ from: location }} replace />
+    );
+  };
+
+
 function App() {
   return (
     <>
@@ -34,18 +51,34 @@ function App() {
       <p>SkillBites</p>
       </div>} >
     <Routes>
-        <Route path="/" element={<Hero />}></Route>
-        <Route path="/contact" element={<Contact/>}/>
-        <Route path="/course" element={<CourseList />} />
         <Route path="/Login" element={<Login />}></Route>
         <Route path="/Signup" element={<Register />}></Route>
+
+        <Route path="/contact" element={<Contact/>}/>
+        
+        <Route path="/" element={<Hero />}></Route>
+
+        <Route element={<AllowRoles allowedRoles={['Student','Instructor']}/>}>
+        <Route path="/course" element={<CourseList />} />
         <Route path='/profile'element={<Profile/>}></Route>
         <Route path='/profile/edit' element={<EditProfile />}></Route>
-        <Route path="/create" element={<CreateCourse />}></Route>
-        <Route path="/course/:id" element={<CourseDescription/>}></Route>
         <Route path="/myCourse" element={<MyCourse/>}></Route>
+        <Route path="/course/:id" element={<CourseDescription/>}></Route>
         <Route path="/myCourse/view/:id" element={<ViewCourse/>}></Route>
         <Route path="/file-viewer" element={<PdfViewer/>}></Route>
+
+        </Route >
+        <Route element={<AllowRoles allowedRoles={['Student']}/>}>
+        <Route path="/order-success" element={<CheckoutSuccess/>}></Route>
+        <Route path="/orders" element={<Orders/>}></Route>
+
+        </Route>
+
+        <Route element={<AllowRoles allowedRoles={['Instructor']}/>}>
+        <Route path="/create" element={<CreateCourse />}></Route>
+        </Route >
+
+        <Route element={<AllowRoles allowedRoles={['Admin']}/>}>
         <Route path="/Admin/Dashboard" element={<AdminDashboard/>}></Route>
         <Route path="/Admin/courses" element={<AdminCourse/>}></Route>
         <Route path="/Admin/feedbacks" element={<Feedbacks/>}></Route>
@@ -53,9 +86,12 @@ function App() {
         <Route path="/Admin/instructors" element={<AdminInstructors/>}></Route>
         <Route path="/Admin/payments" element={<AdminPayment/>}></Route>
         <Route path="/Admin/addCategories" element={<AddCategory/>}></Route>
-        <Route path="/orders" element={<Orders/>}></Route>
-        <Route path="/order-success" element={<CheckoutSuccess/>}></Route>
+        </Route>
+
         <Route path="*" element={<NotFound/>} />
+        <Route path="/denied" element={<Denied/>} />
+
+       
       </Routes>
       </Suspense>
     </>
