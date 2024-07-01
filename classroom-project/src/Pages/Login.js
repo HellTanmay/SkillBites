@@ -30,7 +30,7 @@ export default function Login() {
          navigate ('/Signup',{state:{user:response?.payload.data}})
         toast.success(response?.payload?.message)
       }else 
-      if(response?.payload?.success){
+      if(response?.payload?.success===true){
         redirectUser(response?.payload?.role);
         toast.success( `Welcome ${response?.payload?.role}`,{theme:'colored',position:'top-center'});
       }  

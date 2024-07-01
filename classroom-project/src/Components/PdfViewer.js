@@ -4,7 +4,7 @@ const PdfViewer = () => {
     const source=params.get('source')
     
     let BASE_URL="https://skillbites-backend.onrender.com"
-    // let BASE_URL="http://localhost:4000"
+  
   return (
     <>
             <div className='viewer'>

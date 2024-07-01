@@ -32,7 +32,7 @@
   justify-content: center;
   position: fixed;
   left: -100%;
-  transition: left 1s ease linear
+  transition: left 1s ease 
 }
 .side-icons{
   color:rgb(254, 252, 112);
@@ -40,7 +40,7 @@
 }
 .nav-menu.active {
   left: 0;
-  transition: left 1s ease-in-out;
+  transition: left 500ms ease;
 }
 .row1 {
   display: flex;

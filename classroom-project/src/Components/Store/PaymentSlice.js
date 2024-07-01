@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchWithAuth } from "./fetchRequest";
-// let BASE_URL="https://skillbites-backend.onrender.com"
 
 const initialState={
   payments:[],

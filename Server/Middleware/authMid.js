@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import AppError from '../utils/error.js';
 
 export const Token=(user)=>{
-    const Token=jwt.sign({username:user.username,id:user.id,role:user.role},process.env.JWT_SECRET,{expiresIn:'1m'});
+    const Token=jwt.sign({username:user.username,id:user.id,role:user.role},process.env.JWT_SECRET,{expiresIn:'10m'});
     return  Token ;
 }
 export const refreshToken=(user)=>{

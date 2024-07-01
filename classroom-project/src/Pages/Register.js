@@ -44,6 +44,7 @@ export default function Register() {
      try{
       const res=await dispatch(registerUser(formData))
     if(res?.payload?.success){
+      console.log(res?.payload)
       setTokenData(res?.payload?.data)
       toast.success(res?.payload.message)
 
@@ -61,8 +62,8 @@ export default function Register() {
 async function verifyOtp(ev){
   ev.preventDefault();
   try {
-    const email=tokenData.email
-    const res=await dispatch(verifyEmail({email,otp}))
+   
+    const res=await dispatch(verifyEmail({email:tokenData,otp}))
     if(res?.payload?.success){
       setRedirect(true)
       toast.success(res.payload.message)
@@ -78,8 +79,7 @@ async function resend(ev){
   ev.preventDefault();
   try {
     const email=tokenData.email
-    const user_id=tokenData._id
-    const res=await dispatch(resendOtp({user_id,email}))
+    const res=await dispatch(resendOtp(tokenData))
     if(res?.payload?.success){
       toast.success(res.payload.message)
     }

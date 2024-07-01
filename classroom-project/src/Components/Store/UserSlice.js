@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
 import { toast } from "react-hot-toast";
 import { fetchWithAuth } from "./fetchRequest";
 
-// let BASE_URL="https://skillbites-backend.onrender.com"
 
 const isNetworkError = (error) => {
   return (
@@ -55,11 +54,11 @@ export const verifyEmail = createAsyncThunk("verifyEmail",async ({email,otp}) =>
 }
 );
 
-export const resendOtp = createAsyncThunk("resendOtp",async ({user_id,email}) => {  
+export const resendOtp = createAsyncThunk("resendOtp",async (email) => {  
   try {
     const response = await fetchWithAuth(`/resend-otp`, {
       method: "POST",
-      body: JSON.stringify({user_id,email}),
+      body: JSON.stringify({email}),
       headers: {
           'Content-Type': 'application/json',
         },
@@ -217,9 +216,9 @@ export const fetchUser=createAsyncThunk('fetchUser',async(userId)=>{
         })
         builder.addCase(LoginUser.fulfilled,(state,action)=>{
           console.log(action.payload)
-          state.isLoggedIn=action.payload?true:false;
+          state.isLoggedIn=action.payload?.success===true?true:false;
           state.role=action.payload?.role
-          localStorage.setItem('isLoggedIn',action.payload.success?true:false)
+          localStorage.setItem('isLoggedIn',action.payload.success===true?true:false)
           localStorage.setItem('role',state.role)
           state.loading=false
         })

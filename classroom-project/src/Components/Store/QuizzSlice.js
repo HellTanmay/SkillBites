@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-hot-toast";
 import { fetchWithAuth } from "./fetchRequest";
 
-// let BASE_URL="https://skillbites-backend.onrender.com"
 
 export const addQuiz = createAsyncThunk("addQuiz",async ({ c_id, formData }) => {
     try {

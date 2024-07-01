@@ -3,7 +3,7 @@ import { toast } from "react-hot-toast";
 import { Navigate } from "react-router-dom";
 import { fetchWithAuth } from "./fetchRequest";
 
-// let BASE_URL="https://skillbites-backend.onrender.com"
+
 
 export const createCourse = createAsyncThunk("createCourse", async (data) => {
   try {

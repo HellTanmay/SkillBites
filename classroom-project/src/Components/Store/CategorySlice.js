@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
 import { fetchWithAuth } from "./fetchRequest";
 import { toast } from "react-hot-toast";
 
-// let BASE_URL="https://skillbites-backend.onrender.com"
+
 
 export const addCategory=createAsyncThunk('addCategory',async(category)=>{
  try{

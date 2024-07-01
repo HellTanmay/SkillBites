@@ -1,10 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchWithAuth } from "./fetchRequest";
 
-// let BASE_URL="https://skillbites-backend.onrender.com"
-let BASE_URL="http://localhost:4000"
-
-
 export const addAssignments = createAsyncThunk("addAssignments",async ({ c_id, formData }) => {
     try {
       const response = await fetchWithAuth(

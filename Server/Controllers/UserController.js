@@ -36,7 +36,7 @@ export const register = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Email sent successfully",
-      data: userDoc,
+      data: userDoc.email
     });
   } catch (err) {
     next(err);
@@ -51,6 +51,7 @@ export const verifyEmail = async (req, res, next) => {
       throw new AppError("Try again", 400);
     }
     const verification = await Verification.findOne({ userId: user._id});
+  
     if (!verification) {
       throw new AppError("Token expired!", 404);
     }
@@ -62,11 +63,19 @@ export const verifyEmail = async (req, res, next) => {
     await verification.deleteOne({ userId: user._id });
 
     const token = Token(user);
-    res.cookie("token", token, {
-      maxAge: 60 * 60 * 24 * 1000,
+    res.cookie("token", token, {       
+      maxAge: 10*60*1000,
       secure:process.env.NODE_ENV='production',
       httpOnly: true,
       sameSite:process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
+    });
+   
+    res.cookie("refresh", refresh, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 7 * 24 * 60 * 60 * 1000, 
+      sameSite:process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
+
     });
     res.status(200).json({
       success: true,
@@ -80,8 +89,8 @@ export const verifyEmail = async (req, res, next) => {
 
 export const resend_otp = async (req, res, next) => {
   try {
-    const { user_id, email } = req.body;
-    const user = User.findById(user_id);
+    const {  email } = req.body;
+    const user =await User.findOne({email});
     if (!user) {
       throw new AppError("User not found", 404);
     }
@@ -89,7 +98,7 @@ export const resend_otp = async (req, res, next) => {
     const hashedOtp = await bcrypt.hash(otp.toString(), 10);
 
      await Verification.findOneAndUpdate(
-      { userId: user_id },
+      { userId: user._id },
       { otp: hashedOtp },
       { new: true, upsert: true }
     );
@@ -118,7 +127,7 @@ export const login=async(req,res,next)=>{
         if (userDoc.verified === false) {
           return res.status(200).json({
               success: "verify",
-              data: userDoc,
+              data: userDoc.email,
               message: "User not verified. Please complete the OTP verification.",
             });
         } else {
@@ -128,7 +137,7 @@ export const login=async(req,res,next)=>{
             const refresh = refreshToken(userDoc);
 
            res.cookie("token", token, {       
-              maxAge: 1*60*1000,
+              maxAge: 10*60*1000,
               secure:process.env.NODE_ENV='production',
               httpOnly: true,
               sameSite:process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
@@ -167,7 +176,7 @@ export const refresh=async(req,res,next)=>{
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite:process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
-      maxAge:   1 * 60 * 1000, 
+      maxAge:   10 * 60 * 1000, 
     })
     res.json({success:true})
   } catch (error) {

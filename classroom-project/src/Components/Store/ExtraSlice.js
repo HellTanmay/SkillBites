@@ -1,8 +1,5 @@
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit"
-import { fetchWithAuth
-
- } from "./fetchRequest";
-// let BASE_URL="https://skillbites-backend.onrender.com"
+import { fetchWithAuth} from "./fetchRequest";
 
 
 export const AddContact=createAsyncThunk('AddContact',async(formData)=>{
