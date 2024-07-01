@@ -37,7 +37,7 @@ const __dirname = path.dirname(__filename);
 
 app.use("/pdf", express.static(__dirname + "/pdf"));
 
-app.use(express.static(path.join(__dirname, '../classroom-project/build')));
+app.use(express.static(path.join(__dirname, 'classroom-project/build')));
 
 
 
@@ -58,7 +58,7 @@ app.use(paymentRoute)
 app.use(miscRoutes)
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../classroom-project/build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'classroom-project/build', 'index.html'));
 }); 
 
 app.listen(process.env.PORT, () => {

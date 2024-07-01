@@ -282,11 +282,14 @@ export const Logout=async(req,res,next)=>{
     maxAge: 0,
     secure:process.env.NODE_ENV='production',
     httpOnly: true,
+    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax' 
   });
   res.cookie("refresh", "", {
     maxAge: 0,
     secure:process.env.NODE_ENV='production',
     httpOnly: true,
+    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax' 
   });
+  
   res.status(200).json({success:true,message:'Logged out'})
 }

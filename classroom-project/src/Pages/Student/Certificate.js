@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { IoMdDownload } from "react-icons/io";
 import { toast } from 'react-hot-toast';
+import { fetchWithAuth } from '../../Components/Store/fetchRequest';
 
 const Certificate = () => {
     const [downloading, setDownloading] = useState(false);
@@ -9,7 +10,7 @@ const Certificate = () => {
     const downloadCertificate = async () => {
       try {
         setDownloading(true);
-        const response = await fetch(`http://localhost:4000/certificate/${id}`, {
+        const response = await fetchWithAuth(`/certificate/${id}`, {
             method: 'POST',
             credentials: 'include',
           });

@@ -88,8 +88,9 @@ function App() {
         <Route path="/Admin/addCategories" element={<AddCategory/>}></Route>
         </Route>
 
-        <Route path="*" element={<NotFound/>} />
         <Route path="/denied" element={<Denied/>} />
+        <Route path="*" element={<NotFound/>} />
+
 
        
       </Routes>
