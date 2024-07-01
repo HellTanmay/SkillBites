@@ -37,7 +37,7 @@ const __dirname = path.dirname(__filename);
 
 app.use("/pdf", express.static(__dirname + "/pdf"));
 
-app.use(express.static(path.join(__dirname, 'classroom-project/build')));
+// app.use(express.static(path.join(__dirname, 'classroom-project/build')));
 
 
 
@@ -57,9 +57,9 @@ app.use(quizRoutes)
 app.use(paymentRoute)
 app.use(miscRoutes)
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'classroom-project/build', 'index.html'));
-}); 
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'classroom-project/build', 'index.html'));
+// }); 
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running in port ${process.env.PORT||4000}`);
