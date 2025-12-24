@@ -1,9 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-hot-toast';
 
-const BASE_URL = 'https://skillbites-backend.onrender.com';
-// const BASE_URL='http://localhost:4000'
-
+// const BASE_URL = 'https://skillbites-backend.onrender.com';
+const BASE_URL=process.env.REACT_APP_API_URL
 
 const refreshToken = async () => {
   try {

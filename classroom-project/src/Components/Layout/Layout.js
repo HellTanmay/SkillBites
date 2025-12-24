@@ -19,7 +19,6 @@ export default function Layout({ children ,hideFooter,initial=false,index=true})
   const user=state.User.userData
   const role=state.User.role
   const loading=state.User.loading
-
  const dispatch=useDispatch()
  useEffect(()=>{
   dispatch(fetchUser())
@@ -29,8 +28,8 @@ export default function Layout({ children ,hideFooter,initial=false,index=true})
  
   return (
     <>
+    
       <Navbar onIcon={show} />
-
       <nav className={sidebar ? "nav-menu active" : "nav-menu"}
         style={{ top: 0,bottom:index?'0':'200px'}}>
         <ul className="nav-menu-items" onClick={show}>

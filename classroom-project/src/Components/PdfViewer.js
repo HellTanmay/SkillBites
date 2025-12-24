@@ -3,7 +3,7 @@ const PdfViewer = () => {
     const params = new URLSearchParams(window.location.search);
     const source=params.get('source')
     
-    let BASE_URL="https://skillbites-backend.onrender.com"
+    let BASE_URL=process.env.REACT_APP_API_URL
   
   return (
     <>

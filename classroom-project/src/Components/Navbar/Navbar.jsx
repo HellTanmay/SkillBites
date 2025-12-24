@@ -11,6 +11,7 @@ function Navbar({onIcon}){
 const dispatch=useDispatch()
 const state=useSelector((state)=>state)
 const isLoggedIn=state.User.isLoggedIn;
+const loading=state.User.loading;
 const role=state.User.role
 
   useEffect(()=>{
@@ -40,6 +41,7 @@ const role=state.User.role
           </NavLink>
       
         
+         
           <button
             className="navbar-toggler"
             type="button"
@@ -53,7 +55,7 @@ const role=state.User.role
           </button>
            
           <div className="collapse navbar-collapse " id="navbarSupportedContent"style={{zIndex:1004}}>
-         
+     
             <ul className="navbar-nav mb-2 mb-lg-0 ms-auto  ">
                 
               <li className="nav-item li-item">
@@ -67,7 +69,7 @@ const role=state.User.role
                 Contact
                 </NavLink>
               </li>)}
-              {isLoggedIn &&(
+              {isLoggedIn && !loading&&(
                 <>
              {role!=='Admin'&& <li className="nav-item li-item">
                 <NavLink className="nav-link " to="/course"onClick={fetchCourse}>
@@ -80,7 +82,7 @@ const role=state.User.role
                 </li>
                 </>
               )}
-              {!isLoggedIn &&(
+              {!isLoggedIn && !loading&&(
                 <>
               <li className="nav-item li-item">
                 <NavLink className=" btn btn-md btn-primary  " to="/Login">

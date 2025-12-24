@@ -68,8 +68,9 @@ const DisplayQuiz = ({ quizz_id, tests, states }) => {
     if (res?.payload?.success) {
       toast.success("Submitted successfully");
       setState("submitted");
+    }else{
+      toast.error(res.payload.message);
     }
-    toast.error(res.payload.message);
   }
 
   useEffect(() => {
