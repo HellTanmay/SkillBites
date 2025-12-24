@@ -22,7 +22,7 @@ config({ path: "./.env" });
 
 
 var corsOptions = {
-  origin: ['http://localhost:3000','https://skillbites.netlify.app'],
+  origin: ['http://localhost:3000','https://skillbites.netlify.app,','https://skillbites-backend.onrender.com'],
   credentials:true
 }
 app.use(cookieParser());
