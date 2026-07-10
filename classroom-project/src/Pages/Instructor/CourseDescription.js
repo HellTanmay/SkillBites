@@ -109,6 +109,18 @@ const CourseDescription = () => {
   const userExist = courseInfo?.enrolled?.find(
     (user) => user?.student === User?._id
   );
+  // Check if the user is an admin, instructor, or the author of the course
+  const isAdmin = User?.role === "Admin";
+  const isInstructor = User?.role === "Instructor";
+  const isAuthor = User?._id === courseInfo.author?._id;
+  const isEnrolled = !!userExist;
+
+  const showWatch =
+    isAdmin ||
+    isEnrolled ||
+    (isInstructor && isAuthor);
+
+  const showBuy = User?.role === "Student" && !isEnrolled;
 
   return (
     <Layout>
@@ -198,24 +210,25 @@ const CourseDescription = () => {
                 <p className="fs-4">
                   <strong>₹ {courseInfo.price?.toLocaleString("en-IN")}</strong>
                 </p>
-                <button
-                  className="btn btn-primary"
-                  onClick={() =>
-                    User.role === "Admin" ||
-                    User?.username === courseInfo.author?.username ||
-                    userExist
-                      ? navigate(`/myCourse/view/${courseInfo?._id}`)
-                      : payHandler()
-                  }
-                >
-                  <strong>
-                    {User.role === "Admin" ||
-                    User?.username === courseInfo.author?.username ||
-                    userExist
-                      ? "Watch"
-                      : "Buy now"}
-                  </strong>
-                </button>
+                {showWatch && (
+                  <button
+                    className="btn btn-primary"
+                    onClick={() =>
+                      navigate(`/myCourse/view/${courseInfo._id}`)
+                    }
+                  >
+                    <strong>Watch Now</strong>
+                  </button>
+                )}
+
+                {showBuy && (
+                  <button
+                    className="btn btn-primary"
+                    onClick={payHandler}
+                  >
+                    <strong>Buy Now</strong>
+                  </button>
+                )}
               </div>
             </div>
           </>

@@ -25,8 +25,12 @@ export const createPayment=async(req,res,next)=>{
         if (purchase) {
           throw new AppError("You have already purchased this course", 400);
         } else {
-          const options = req.body;
-          options.receipt = shortid.generate();
+          const options = {
+            amount: course.price * 100, 
+            currency: "INR",
+            receipt: shortid.generate(),
+          };
+
           const order = await razorpay.orders.create(options);
           if (!order) {
             throw new AppError("Something went wrong, Try again later", 400);
